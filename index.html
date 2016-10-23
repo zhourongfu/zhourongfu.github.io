@@ -185,6 +185,156 @@
 
             
             <section id="main">
+    <article id="post-nginxw" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2016/10/23/nginxw/">nginx的URL重定向功能</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2016/10/23/nginxw/">
+            <time datetime="2016-10-23T13:32:15.416Z" itemprop="datePublished">2016-10-23</time>
+        </a>
+    </div>
+
+
+                        
+                        
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>标签（空格分隔）： 技术</p>
+<hr>
+<p>location</p>
+<p>语法:location [=|~|~<em>|^~] /uri/ { … }<br>默认:否<br>这个指令随URL不同而接受不同的结构。你可以配置使用常规字符串和正则表达式。如果使用正则表达式，你必须使用 ~</em> 前缀选择不区分大小写的匹配或者 ~ 选择区分大小写的匹配。</p>
+<p>确定 哪个location 指令匹配一个特定指令，常规字符串第一个测试。常规字符串匹配请求的开始部分并且区分大小写，最明确的匹配将会被使用（查看下文明白 nginx 怎么确定它）。然后正则表达式按照配置文件里的顺序测试。找到第一个比配的正则表达式将停止搜索。如果没有找到匹配的正则表达式，使用常规字符串的结果。</p>
+<p>有两个方法修改这个行为。第一个方法是使用 “=”前缀，将只执行严格匹配。如果这个查询匹配，那么将停止搜索并立即处理这个请求。例子：如果经常发生”/”请求，那么使用 “location = /” 将加速处理这个请求。</p>
+<p>第二个是使用 ^~ 前缀。如果把这个前缀用于一个常规字符串那么告诉nginx 如果路径匹配那么不测试正则表达式。</p>
+<p>而且它重要在于 NGINX 做比较没有 URL 编码，所以如果你有一个 URL 链接’/images/%20/test’ , 那么使用 “images/ /test” 限定location。</p>
+<p>总结，指令按下列顺序被接受:</p>
+<ol>
+<li>= 前缀的指令严格匹配这个查询。如果找到，停止搜索。</li>
+<li>剩下的常规字符串，长的在前。如果这个匹配使用 ^~ 前缀，搜索停止。</li>
+<li>正则表达式，按配置文件里的顺序。</li>
+<li>如果第三步产生匹配，则使用这个结果。否则使用第二步的匹配结果。</li>
+<li>例子：</li>
+</ol>
+<p>location = / {<br><strong>＃</strong> <strong>只匹配 / 查询</strong>。<br>[ configuration A ]<br>}</p>
+<p>location / {<br><strong>#匹配任何查询，因为所有请求都已 / 开头。但是正则表达式规则和长的块规则将被优先和查询匹配。</strong><br>[ configuration B ]<br>}</p>
+<p>location ^~ /images/ {<br><strong># 匹配任何已 /images/ 开头的任何查询并且停止搜索。任何正则表达式将不会被测试。</strong><br>[ configuration C ]<br>}</p>
+<p>location ~<em> .(gif|jpg|jpeg)$ {<br><em>*# 匹配任何已 gif、jpg 或 jpeg 结尾的请求。然而所有 /images/ 目录的请求将使用 Configuration C。</em></em><br>[ configuration D ]<br>}</p>
+<p>例子请求:</p>
+<p>/ -&gt; configuration A</p>
+<p>/documents/document.html -&gt; configuration B</p>
+<p>/images/1.gif -&gt; configuration C</p>
+<p>/documents/1.jpg -&gt; configuration D</p>
+<p><em>注意：按任意顺序定义这4个配置结果将仍然一样。</em></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="/2016/10/23/nginxw/" data-id="ciumng45d0000qcs30ilbc1al" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="/2016/10/23/nginxw/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="/2016/10/23/nginxw/">评论</a>
+    
+
+~        
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+
     <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -235,7 +385,7 @@
 
 </div>
 
-    <a data-url="/2016/10/21/hello-world/" data-id="ciume8n320000sys34vmlxxb9" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="/2016/10/21/hello-world/" data-id="ciumepyqp0000uns3laq6lzfy" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -315,130 +465,6 @@
 
 
 
-
-    <article id="post-nginx" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2016/10/20/nginx/">nginx</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2016/10/20/nginx/">
-            <time datetime="2016-10-20T11:58:53.000Z" itemprop="datePublished">2016-10-20</time>
-        </a>
-    </div>
-
-
-                        
-                        
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            
-            
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-
-</div>
-
-    <a data-url="/2016/10/20/nginx/" data-id="ciume8n3c0002sys3hf2pk9i6" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
-<script>
-    (function ($) {
-        // Prevent duplicate binding
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-</script>
-
-            
-    
-        <a href="/2016/10/20/nginx/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="/2016/10/20/nginx/">评论</a>
-    
-
-~        
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
 </section>
             
                 <aside id="sidebar">
@@ -448,6 +474,25 @@
         <h3 class="widget-title">最新文章</h3>
         <div class="widget">
             <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/10/23/nginxw/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2016/10/23/nginxw/" class="title">nginx的URL重定向功能</a></p>
+                            <p class="item-date"><time datetime="2016-10-23T13:32:15.416Z" itemprop="datePublished">2016-10-23</time></p>
+                        </div>
+                    </li>
                 
                     <li>
                         
@@ -465,25 +510,6 @@
                             <p class="item-category"></p>
                             <p class="item-title"><a href="/2016/10/21/hello-world/" class="title">你好 闷骚背锅男</a></p>
                             <p class="item-date"><time datetime="2016-10-21T12:55:22.502Z" itemprop="datePublished">2016-10-21</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/10/20/nginx/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"></p>
-                            <p class="item-title"><a href="/2016/10/20/nginx/" class="title">nginx</a></p>
-                            <p class="item-date"><time datetime="2016-10-20T11:58:53.000Z" itemprop="datePublished">2016-10-20</time></p>
                         </div>
                     </li>
                 
