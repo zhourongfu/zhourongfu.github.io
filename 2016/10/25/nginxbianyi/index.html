@@ -5,14 +5,17 @@
     
     <title>nginx的编译安装 | AlexZhou</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta property="og:type" content="article">
+    <meta name="description" content="Idina Menze和Caleb Hyles激情对唱Let It Go：">
+<meta property="og:type" content="article">
 <meta property="og:title" content="nginx的编译安装">
 <meta property="og:url" content="/2016/10/25/nginxbianyi/index.html">
 <meta property="og:site_name" content="AlexZhou">
+<meta property="og:description" content="Idina Menze和Caleb Hyles激情对唱Let It Go：">
 <meta property="og:image" content="http://139.224.59.74/msbgn/0.jpg">
-<meta property="og:updated_time" content="2016-10-25T08:17:59.937Z">
+<meta property="og:updated_time" content="2016-10-25T10:01:59.541Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nginx的编译安装">
+<meta name="twitter:description" content="Idina Menze和Caleb Hyles激情对唱Let It Go：">
 <meta name="twitter:image" content="http://139.224.59.74/msbgn/0.jpg">
     
 
@@ -205,7 +208,7 @@
     <div class="article-date">
         <i class="fa fa-calendar"></i>
         <a href="/2016/10/25/nginxbianyi/">
-            <time datetime="2016-10-25T08:17:59.943Z" itemprop="datePublished">2016-10-25</time>
+            <time datetime="2016-10-25T10:01:59.552Z" itemprop="datePublished">2016-10-25</time>
         </a>
     </div>
 
@@ -231,7 +234,8 @@
         
             
             <hr>
-<p><img src="http://139.224.59.74/msbgn/0.jpg" alt="nginx实现原理"><br><a id="more"></a><br>第一部分：在Nginx服务器上分别操作</p>
+<p>Idina Menze和Caleb Hyles激情对唱Let It Go：  </p>
+<p><iframe height="420" width="650" src="http://player.youku.com/embed/XNjcyMDU4Njg0" frameborder="0" allowfullscreen><br></iframe><br><img src="http://139.224.59.74/msbgn/0.jpg" alt="nginx实现原理"><br><a id="more"></a><br>第一部分：在Nginx服务器上分别操作</p>
 <p>一、关闭SElinux、配置防火墙<br>1、vi /etc/selinux/config<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#SELINUX=enforcing #注释掉</div><div class="line">#SELINUXTYPE=targeted #注释掉</div><div class="line">SELINUX=disabled #增加</div><div class="line"></div><div class="line">:wq!  #保存退出</div><div class="line">setenforce 0 #使配置立即生效</div></pre></td></tr></table></figure></p>
 <p>2、vi /etc/sysconfig/iptables  #编辑<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-A RH-Firewall-1-INPUT -d 224.0.0.18 -j ACCEPT  #允许组播地址通信</div><div class="line">-A RH-Firewall-1-INPUT -p    vrrp    -j ACCEPT  #允许VRRP（虚拟路由器冗余协）通信</div><div class="line">-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT  #允许80端口通过防火墙</div><div class="line">:wq! #保存退出 </div><div class="line">/etc/init.d/iptables restart #重启防火墙使配置生效</div><div class="line">(或者)</div><div class="line">service iptables stop</div></pre></td></tr></table></figure></p>
 <p>二、安装Nginx</p>
@@ -378,7 +382,7 @@
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/nginx/">nginx</a></p>
                             <p class="item-title"><a href="/2016/10/25/nginxbianyi/" class="title">nginx的编译安装</a></p>
-                            <p class="item-date"><time datetime="2016-10-25T08:17:59.943Z" itemprop="datePublished">2016-10-25</time></p>
+                            <p class="item-date"><time datetime="2016-10-25T10:01:59.552Z" itemprop="datePublished">2016-10-25</time></p>
                         </div>
                     </li>
                 
