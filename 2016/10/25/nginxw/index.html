@@ -3,17 +3,26 @@
 <head>
     <meta charset="utf-8">
     
-    <title>归档 | AlexZhou</title>
+    <title>nginx的URL重定向功能 | AlexZhou</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="msbgn blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="AlexZhou">
-<meta property="og:url" content="/archives/index.html">
+    <meta name="description" content="location
+语法:location [=|~|~|^~] /uri/ { … }默认:否这个指令随URL不同而接受不同的结构。你可以配置使用常规字符串和正则表达式。如果使用正则表达式，你必须使用 ~ 前缀选择不区分大小写的匹配或者 ~ 选择区分大小写的匹配。
+确定 哪个location 指令匹配一个特定指令，常规字符串第一个测试。常规字符串匹配请求的开始部分并且区分大小写，最明确的匹配将会被">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx的URL重定向功能">
+<meta property="og:url" content="/2016/10/25/nginxw/index.html">
 <meta property="og:site_name" content="AlexZhou">
-<meta property="og:description" content="msbgn blog">
+<meta property="og:description" content="location
+语法:location [=|~|~|^~] /uri/ { … }默认:否这个指令随URL不同而接受不同的结构。你可以配置使用常规字符串和正则表达式。如果使用正则表达式，你必须使用 ~ 前缀选择不区分大小写的匹配或者 ~ 选择区分大小写的匹配。
+确定 哪个location 指令匹配一个特定指令，常规字符串第一个测试。常规字符串匹配请求的开始部分并且区分大小写，最明确的匹配将会被">
+<meta property="og:image" content="http://139.224.59.74:4000/img/0.jpg">
+<meta property="og:updated_time" content="2016-10-25T04:02:44.557Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AlexZhou">
-<meta name="twitter:description" content="msbgn blog">
+<meta name="twitter:title" content="nginx的URL重定向功能">
+<meta name="twitter:description" content="location
+语法:location [=|~|~|^~] /uri/ { … }默认:否这个指令随URL不同而接受不同的结构。你可以配置使用常规字符串和正则表达式。如果使用正则表达式，你必须使用 ~ 前缀选择不区分大小写的匹配或者 ~ 选择区分大小写的匹配。
+确定 哪个location 指令匹配一个特定指令，常规字符串第一个测试。常规字符串匹配请求的开始部分并且区分大小写，最明确的匹配将会被">
+<meta name="twitter:image" content="http://139.224.59.74:4000/img/0.jpg">
     
 
     
@@ -186,25 +195,21 @@
 </aside>
 
             
-            <section id="main"><div class="timeline timeline-wrap">
-    
-            <div class="timeline-row timeline-row-major">
-                <span class="node"><i class="fa fa-calendar"></i></span>
-                <h1 class="title">2016</h1>
-            </div>
+            <section id="main"><article id="post-nginxw" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
         
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+        
+            <header class="article-header">
                 
     
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2016/10/25/nginxw/">nginx的URL重定向功能</a>
+        <h1 class="article-title" itemprop="name">
+            nginx的URL重定向功能
         </h1>
     
 
-                <div class="article-meta">
-                    
+                
+                    <div class="article-meta">
+                        
     <div class="article-date">
         <i class="fa fa-calendar"></i>
         <a href="/2016/10/25/nginxw/">
@@ -213,59 +218,155 @@
     </div>
 
 
-                    
+                        
     <div class="article-category">
     	<i class="fa fa-folder"></i>
         <a class="article-category-link" href="/categories/nginx/">nginx</a>
     </div>
 
-                    
+                        
     <div class="article-tag">
         <i class="fa fa-tag"></i>
         <a class="tag-link" href="/tags/nginx/">nginx</a>, <a class="tag-link" href="/tags/科技/">科技</a>
     </div>
 
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+                    </div>
                 
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2016/10/25/nginxbianyi/">nginx的编译安装</a>
-        </h1>
-    
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>location</p>
+<p>语法:location [=|~|~<em>|^~] /uri/ { … }<br>默认:否<br>这个指令随URL不同而接受不同的结构。你可以配置使用常规字符串和正则表达式。如果使用正则表达式，你必须使用 ~</em> 前缀选择不区分大小写的匹配或者 ~ 选择区分大小写的匹配。</p>
+<p>确定 哪个location 指令匹配一个特定指令，常规字符串第一个测试。常规字符串匹配请求的开始部分并且区分大小写，最明确的匹配将会被使用（查看下文明白 nginx 怎么确定它）。然后正则表达式按照配置文件里的顺序测试。找到第一个比配的正则表达式将停止搜索。如果没有找到匹配的正则表达式，使用常规字符串的结果。</p>
+<p>有两个方法修改这个行为。第一个方法是使用 “=”前缀，将只执行严格匹配。如果这个查询匹配，那么将停止搜索并立即处理这个请求。例子：如果经常发生”/”请求，那么使用 “location = /” 将加速处理这个请求。</p>
+<p>第二个是使用 ^~ 前缀。如果把这个前缀用于一个常规字符串那么告诉nginx 如果路径匹配那么不测试正则表达式。</p>
+<p>而且它重要在于 NGINX 做比较没有 URL 编码，所以如果你有一个 URL 链接’/images/%20/test’ , 那么使用 “images/ /test” 限定location。<br><a id="more"></a><br>总结，指令按下列顺序被接受:</p>
+<ol>
+<li>= 前缀的指令严格匹配这个查询。如果找到，停止搜索。</li>
+<li>剩下的常规字符串，长的在前。如果这个匹配使用 ^~ 前缀，搜索停止。</li>
+<li>正则表达式，按配置文件里的顺序。</li>
+<li>如果第三步产生匹配，则使用这个结果。否则使用第二步的匹配结果。</li>
+<li>例子：</li>
+</ol>
+<p>location = / {<br><strong>＃</strong> <strong>只匹配 / 查询</strong>。<br>[ configuration A ]<br>}</p>
+<p>location / {<br><strong>#匹配任何查询，因为所有请求都已 / 开头。但是正则表达式规则和长的块规则将被优先和查询匹配。</strong><br>[ configuration B ]<br>}</p>
+<p>location ^~ /images/ {<br><strong># 匹配任何已 /images/ 开头的任何查询并且停止搜索。任何正则表达式将不会被测试。</strong><br>[ configuration C ]<br>}</p>
+<p>location ~<em> .(gif|jpg|jpeg)$ {<br><em>*# 匹配任何已 gif、jpg 或 jpeg 结尾的请求。然而所有 /images/ 目录的请求将使用 Configuration C。</em></em><br>[ configuration D ]<br>}</p>
+<p>例子请求:</p>
+<p>/ -&gt; configuration A</p>
+<p>/documents/document.html -&gt; configuration B</p>
+<p>/images/1.gif -&gt; configuration C</p>
+<p>/documents/1.jpg -&gt; configuration D</p>
+<p><em>注意：按任意顺序定义这4个配置结果将仍然一样。</em></p>
 
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2016/10/25/nginxbianyi/">
-            <time datetime="2016-10-25T03:56:53.927Z" itemprop="datePublished">2016-10-25</time>
-        </a>
-    </div>
-
-
-                    
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/nginx/">nginx</a>
-    </div>
-
-                    
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/nginx/">nginx</a>, <a class="tag-link" href="/tags/科技/">科技</a>
-    </div>
-
-                </div>
-            </div>
+        
         </div>
-    
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
 </div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+           
+    
+        <a href="/2016/10/25/nginxw/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="/2016/10/25/nginxw/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2016/10/25/nginxbianyi/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">nginx的编译安装</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2016/10/25/nginxw/" data-title="nginx的URL重定向功能" data-url="/2016/10/25/nginxw/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
 </section>
             
                 <aside id="sidebar">
@@ -388,11 +489,13 @@
     <script>
     var disqus_config = function () {
         
-        this.page.identifier = 'undefined';
+            this.page.url = '/2016/10/25/nginxw/';
+        
+        this.page.identifier = 'nginxw';
     };
     (function() { 
         var d = document, s = d.createElement('script');  
-        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/count.js';
+        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();

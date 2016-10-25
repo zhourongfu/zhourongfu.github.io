@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>nginx的编译安装 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta property="og:type" content="article">
+<meta property="og:title" content="nginx的编译安装">
+<meta property="og:url" content="/2016/10/25/nginxbianyi/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:image" content="http://139.224.59.74:4000/img/0.jpg">
+<meta property="og:updated_time" content="2016-10-25T03:56:53.916Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx的编译安装">
+<meta name="twitter:image" content="http://139.224.59.74:4000/img/0.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">Time Flies(岁月如梭)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                2
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                2
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-nginxbianyi" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            nginx的编译安装
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2016/10/25/nginxbianyi/">
+            <time datetime="2016-10-25T03:56:53.927Z" itemprop="datePublished">2016-10-25</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/nginx/">nginx</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/nginx/">nginx</a>, <a class="tag-link" href="/tags/科技/">科技</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p><img src="http://139.224.59.74:4000/img/0.jpg" alt="nginx实现原理"><br><a id="more"></a><br>第一部分：在Nginx服务器上分别操作</p>
+<p>一、关闭SElinux、配置防火墙<br>1、vi /etc/selinux/config<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#SELINUX=enforcing #注释掉</div><div class="line">#SELINUXTYPE=targeted #注释掉</div><div class="line">SELINUX=disabled #增加</div><div class="line"></div><div class="line">:wq!  #保存退出</div><div class="line">setenforce 0 #使配置立即生效</div></pre></td></tr></table></figure></p>
+<p>2、vi /etc/sysconfig/iptables  #编辑<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-A RH-Firewall-1-INPUT -d 224.0.0.18 -j ACCEPT  #允许组播地址通信</div><div class="line">-A RH-Firewall-1-INPUT -p    vrrp    -j ACCEPT  #允许VRRP（虚拟路由器冗余协）通信</div><div class="line">-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT  #允许80端口通过防火墙</div><div class="line">:wq! #保存退出 </div><div class="line">/etc/init.d/iptables restart #重启防火墙使配置生效</div><div class="line">(或者)</div><div class="line">service iptables stop</div></pre></td></tr></table></figure></p>
+<p>二、安装Nginx</p>
+<p>1、安装编译工具包（使用CentOS yum命令安装，安装的包比较多，方便以后配置lnmp环境）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y make apr* autoconf automake curl curl-devel gcc gcc-c++ gtk+-devel zlib-devel openssl openssl-devel pcre-devel gd kernel keyutils patch perl kernel-headers compat*  cpp glibc libgomp libstdc++-devel keyutils-libs-devel libsepol-devel libselinux-devel krb5-devel  libXpm* freetype freetype-devel freetype* fontconfig fontconfig-devel  libjpeg* libpng* php-common php-gd gettext gettext-devel ncurses* libtool* libxml2 libxml2-devel patch policycoreutils bison</div></pre></td></tr></table></figure></p>
+<p>2、下载软件包<br>（1）<a href="http://nginx.org/download/nginx-1.9.0.tar.gz" target="_blank" rel="external">http://nginx.org/download/nginx-1.9.0.tar.gz</a>  #下载Nginx<br>（2）<a href="https://sourceforge.net/projects/pcre/files/pcre/8.35/pcre-8.35.tar.gz/download" target="_blank" rel="external">https://sourceforge.net/projects/pcre/files/pcre/8.35/pcre-8.35.tar.gz/download</a>  #下载pcre （支持nginx伪静态）<br>上传以上软件包到/usr/local/ 目录</p>
+<p>3、安装pcre<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/src</div><div class="line">mkdir /usr/local/pcre #创建安装目录</div><div class="line">tar -zxvf pcre-8.35.tar.gz</div><div class="line">cd pcre-8.35</div><div class="line">./configure --prefix=/usr/local/pcre </div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure></p>
+<p>4、安装Nginx<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/</div><div class="line">groupadd  www  </div><div class="line">useradd -g www www -s /bin/false  </div><div class="line">tar  -zxvf nginx-1.9.0.tar.gz </div><div class="line">cd nginx-1.9.0</div><div class="line"></div><div class="line">*带参数编译根据自己使用nginx的具体情况安装对应模块*</div><div class="line">./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module  --with-mail_ssl_module --with-file-aio</div><div class="line"></div><div class="line">make &amp;&amp; make install</div><div class="line"></div><div class="line">设置nginx开启启动</div><div class="line">vi /etc/rc.d/init.d/nginx #编辑启动文件添加下面内容</div><div class="line">#!/bin/sh</div><div class="line">#</div><div class="line"># nginx - this script starts and stops the nginx daemin</div><div class="line">#</div><div class="line"></div><div class="line"># Comments to support chkconfig on RedHat Linux</div><div class="line"># chkconfig: 2345 64 36</div><div class="line"># description: nginx</div><div class="line"></div><div class="line"># Comments to support LSB init script conventions</div><div class="line">### BEGIN INIT INFO</div><div class="line"># Provides: nginx</div><div class="line"># Required-Start: $local_fs $network $remote_fs</div><div class="line"># Should-Start: ypbind nscd ldap ntpd xntpd</div><div class="line"># Required-Stop: $local_fs $network $remote_fs</div><div class="line"># Default-Start:  2 3 4 5</div><div class="line"># Default-Stop: 0 1 6</div><div class="line"># Short-Description: start and stop nginx</div><div class="line">### END INIT INFO</div><div class="line"></div><div class="line"># Source function library.</div><div class="line">. /etc/init.d/functions</div><div class="line"></div><div class="line">nginx=&quot;/usr/sbin/nginx &quot;</div><div class="line">prog=$(basename $nginx)</div><div class="line"></div><div class="line">NGINX_CONF_FILE=&quot;/etc/nginx/nginx.conf&quot;</div><div class="line"></div><div class="line">lockfile=/var/lock/subsys/nginx</div><div class="line"></div><div class="line">start() &#123;</div><div class="line">    [ -x $nginx ] || exit 5</div><div class="line">    [ -f $NGINX_CONF_FILE ] || exit 6</div><div class="line">    echo -n $&quot;Starting $prog: &quot;</div><div class="line">    daemon $nginx -c $NGINX_CONF_FILE</div><div class="line">    retval=$?</div><div class="line">    echo</div><div class="line">    [ $retval -eq 0 ] &amp;&amp; touch $lockfile</div><div class="line">    return $retval</div><div class="line">&#125;</div><div class="line"></div><div class="line">stop() &#123;</div><div class="line">    echo -n $&quot;Stopping $prog: &quot;</div><div class="line">    killproc $prog -QUIT</div><div class="line">    retval=$?</div><div class="line">    echo</div><div class="line">    [ $retval -eq 0 ] &amp;&amp; rm -f $lockfile</div><div class="line">    return $retval</div><div class="line">&#125;</div><div class="line"></div><div class="line">restart() &#123;</div><div class="line">    configtest || return $?</div><div class="line">    stop</div><div class="line">    sleep 1</div><div class="line">    start</div><div class="line">&#125;</div><div class="line"></div><div class="line">reload() &#123;</div><div class="line">    configtest || return $?</div><div class="line">    echo -n $&quot;Reloading $prog: &quot;</div><div class="line">    killproc $nginx -HUP</div><div class="line">    RETVAL=$?</div><div class="line">    echo</div><div class="line">&#125;</div><div class="line"></div><div class="line">force_reload() &#123;</div><div class="line">    restart</div><div class="line">&#125;</div><div class="line"></div><div class="line">configtest() &#123;</div><div class="line">  $nginx -t -c $NGINX_CONF_FILE</div><div class="line">&#125;</div><div class="line"></div><div class="line">rh_status() &#123;</div><div class="line">    status $prog</div><div class="line">&#125;</div><div class="line"></div><div class="line">rh_status_q() &#123;</div><div class="line">    rh_status &gt;/dev/null 2&gt;&amp;1</div><div class="line">&#125;</div><div class="line"></div><div class="line">case &quot;$1&quot; in</div><div class="line">    start)</div><div class="line">        rh_status_q &amp;&amp; exit 0</div><div class="line">        $1</div><div class="line">        ;;</div><div class="line">    stop)</div><div class="line">        rh_status_q || exit 0</div><div class="line">        $1</div><div class="line">        ;;</div><div class="line">    restart|configtest)</div><div class="line">        $1</div><div class="line">        ;;</div><div class="line">    reload)</div><div class="line">        rh_status_q || exit 7</div><div class="line">        $1</div><div class="line">        ;;</div><div class="line">    force-reload)</div><div class="line">        force_reload</div><div class="line">        ;;</div><div class="line">    status)</div><div class="line">        rh_status</div><div class="line">        ;;</div><div class="line">    condrestart|try-restart)</div><div class="line">        rh_status_q || exit 0</div><div class="line">            ;;</div><div class="line">    *)</div><div class="line">        echo $&quot;Usage: $0 &#123;start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest&#125;&quot;</div><div class="line">        exit 2</div><div class="line">esac</div><div class="line">*************************************************************************************************</div><div class="line">:wq! #保存退出</div><div class="line">chmod 775 /etc/rc.d/init.d/nginx #赋予文件执行权限</div><div class="line">chkconfig nginx on #设置开机启动</div><div class="line">/etc/rc.d/init.d/nginx restart  #重新启动Nginx</div><div class="line">service nginx restart</div><div class="line">*************************************************************************************************</div></pre></td></tr></table></figure></p>
+<p>三、配置Nginx<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp /etc/nginx/nginx.conf  /etc/nginx/nginx.conf.bak  #备份nginx配置文件</div></pre></td></tr></table></figure></p>
+<p>1、设置nginx运行账<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">vi  /etc/nginx/nginx.conf  #编辑，修改</div><div class="line">找到server，在上面一行添加如下内容：</div><div class="line">server &#123;</div><div class="line">listen       80 default;</div><div class="line">server_name  _;</div><div class="line">location / &#123;</div><div class="line">root   html;</div><div class="line">return 404;</div><div class="line">&#125;</div><div class="line">location ~ /.ht &#123;</div><div class="line"></div><div class="line">deny  all;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">:wq! #保存退出</div><div class="line">service nginx restart</div><div class="line">这样设置之后，空主机头访问会直接跳转到nginx404错误页面。</div></pre></td></tr></table></figure></p>
+<p>3、添加nginx虚拟主机包含文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">cd /etc/nginx/</div><div class="line">mkdir vhost   </div><div class="line">vi /etc/nginx/nginx.conf</div><div class="line">找到上一步添加的代码，在最后添加如下内容：</div><div class="line">include  vhost/*.conf;</div><div class="line">:wq! #保存退出</div><div class="line">例如：</div><div class="line">server &#123;</div><div class="line">listen       80 default;</div><div class="line">server_name  _;</div><div class="line">location / &#123;</div><div class="line">root   html;</div><div class="line">return 404;</div><div class="line">&#125;</div><div class="line">location ~ /.ht &#123;</div><div class="line">deny  all;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">include  vhost/*.conf;</div></pre></td></tr></table></figure></p>
+<p>4、添加Web服务器列表文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cd  /etc/nginx/   #进入目录 </div><div class="line">touch  mysvrhost.conf  #建立文件</div><div class="line">vi  /etc/nginx/nginx.conf   #编辑</div><div class="line">找到上一步添加的代码，在下面添加一行</div><div class="line">include  mysvrhost.conf;</div><div class="line">:wq! #保存退出</div></pre></td></tr></table></figure></p>
+<p>5、设置nginx全局参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">vi  /etc/nginx/nginx.conf</div><div class="line">worker_processes 2;   # 工作进程数,为CPU的核心数或者两倍</div><div class="line">events</div><div class="line">&#123;</div><div class="line">use epoll;   #增加</div><div class="line">worker_connections 65535;    #修改为65535，最大连接数。</div><div class="line">&#125;</div><div class="line">********以下代码在http &#123; 部分增加与修改********</div><div class="line">server_names_hash_bucket_size 128;   #增加</div><div class="line">client_header_buffer_size 32k;       #增加</div><div class="line">large_client_header_buffers 4 32k;   #增加</div><div class="line">client_max_body_size 300m;           #增加</div><div class="line">tcp_nopush     on;      #修改为on</div><div class="line">keepalive_timeout  60;  #修改为60</div><div class="line">tcp_nodelay on;        #增加</div><div class="line">server_tokens off;     #增加，不显示nginx版本信息</div><div class="line">gzip  on;  #修改为on</div><div class="line">gzip_min_length  1k;      #增加</div><div class="line">gzip_buffers     4 16k;   #增加</div><div class="line">gzip_http_version 1.1;    #增加</div><div class="line">gzip_comp_level 2;        #增加</div><div class="line">gzip_types       text/plain application/x-javascript text/css application/xml;  #增加</div><div class="line">gzip_vary on;  #增加</div></pre></td></tr></table></figure></p>
+<p>6、设置Web服务器列表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cd  /etc/nginx   #进入目录</div><div class="line">vi mysvrhost.conf  #编辑，添加以下代码</div><div class="line">upstream  osyunweihost &#123;</div><div class="line">server 192.168.21.127:80 weight=1 max_fails=2 fail_timeout=30s;</div><div class="line">server 192.168.21.128:80 weight=1 max_fails=2 fail_timeout=30s;</div><div class="line">ip_hash;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>7、新建虚拟主机配置文件<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">```</div><div class="line">cd /etc/nginx/vhost   </div><div class="line">touch osyunwei.conf #建立虚拟主机配置文件</div><div class="line">vi  osyunwei.conf #编辑</div><div class="line">log_format  access  &apos;$remote_addr - $remote_user [$time_local] $request &apos;</div><div class="line">&apos;&quot;$status&quot; $body_bytes_sent &quot;$http_referer&quot; &apos;</div><div class="line">&apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;</div><div class="line">server</div><div class="line">&#123;</div><div class="line">listen       80;</div><div class="line">server_name www.a.com www.b.com;</div><div class="line">location /</div><div class="line">&#123;</div><div class="line">proxy_next_upstream http_502 http_504 error timeout invalid_header;</div><div class="line">proxy_pass http://osyunweihost;</div><div class="line">#proxy_redirect off;</div><div class="line">proxy_set_header Host  $host;</div><div class="line">proxy_set_header X-Forwarded-For  $remote_addr;</div><div class="line">&#125;</div><div class="line">location /NginxStatus &#123;</div><div class="line">stub_status on;</div><div class="line">access_log  on;</div><div class="line">auth_basic  &quot;NginxStatus&quot;;</div><div class="line">######auth_basic_user_file  pwd;</div><div class="line">&#125;</div><div class="line">access_log  /usr/local/nginx/logs/access.log  access;</div><div class="line">&#125;</div><div class="line">:wq!  #保存配置</div><div class="line">service nginx restart  #重启nginx</div></pre></td></tr></table></figure></p>
+<p><strong><strong>至此nginx安装配置基本完成</strong></strong></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+           
+    
+        <a href="/2016/10/25/nginxbianyi/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="/2016/10/25/nginxbianyi/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2016/10/25/nginxw/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    nginx的URL重定向功能
+                
+            </div>
+        </a>
+    
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2016/10/25/nginxbianyi/" data-title="nginx的编译安装" data-url="/2016/10/25/nginxbianyi/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/10/25/nginxw/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://139.224.59.74:4000/img/0.jpg)" alt="nginx的URL重定向功能" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/nginx/">nginx</a></p>
+                            <p class="item-title"><a href="/2016/10/25/nginxw/" class="title">nginx的URL重定向功能</a></p>
+                            <p class="item-date"><time datetime="2016-10-25T04:02:44.567Z" itemprop="datePublished">2016-10-25</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/10/25/nginxbianyi/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://139.224.59.74:4000/img/0.jpg)" alt="nginx的编译安装" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/nginx/">nginx</a></p>
+                            <p class="item-title"><a href="/2016/10/25/nginxbianyi/" class="title">nginx的编译安装</a></p>
+                            <p class="item-date"><time datetime="2016-10-25T03:56:53.927Z" itemprop="datePublished">2016-10-25</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/科技/" style="font-size: 10px;">科技</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://www.baidu.com">百度</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2016 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_config = function () {
+        
+            this.page.url = '/2016/10/25/nginxbianyi/';
+        
+        this.page.identifier = 'nginxbianyi';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'hexo-theme-icarus' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
