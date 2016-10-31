@@ -3,26 +3,20 @@
 <head>
     <meta charset="utf-8">
     
-    <title>StartSSL免费https证书申请安装 | AlexZhou</title>
+    <title>nginx配置SSL双向认证 | AlexZhou</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="StartSSL是比较早的免费https提供商，由于之前的沃通SSL证书被禁用后，目前只有StartSSL免费提供着第三方证书，当然你也可以选择购买StartSSL的收费版证书，由于本人自己测试以及使用着免费的StartSSL证书，所以废话不多说直接说明StartSSL的配置安装说明。
-第一、StartSSL官方网站https://www.startssl.com/
-打开startssl官网新用户">
+    <meta name="description" content="https双向认证 双向认证SSL 协议的具体通讯过程，这种情况要求服务器和客户端双方都有证书。 单向认证SSL 协议不需要客户端拥有CA证书，以及在协商对称密码方案，对称通话密钥时，服务器发送给客户端的是没有加过密的（这并不影响SSL过程的安全性）密码方案。这样，双方具体的通讯内容，就是加密过的数据。如果有第三方攻击，获得的只是加密的数据，第三方要获得有用的信息，就需要对加密的数据进行解密，这">
 <meta property="og:type" content="article">
-<meta property="og:title" content="StartSSL免费https证书申请安装">
-<meta property="og:url" content="/2016/10/27/SSL/index.html">
+<meta property="og:title" content="nginx配置SSL双向认证">
+<meta property="og:url" content="/2016/10/31/nginxrenzhen/index.html">
 <meta property="og:site_name" content="AlexZhou">
-<meta property="og:description" content="StartSSL是比较早的免费https提供商，由于之前的沃通SSL证书被禁用后，目前只有StartSSL免费提供着第三方证书，当然你也可以选择购买StartSSL的收费版证书，由于本人自己测试以及使用着免费的StartSSL证书，所以废话不多说直接说明StartSSL的配置安装说明。
-第一、StartSSL官方网站https://www.startssl.com/
-打开startssl官网新用户">
-<meta property="og:image" content="http://139.224.59.74/msbgn/startssl-index.png">
-<meta property="og:updated_time" content="2016-10-27T08:29:13.051Z">
+<meta property="og:description" content="https双向认证 双向认证SSL 协议的具体通讯过程，这种情况要求服务器和客户端双方都有证书。 单向认证SSL 协议不需要客户端拥有CA证书，以及在协商对称密码方案，对称通话密钥时，服务器发送给客户端的是没有加过密的（这并不影响SSL过程的安全性）密码方案。这样，双方具体的通讯内容，就是加密过的数据。如果有第三方攻击，获得的只是加密的数据，第三方要获得有用的信息，就需要对加密的数据进行解密，这">
+<meta property="og:image" content="http://139.224.59.74/msbgn/gup12ks.png">
+<meta property="og:updated_time" content="2016-10-31T08:07:33.480Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="StartSSL免费https证书申请安装">
-<meta name="twitter:description" content="StartSSL是比较早的免费https提供商，由于之前的沃通SSL证书被禁用后，目前只有StartSSL免费提供着第三方证书，当然你也可以选择购买StartSSL的收费版证书，由于本人自己测试以及使用着免费的StartSSL证书，所以废话不多说直接说明StartSSL的配置安装说明。
-第一、StartSSL官方网站https://www.startssl.com/
-打开startssl官网新用户">
-<meta name="twitter:image" content="http://139.224.59.74/msbgn/startssl-index.png">
+<meta name="twitter:title" content="nginx配置SSL双向认证">
+<meta name="twitter:description" content="https双向认证 双向认证SSL 协议的具体通讯过程，这种情况要求服务器和客户端双方都有证书。 单向认证SSL 协议不需要客户端拥有CA证书，以及在协商对称密码方案，对称通话密钥时，服务器发送给客户端的是没有加过密的（这并不影响SSL过程的安全性）密码方案。这样，双方具体的通讯内容，就是加密过的数据。如果有第三方攻击，获得的只是加密的数据，第三方要获得有用的信息，就需要对加密的数据进行解密，这">
+<meta name="twitter:image" content="http://139.224.59.74/msbgn/gup12ks.png">
     
 
     
@@ -200,7 +194,7 @@
 </aside>
 
             
-            <section id="main"><article id="post-SSL" class="article article-type-post" itemscope itemprop="blogPost">
+            <section id="main"><article id="post-nginxrenzhen" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -208,7 +202,7 @@
                 
     
         <h1 class="article-title" itemprop="name">
-            StartSSL免费https证书申请安装
+            nginx配置SSL双向认证
         </h1>
     
 
@@ -217,8 +211,8 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/10/27/SSL/">
-            <time datetime="2016-10-27T08:29:13.062Z" itemprop="datePublished">2016-10-27</time>
+        <a href="/2016/10/31/nginxrenzhen/">
+            <time datetime="2016-10-31T08:07:33.485Z" itemprop="datePublished">2016-10-31</time>
         </a>
     </div>
 
@@ -226,13 +220,13 @@
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/SSL/">SSL</a>
+        <a class="article-category-link" href="/categories/nginx/">nginx</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/StartSSL/">StartSSL</a>, <a class="tag-link" href="/tags/科技/">科技</a>
+        <a class="tag-link" href="/tags/nginx/">nginx</a>, <a class="tag-link" href="/tags/ssl/">ssl</a>
     </div>
 
                     </div>
@@ -243,12 +237,23 @@
         <div class="article-entry" itemprop="articleBody">
         
             
-            <p>StartSSL是比较早的免费https提供商，由于之前的沃通SSL证书被禁用后，目前只有StartSSL免费提供着第三方证书，当然你也可以选择购买StartSSL的收费版证书，由于本人自己测试以及使用着免费的StartSSL证书，所以废话不多说直接说明StartSSL的配置安装说明。</p>
-<p>第一、StartSSL官方网站<br><a href="https://www.startssl.com/" target="_blank" rel="external">https://www.startssl.com/</a></p>
-<p><img src="http://139.224.59.74/msbgn/startssl-index.png" alt="startssl"><br><em>打开startssl官网新用户进行注册，老用户直接跳过注册，进行登录。</em><br><a id="more"></a><br>第二、新注册StartSSL账号<br><img src="http://139.224.59.74/msbgn/startssl-Signup.png" alt="startssl"><br>根据说明选择国家，填写注册自己的邮箱进行注册操作，验证码会发送至对应的邮箱。(<em>按照注册流程下一步进行操作，楼主是已经注册的用户，直接点击LOGIN即可</em>)</p>
-<p>第三、选择SSL证书的应用类型、选择验证方式<br><img src="http://139.224.59.74/msbgn/startss-validation.png" alt="startssl"><br>这里我们使用的是域名的方式进行验证<br><img src="http://139.224.59.74/msbgn/validation-code.png" alt="startssl"><br>填写好需要验证的域名或者子域名，然后点击确定，进行校验，选择需要验证的邮箱，并且受到邮箱的验证码填入validation code 点击验证</p>
-<p>第四、申请免费域名SSL证书<br><img src="http://139.224.59.74/msbgn/startss-DV.png" alt="startssl"><br>选择要申请的证书的合适类型，这里我们选择，Free User (Not Validated)，DV SSLCertificate证书类型<br><img src="http://139.224.59.74/msbgn/startss-CRS.png" alt="startssl"><br>填写申请的域名(最多支持5个子域名免费版的证书，否则需要购买更多)，填写CSR，有两种方式：<br>1.选择下载tartComTool.exe 客户端去生成CSR<br>2.使用命令行生成openssl req -newkey rsa:2048 -keyout yourname.key -out yourname.csr<br>选择由IE Browser获得pfx格式证书，点击提交</p>
-<p>第五、StartSSL免费SSL证书的下载和使用<br><img src="http://139.224.59.74/msbgn/startss-cests.png" alt="startssl"><br>打开Certificate List这时候已经生成了刚刚申请的证书，说明下，这里我们默认注册的证书是1年如果需要增加证书使用年限在生成csr的时候修改证书的使用年限。<br><img src="http://139.224.59.74/msbgn/startss-yingyong.png" alt="startssl"><br>证书的应用场景比较广泛比如nginx、ISS、ApacheServer等多服务器上部署，至此证书的申请使用已经完成，接下来就是各位部署到自己对应的服务器使用了，有兴趣的朋友可以自己申请部署试一试。</p>
+            <p><img src="http://139.224.59.74/msbgn/gup12ks.png" alt="nginxSSL"></p>
+<p><strong>https双向认证</strong> 双向认证SSL 协议的具体通讯过程，这种情况要求服务器和客户端双方都有证书。 单向认证SSL 协议不需要客户端拥有CA证书，以及在协商对称密码方案，对称通话密钥时，服务器发送给客户端的是没有加过密的（这并不影响SSL过程的安全性）密码方案。这样，双方具体的通讯内容，就是加密过的数据。如果有第三方攻击，获得的只是加密的数据，第三方要获得有用的信息，就需要对加密的数据进行解密，这时候的安全就依赖于密码方案的安全。而幸运的是，目前所用的密码方案，只要通讯密钥长度足够的长，就足够的安全。这也是我们强调要求使用128位加密通讯的原因。<br>一般Web应用都是采用单向认证的，原因很简单，用户数目广泛，且无需做在通讯层做用户身份验证，一般都在应用逻辑层来保证用户的合法登入。但如果是企业应用对接，情况就不一样，可能会要求对客户端（相对而言）做身份验证。这时就需要做双向认证。<br><a id="more"></a></p>
+<h2 id="1、安装nginx"><a href="#1、安装nginx" class="headerlink" title="1、安装nginx"></a>1、安装nginx</h2><p>参考《nginx安装》：<a href="http://139.224.59.74:4000/2016/10/25/nginxbianyi/" target="_blank" rel="external">http://139.224.59.74:4000/2016/10/25/nginxbianyi/</a></p>
+<hr>
+<h2 id="2、使用openssl实现证书中心"><a href="#2、使用openssl实现证书中心" class="headerlink" title="2、使用openssl实现证书中心"></a>2、使用openssl实现证书中心</h2><p>由于是使用openssl架设私有证书中心，因此要保证以下字段在证书中心的证书、服务端证书、客户端证书中都相同</p>
+<h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Country Name</div><div class="line"> State <span class="keyword">or</span> Province Name</div><div class="line"> Locality Name</div><div class="line"> Organization Name</div><div class="line"> Organizational Unit Name</div></pre></td></tr></table></figure>
+<p>编辑证书中心配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">vim /etc/pki/tls/openssl.cnf</div><div class="line">[ ca ]</div><div class="line">default_ca      = CA_default            # The default ca section</div><div class="line">####################################################################</div><div class="line">[ CA_default ]</div><div class="line">dir             = /etc/pki/CA           # Where everything is kept</div><div class="line">certs           = $dir/certs            # Where the issued certs are kept</div><div class="line">crl_dir         = $dir/crl              # Where the issued crl are kept</div><div class="line">database        = $dir/index.txt        # database index file.</div><div class="line">#unique_subject = no                    # Set to &apos;no&apos; to allow creation of                                      # several ctificates with same subject.</div><div class="line">new_certs_dir   = $dir/newcerts         # default place for new certs.</div><div class="line">certificate     = $dir/cacert.pem       # The CA certificate</div><div class="line">serial          = $dir/serial           # The current serial number</div><div class="line">crlnumber       = $dir/crlnumber        # the current crl number                                      # must be commented out to leave a V1 CRL</div><div class="line">crl             = $dir/crl.pem          # The current CRL</div><div class="line">private_key     = $dir/private/cakey.pem# The private key</div><div class="line">RANDFILE        = $dir/private/.rand    # private random number file</div><div class="line">x509_extensions = usr_cert              # The extentions to add to the cert</div><div class="line"># Comment out the following two lines for the &quot;traditional&quot;</div><div class="line"># (and highly broken) format.</div><div class="line">name_opt        = ca_default            # Subject Name options</div><div class="line">cert_opt        = ca_default            # Certificate field options</div></pre></td></tr></table></figure>
+<p>创建证书私钥<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/pki/CA/private</div><div class="line">(umask 077;openssl genrsa -out cakey.pem 2048)</div></pre></td></tr></table></figure></p>
+<p>生成自签证书（我这里申请的自签证书为10年，如有报错，请检查vim /etc/pki/tls/openssl.cnf）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/pki/CA/</div><div class="line">openssl req -new -x509 -key private/cakey.pem -out cacert.pem -days=3655</div></pre></td></tr></table></figure></p>
+<h2 id="3、创建服务器证书"><a href="#3、创建服务器证书" class="headerlink" title="3、创建服务器证书"></a>3、创建服务器证书</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir /usr/local/nginx/ssl</div><div class="line"> cd /usr/local/nginx/ssl</div><div class="line"> (umask 077;openssl genrsa -out nginx.key 1024)</div><div class="line"> openssl req -new -key nginx.key -out nginx.csr</div><div class="line"> openssl ca -in nginx.csr -out nginx.crt -days=3650</div></pre></td></tr></table></figure>
+<p>##4、创建客户端浏览器证书</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(umask 077;openssl genrsa -out client.key 1024)</div><div class="line"> openssl req -new -key client.key -out client.csr</div><div class="line"> openssl ca -in client.csr -out client.crt -days=3650</div><div class="line"> 将文本格式的证书转换成可以导入浏览器的证书，最好是设置客户端证书访问密码，并且报存好客户端证书p12</div><div class="line"> openssl pkcs12 -export -clcerts -in client.crt -inkey client.key -out client.p12</div></pre></td></tr></table></figure>
+<h2 id="5、配置nginx服务器验证"><a href="#5、配置nginx服务器验证" class="headerlink" title="5、配置nginx服务器验证"></a>5、配置nginx服务器验证</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">vim /usr/local/nginx/conf/nginx.conf</div><div class="line"> ssl on;</div><div class="line"> ssl_certificate         /usr/local/nginx/ssl/nginx.crt;</div><div class="line"> ssl_certificate_key     /usr/local/nginx/ssl/nginx.key;</div><div class="line"> ssl_client_certificate  /usr/local/nginx/ssl/cacert.pem;</div><div class="line"> ssl_session_timeout     5m;</div><div class="line"> #ssl_verify_client       on;                         服务器验证客户端，暂时不开启，让没有证书的客户端可以访问，先完成单向验证</div><div class="line"> ssl_protocols           SSLv2 SSLv3 TLSv1;</div></pre></td></tr></table></figure>
+<h2 id="6、打开浏览器安装客户端证书"><a href="#6、打开浏览器安装客户端证书" class="headerlink" title="6、打开浏览器安装客户端证书"></a>6、打开浏览器安装客户端证书</h2><p><img src="http://139.224.59.74/msbgn/toiss.png" alt="client1"><br><img src="http://139.224.59.74/msbgn/mima1.png" alt="client2"><br>点击安装生成的证书下一步输入证书密码(密码就是之前生成证书时候设置的密码)，下一步安装成功。</p>
+<h2 id="7、验证证书的使用"><a href="#7、验证证书的使用" class="headerlink" title="7、验证证书的使用"></a>7、验证证书的使用</h2><h3 id="没有导入证书访问"><a href="#没有导入证书访问" class="headerlink" title="没有导入证书访问"></a>没有导入证书访问</h3><p><img src="http://139.224.59.74/msbgn/catsd.png" alt="client3"><br>没有导入浏览器安装的证书显示为400</p>
+<h3 id="导入证书访问"><a href="#导入证书访问" class="headerlink" title="导入证书访问"></a>导入证书访问</h3><p><img src="http://139.224.59.74/msbgn/nhkk.png" alt="client4"><br>注意:安装证书的时候，记得安装完成证书关闭浏览器重新打开访问。<br>感谢阅读这份帮助文档。请点击右上角开启分享体验吧。</p>
 
         
         </div>
@@ -312,7 +317,7 @@
 
            
     
-        <a href="/2016/10/27/SSL/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="/2016/10/27/SSL/">评论</a>
+        <a href="/2016/10/31/nginxrenzhen/#comments" class="article-comment-link disqus-comment-count" data-disqus-url="/2016/10/31/nginxrenzhen/">评论</a>
     
 
 ~        
@@ -415,19 +420,10 @@
         
 <nav id="article-nav">
     
-        <a href="/2016/10/31/nginxrenzhen/" id="article-nav-newer" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">上一篇</strong>
-            <div class="article-nav-title">
-                
-                    nginx配置SSL双向认证
-                
-            </div>
-        </a>
     
-    
-        <a href="/2016/10/25/nginxbianyi/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2016/10/27/SSL/" id="article-nav-older" class="article-nav-link-wrap">
             <strong class="article-nav-caption">下一篇</strong>
-            <div class="article-nav-title">nginx的编译安装</div>
+            <div class="article-nav-title">StartSSL免费https证书申请安装</div>
         </a>
     
 </nav>
@@ -439,7 +435,7 @@
 
 <section id="comments"
 <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key="2016/10/27/SSL/" data-title="StartSSL免费https证书申请安装" data-url="/2016/10/27/SSL/"></div>
+    <div class="ds-thread" data-thread-key="2016/10/31/nginxrenzhen/" data-title="nginx配置SSL双向认证" data-url="/2016/10/31/nginxrenzhen/"></div>
     <!-- 多说评论框 end -->
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
     <script type="text/javascript">
@@ -620,9 +616,9 @@
     <script>
     var disqus_config = function () {
         
-            this.page.url = '/2016/10/27/SSL/';
+            this.page.url = '/2016/10/31/nginxrenzhen/';
         
-        this.page.identifier = 'SSL';
+        this.page.identifier = 'nginxrenzhen';
     };
     (function() { 
         var d = document, s = d.createElement('script');  
