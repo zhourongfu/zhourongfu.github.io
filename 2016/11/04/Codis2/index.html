@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Codis 高可用负载均衡群集的搭建与使用2 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta property="og:type" content="article">
+<meta property="og:title" content="Codis 高可用负载均衡群集的搭建与使用2">
+<meta property="og:url" content="/2016/11/04/Codis2/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:image" content="http://www.msbgn.cn/msbgn/Codis1.png">
+<meta property="og:updated_time" content="2016-11-04T04:19:17.741Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Codis 高可用负载均衡群集的搭建与使用2">
+<meta name="twitter:image" content="http://www.msbgn.cn/msbgn/Codis1.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">Time Flies(岁月如梭)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                24
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                18
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Codis2" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Codis 高可用负载均衡群集的搭建与使用2
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2016/11/04/Codis2/">
+            <time datetime="2016-11-04T04:19:17.741Z" itemprop="datePublished">2016-11-04</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Codis/">Codis</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Codis/">Codis</a>, <a class="tag-link" href="/tags/负载/">负载</a>, <a class="tag-link" href="/tags/集群/">集群</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p><img src="http://www.msbgn.cn/msbgn/Codis1.png" alt="Codis"></p>
+<a id="more"></a>
+<h2 id="一、部署Keepalived-haproxy-高可用负载均衡"><a href="#一、部署Keepalived-haproxy-高可用负载均衡" class="headerlink" title="一、部署Keepalived + haproxy 高可用负载均衡"></a>一、部署Keepalived + haproxy 高可用负载均衡</h2><p>安装<code>haproxy</code>、<code>keepalived</code> (43.130、43.132 机器上操作)</p>
+<ul>
+<li>1.查看系统内核是否支持<code>tproxy</code></li>
+</ul>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@vmware<span class="number">-130</span> ~]# grep TPROXY /boot/config-`uname -r` </div><div class="line">CONFIG_NETFILTER_TPROXY=m</div><div class="line">CONFIG_NETFILTER_XT_TARGET_TPROXY=m</div><div class="line">内核为<span class="number">2.6</span><span class="number">.32</span><span class="number">-220.</span>el6.x86_64，支持TPROXY；</div></pre></td></tr></table></figure>
+<ul>
+<li>2.源码安装<code>pcre-8.01</code></li>
+</ul>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@vmware<span class="number">-130</span> ~]# rpm -qa|grep pcre</div><div class="line">pcre<span class="number">-7.8</span><span class="number">-6.</span>el6.x86_64</div><div class="line">pcre-devel<span class="number">-7.8</span><span class="number">-6.</span>el6.x86_64</div></pre></td></tr></table></figure>
+<p>系统已经<code>rpm</code>形式安装了<code>pcre</code>，但安装<code>haproxy</code>时，提示找不到<code>pcre</code>的库文件，看了<code>haproxy</code>的<code>Makefile</code>文件，指定<code>pcre</code>的为<code>/usr/local</code>下，故再源码安装一个<code>pcre-8.01</code>，如下(如果不重新安装，可以改<code>makefile</code>文件或把库文件软链到<code>makefile</code>文件指定的路径)</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># cd /data/packages</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># tar -zxf pcre-8.37.tar.gz &amp;&amp; cd pcre-8.37</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> pcre<span class="number">-8.36</span> ]<span class="meta"># ./configure --disable-shared --with-pic</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> pcre<span class="number">-8.36</span> ]<span class="meta"># make &amp;&amp; make install</span></div></pre></td></tr></table></figure>
+<ul>
+<li>3.安装 haproxy-1.4.22</li>
+</ul>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@vmware<span class="number">-130</span> ~]# cd /data/packages</div><div class="line">[root@vmware<span class="number">-130</span> ~]# tar xf haproxy<span class="number">-1.4</span><span class="number">.26</span>.tar.gz</div><div class="line">[root@vmware<span class="number">-130</span> ~]# cd haproxy<span class="number">-1.4</span><span class="number">.26</span></div><div class="line">[root@vmware<span class="number">-130</span> haproxy<span class="number">-1.4</span><span class="number">.26</span> ]# make TARGET=linux26 CPU=x86_64 USE_STATIC_PCRE=<span class="number">1</span> USE_LINUX_TPROXY=<span class="number">1</span></div><div class="line">[root@vmware<span class="number">-130</span> haproxy<span class="number">-1.4</span><span class="number">.26</span> ]# make install target=linux26</div><div class="line">[root@vmware<span class="number">-130</span> haproxy<span class="number">-1.4</span><span class="number">.26</span> ]# mkdir -p /usr/local/haproxy/sbin</div><div class="line">[root@vmware<span class="number">-130</span> haproxy<span class="number">-1.4</span><span class="number">.26</span> ]# mkdir -p /data/haproxy/&#123;conf,run,logs&#125;</div><div class="line">[root@vmware<span class="number">-130</span> haproxy<span class="number">-1.4</span><span class="number">.26</span> ]# ln -s /usr/local/sbin/haproxy /usr/local/haproxy/sbin</div></pre></td></tr></table></figure>
+<ul>
+<li>4.创建haproxy启动脚本</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div></pre></td><td class="code"><pre><div class="line">[root@vmware-130 ~]<span class="comment"># vim /etc/init.d/haproxy </span></div><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"><span class="comment"># haproxy</span></div><div class="line"><span class="comment"># chkconfig: 35 85 15</span></div><div class="line"><span class="comment"># description: HAProxy is a free, very fast and reliable solution \</span></div><div class="line"><span class="comment"># offering high availability, load balancing, and \</span></div><div class="line"><span class="comment"># proxying for TCP and HTTP-based applications</span></div><div class="line"><span class="comment"># processname: haproxy</span></div><div class="line"><span class="comment"># config: /data/haproxy/conf/haproxy.cfg</span></div><div class="line"><span class="comment"># pidfile: /data/haproxy/run/haproxy.pid</span></div><div class="line"></div><div class="line"><span class="comment"># Source function library.</span></div><div class="line">. /etc/rc.d/init.d/<span class="built_in">functions</span></div><div class="line"></div><div class="line"><span class="comment"># Source networking configuration.</span></div><div class="line">. /etc/sysconfig/network</div><div class="line"></div><div class="line"><span class="comment"># Check that networking is up.</span></div><div class="line">[ <span class="string">"<span class="variable">$NETWORKING</span>"</span> = <span class="string">"no"</span> ] &amp;&amp; <span class="built_in">exit</span> 0</div><div class="line"></div><div class="line">config=<span class="string">"/data/haproxy/conf/haproxy.cfg"</span></div><div class="line"><span class="built_in">exec</span>=<span class="string">"/usr/local/haproxy/sbin/haproxy"</span></div><div class="line">prog=$(basename <span class="variable">$exec</span>)</div><div class="line"></div><div class="line">[ <span class="_">-e</span> /etc/sysconfig/<span class="variable">$prog</span> ] &amp;&amp; . /etc/sysconfig/<span class="variable">$prog</span></div><div class="line"></div><div class="line">lockfile=/var/lock/subsys/haproxy</div><div class="line"></div><div class="line"><span class="function"><span class="title">check</span></span>() &#123;</div><div class="line">    <span class="variable">$exec</span> -c -V <span class="_">-f</span> <span class="variable">$config</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span></span>() &#123;</div><div class="line">    <span class="variable">$exec</span> -c -q <span class="_">-f</span> <span class="variable">$config</span></div><div class="line">    <span class="keyword">if</span> [ $? <span class="_">-ne</span> 0 ]; <span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Errors in configuration file, check with <span class="variable">$prog</span> check."</span></div><div class="line">        <span class="built_in">return</span> 1</div><div class="line">    <span class="keyword">fi</span></div><div class="line"> </div><div class="line">    <span class="built_in">echo</span> -n $<span class="string">"Starting <span class="variable">$prog</span>: "</span></div><div class="line">    <span class="comment"># start it up here, usually something like "daemon $exec"</span></div><div class="line">    daemon <span class="variable">$exec</span> -D <span class="_">-f</span> <span class="variable">$config</span> -p /data/haproxy/run/<span class="variable">$prog</span>.pid</div><div class="line">    retval=$?</div><div class="line">    <span class="built_in">echo</span></div><div class="line">    [ <span class="variable">$retval</span> <span class="_">-eq</span> 0 ] &amp;&amp; touch <span class="variable">$lockfile</span></div><div class="line">    <span class="built_in">return</span> <span class="variable">$retval</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="title">stop</span></span>() &#123;</div><div class="line">    <span class="built_in">echo</span> -n $<span class="string">"Stopping <span class="variable">$prog</span>: "</span></div><div class="line">    <span class="comment"># stop it here, often "killproc $prog"</span></div><div class="line">    killproc <span class="variable">$prog</span> </div><div class="line">    retval=$?</div><div class="line">    <span class="built_in">echo</span></div><div class="line">    [ <span class="variable">$retval</span> <span class="_">-eq</span> 0 ] &amp;&amp; rm <span class="_">-f</span> <span class="variable">$lockfile</span></div><div class="line">    <span class="built_in">return</span> <span class="variable">$retval</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="title">restart</span></span>() &#123;</div><div class="line">    <span class="variable">$exec</span> -c -q <span class="_">-f</span> <span class="variable">$config</span></div><div class="line">    <span class="keyword">if</span> [ $? <span class="_">-ne</span> 0 ]; <span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Errors in configuration file, check with <span class="variable">$prog</span> check."</span></div><div class="line">        <span class="built_in">return</span> 1</div><div class="line">    <span class="keyword">fi</span></div><div class="line">    stop</div><div class="line">    start</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="title">reload</span></span>() &#123;</div><div class="line">    <span class="variable">$exec</span> -c -q <span class="_">-f</span> <span class="variable">$config</span></div><div class="line">    <span class="keyword">if</span> [ $? <span class="_">-ne</span> 0 ]; <span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Errors in configuration file, check with <span class="variable">$prog</span> check."</span></div><div class="line">        <span class="built_in">return</span> 1</div><div class="line">    <span class="keyword">fi</span></div><div class="line">    <span class="built_in">echo</span> -n $<span class="string">"Reloading <span class="variable">$prog</span>: "</span></div><div class="line">    <span class="variable">$exec</span> -D <span class="_">-f</span> <span class="variable">$config</span> -p /data/haproxy/run/<span class="variable">$prog</span>.pid -sf $(cat /data/haproxy/run/<span class="variable">$prog</span>.pid)</div><div class="line">    retval=$?</div><div class="line">    <span class="built_in">echo</span></div><div class="line">    <span class="built_in">return</span> <span class="variable">$retval</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="title">force_reload</span></span>() &#123;</div><div class="line">    restart</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="title">fdr_status</span></span>() &#123;</div><div class="line">    status <span class="variable">$prog</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></div><div class="line">    start|stop|restart|reload)</div><div class="line">        <span class="variable">$1</span></div><div class="line">        ;;</div><div class="line">    force-reload)</div><div class="line">        force_reload</div><div class="line">        ;;</div><div class="line">    checkconfig)</div><div class="line">        check</div><div class="line">        ;;</div><div class="line">    status)</div><div class="line">        fdr_status</div><div class="line">        ;;</div><div class="line">    condrestart|try-restart)</div><div class="line">      [ ! <span class="_">-f</span> <span class="variable">$lockfile</span> ] || restart</div><div class="line">    ;;</div><div class="line">    *)</div><div class="line">        <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|status|checkconfig|restart|try-restart|reload|force-reload&#125;"</span></div><div class="line">        <span class="built_in">exit</span> 2</div><div class="line"><span class="keyword">esac</span></div></pre></td></tr></table></figure>
+<p>备注：此脚本stop的时候有问题，有待解决。</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#添加haproxy服务#添加haproxy服务</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># echo <span class="string">"net.ipv4.ip_nonlocal_bind = 1"</span> &gt;&gt; /etc/rsysctl.conf</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># sysctl -p</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># chmod 755 /etc/init.d/haproxy</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># chkconfig --add haproxy</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># chkconfig haproxy on</span></div></pre></td></tr></table></figure>
+<ul>
+<li>5.安装keepalived</li>
+</ul>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@vmware<span class="number">-130</span> ~]# cd /data/packages</div><div class="line">[root@vmware<span class="number">-130</span> ~]# tar zxvf keepalived<span class="number">-1.2</span><span class="number">.16</span>.tar.gz</div><div class="line">[root@vmware<span class="number">-130</span> ~]# cd keepalived<span class="number">-1.2</span><span class="number">.16</span></div><div class="line">[root@vmware<span class="number">-130</span> keepalived<span class="number">-1.2</span><span class="number">.16</span> ]# ./configure --with-kernel-dir=/usr/src/kernels/<span class="number">2.6</span><span class="number">.32</span><span class="number">-504.16</span><span class="number">.2</span>.el6.x86_64/</div><div class="line">\\若/usr/src/kernels/目录下为空，那么安装kernel-headers和kernel-devel包 yum install -y kernel-header kernel-devel</div><div class="line"> [root@vmware<span class="number">-130</span> keepalived<span class="number">-1.2</span><span class="number">.16</span> ]# make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<ul>
+<li>6.配置keepalived,添加keepalived 服务</li>
+</ul>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># cp /usr/local/etc/rc.d/init.d/keepalived /etc/rc.d/init.d/</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># cp /usr/local/etc/sysconfig/keepalived /etc/sysconfig/</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># mkdir -p /data/keepalived/&#123;conf,scripts&#125;</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># cp /usr/local/sbin/keepalived /usr/sbin/</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># chkconfig --add keepalived</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># chkconfig keepalived on</span></div></pre></td></tr></table></figure>
+<ul>
+<li>7 配置haproxy.cfg配置文件( 43.130, 43.132 配置，haproxy.cfg配置文件完全一样 )</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">[root@vmware-<span class="number">130</span> ~]<span class="comment"># vim /usr/local/haproxy/conf/haproxy.cfg</span></div><div class="line"><span class="comment">########### 全局配置 #########</span></div><div class="line">global</div><div class="line"><span class="keyword">log</span> <span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span> <span class="keyword">local</span><span class="number">0</span> err</div><div class="line"><span class="keyword">chroot</span> /usr/<span class="keyword">local</span>/haproxy</div><div class="line">daemon</div><div class="line">nbproc <span class="number">1</span></div><div class="line">group nobody</div><div class="line">user nobody</div><div class="line">pidfile /usr/<span class="keyword">local</span>/haproxy/run/haproxy.pid</div><div class="line">ulimit-n <span class="number">65536</span></div><div class="line"><span class="comment">#spread-checks 5m </span></div><div class="line"><span class="comment">#stats timeout 5m</span></div><div class="line"><span class="comment">#stats maxconn 100</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">######## 默认配置 ############</span></div><div class="line">defaults</div><div class="line">mode tcp                     <span class="comment">#默认的模式mode &#123; tcp|http|health &#125;，tcp是4层，http是7层，health只会返回OK</span></div><div class="line">retries <span class="number">3</span>                    <span class="comment">#两次连接失败就认为是服务器不可用，也可以通过后面设置</span></div><div class="line">option redispatch            <span class="comment">#当serverId对应的服务器挂掉后，强制定向到其他健康的服务器</span></div><div class="line">option abortonclose          <span class="comment">#当服务器负载很高的时候，自动结束掉当前队列处理比较久的链接</span></div><div class="line">maxconn <span class="number">32000</span>                <span class="comment">#默认的最大连接数</span></div><div class="line">timeout <span class="keyword">connect</span> <span class="number">5000</span>ms       <span class="comment">#连接超时</span></div><div class="line">timeout client <span class="number">30000</span>ms       <span class="comment">#客户端超时</span></div><div class="line">timeout server <span class="number">30000</span>ms       <span class="comment">#服务器超时</span></div><div class="line"><span class="comment">#timeout check 2000          #心跳检测超时</span></div><div class="line"><span class="keyword">log</span> <span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span> local3 err     <span class="comment">#[err warning info debug]</span></div><div class="line"> </div><div class="line"><span class="comment">######## proxy 配置#################</span></div><div class="line"><span class="keyword">listen</span> proxy_status </div><div class="line"><span class="keyword">bind</span> <span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>:<span class="number">45001</span></div><div class="line">mode tcp</div><div class="line">balance roundrobin</div><div class="line">server codis_proxy_1 <span class="number">192.168</span>.<span class="number">43.130</span>:<span class="number">19000</span> weight <span class="number">1</span> maxconn <span class="number">10000</span> check inter <span class="number">10</span><span class="keyword">s</span></div><div class="line">server codis_proxy_2 <span class="number">192.168</span>.<span class="number">43.131</span>:<span class="number">19000</span> weight <span class="number">1</span> maxconn <span class="number">10000</span> check inter <span class="number">10</span><span class="keyword">s</span></div><div class="line">server codis_proxy_3 <span class="number">192.168</span>.<span class="number">43.132</span>:<span class="number">19000</span> weight <span class="number">1</span> maxconn <span class="number">10000</span> check inter <span class="number">10</span><span class="keyword">s</span></div><div class="line"> </div><div class="line"><span class="comment">######## 统计页面配置 ########</span></div><div class="line"><span class="keyword">listen</span> admin_stats</div><div class="line"><span class="keyword">bind</span> <span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>:<span class="number">8099</span>     <span class="comment">#监听端口</span></div><div class="line">mode http             <span class="comment">#http的7层模式</span></div><div class="line">option httplog        <span class="comment">#采用http日志格式</span></div><div class="line"><span class="comment">#log 127.0.0.1 local0 err</span></div><div class="line">maxconn <span class="number">10</span></div><div class="line">stats refresh <span class="number">30</span><span class="keyword">s</span>     <span class="comment">#统计页面自动刷新时间</span></div><div class="line">stats uri /stats      <span class="comment">#统计页面url</span></div><div class="line">stats realm XingCloud\ Haproxy     <span class="comment">#统计页面密码框上提示文本</span></div><div class="line">stats auth admin:admin             <span class="comment">#统计页面用户名和密码设置</span></div><div class="line">stats hide-version                 <span class="comment">#隐藏统计页面上HAProxy的版本信息</span></div><div class="line">stats admin <span class="keyword">if</span> TRUE</div></pre></td></tr></table></figure>
+<ul>
+<li>8 配置keepalived.conf配置文件 ( 43.130 上配置，43.132备用配置主要修改参数已经标注 )</li>
+</ul>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line">[root@vmware<span class="number">-130</span> ~]<span class="meta"># vim /data/keepalived/conf/keepalived.conf</span></div><div class="line">! Configuration File for keepalived  </div><div class="line">  </div><div class="line"><span class="class">global_defs </span>&#123;  </div><div class="line">   <span class="class">notification_email </span>&#123;  </div><div class="line">         lwz_benet@<span class="number">163.</span>com </div><div class="line">   &#125;  </div><div class="line">   notification_email_from lwz_benet@<span class="number">1163.</span>com</div><div class="line">   smtp_connect_timeout <span class="number">30</span>  </div><div class="line">   smtp_server <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>  </div><div class="line">   router_id HAProxy_DEVEL </div><div class="line">&#125;  </div><div class="line"></div><div class="line">vrrp_script <span class="class">chk_haproxy </span>&#123;  </div><div class="line">    script <span class="string">"killall -0 haproxy"</span>  </div><div class="line">    interval <span class="number">2</span>  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">vrrp_instance <span class="class">HAProxy_HA </span>&#123;  </div><div class="line">    state BACKUP     </div><div class="line">    interface eth0  </div><div class="line">    virtual_router_id <span class="number">80</span>   </div><div class="line">    priority <span class="number">100</span>      <span class="meta">#备用为90</span></div><div class="line">    advert_int <span class="number">2</span></div><div class="line">    nopreempt        <span class="meta">#设置不强占，防止业务来回切换。</span></div><div class="line"></div><div class="line">    <span class="class">authentication </span>&#123;  </div><div class="line">        auth_type PASS  </div><div class="line">        auth_pass KJj23576hYgu23IP  </div><div class="line">    &#125;  </div><div class="line">    <span class="class">track_interface </span>&#123;  </div><div class="line">       eth0  </div><div class="line">    &#125;  </div><div class="line">    <span class="class">virtual_ipaddress </span>&#123;  </div><div class="line">        <span class="number">192.168</span><span class="number">.43</span><span class="number">.100</span></div><div class="line">    &#125;  </div><div class="line">    <span class="class">track_script </span>&#123;  </div><div class="line">        chk_haproxy  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="meta">#状态通知  </span></div><div class="line">    notify_master <span class="string">"/data/keepalived/scripts/mail_notify.py master"</span>  </div><div class="line">    notify_backup <span class="string">"/data/keepalived/scripts/mail_notify.py backup"</span>  </div><div class="line">    notify_fault  <span class="string">"/data/keepalived/scripts/mail_notify.py fault"</span>  </div><div class="line">&#125;</div><div class="line">\\拷贝主上面的keepalived.conf到从上，只需修改priority值参数即可。</div><div class="line"> </div><div class="line">创建<span class="meta-keyword">/data/</span>keepalived<span class="meta-keyword">/scripts/</span>mail_notify.py邮件通知程序：</div><div class="line">详细请访问：http:<span class="comment">//liweizhong.blog.51cto.com/1383716/1639917</span></div><div class="line">\\最后修改下通知信息为英文，中文内容可能会投递失败。</div><div class="line"> </div><div class="line"><span class="meta"># 配置haproxy日志</span></div><div class="line">[root@vmware<span class="number">-130</span> ~]<span class="meta"># vim /etc/rsyslog.d/haproxy.conf</span></div><div class="line">$ModLoad imudp</div><div class="line">$UDPServerRun <span class="number">514</span></div><div class="line">local3.* <span class="meta-keyword">/data/</span>haproxy<span class="meta-keyword">/logs/</span>haproxy.log</div><div class="line">local0.* <span class="meta-keyword">/data/</span>haproxy<span class="meta-keyword">/logs/</span>haproxy.log</div><div class="line">[root@vmware<span class="number">-130</span> ~]<span class="meta"># vim /etc/sysconfig/rsyslog</span></div><div class="line">SYSLOGD_OPTIONS=<span class="string">"-c 2 -r -m 0"</span></div><div class="line">[root@vmware<span class="number">-130</span> ~]<span class="meta"># service rsyslog restart</span></div></pre></td></tr></table></figure>
+<ul>
+<li>8启动haproxy、keepalived服务。(先启动两个haproxy服务，然后在依次启动master、backup上的keepalived服务)</li>
+</ul>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># service haproxy start   ( 先启动 haproxy 服务 )</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># service keepalived start</span></div></pre></td></tr></table></figure>
+<ul>
+<li>10测试redis-cli客户端访问</li>
+</ul>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@vmware<span class="number">-130</span> ~]# redis-cli -h <span class="number">192.168</span><span class="number">.43</span><span class="number">.130</span> -p <span class="number">45001</span></div></pre></td></tr></table></figure>
+<p>备注：redis-cli 命令，codis里面是没有的，我是安装redis服务的，只是用codis而已。</p>
+<h4 id="到这里，整个架构已经全部部署完成啦！！！"><a href="#到这里，整个架构已经全部部署完成啦！！！" class="headerlink" title="到这里，整个架构已经全部部署完成啦！！！"></a>到这里，整个架构已经全部部署完成啦！！！</h4><h2 id="二、Codis-群集架构故障测试"><a href="#二、Codis-群集架构故障测试" class="headerlink" title="二、Codis 群集架构故障测试"></a>二、Codis 群集架构故障测试</h2><ul>
+<li>codis-server的HA安装</li>
+</ul>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">export GOPATH=/data/<span class="keyword">go</span></div><div class="line">/usr/local/<span class="keyword">go</span>/bin/<span class="keyword">go</span> <span class="built_in">get</span> github.<span class="keyword">com</span>/ngaut/codis-<span class="keyword">ha</span></div><div class="line"><span class="keyword">cd</span>  /data/<span class="keyword">go</span>/src/github.<span class="keyword">com</span>/ngaut/codis-<span class="keyword">ha</span></div><div class="line"><span class="keyword">go</span> build</div><div class="line"><span class="keyword">cp</span> codis-<span class="keyword">ha</span> /data/<span class="keyword">go</span>/src/github.<span class="keyword">com</span>/wandoulabs/codis/bin/</div><div class="line">使用方法：</div><div class="line">codis-<span class="keyword">ha</span> --codis-config=dashboard地址:<span class="number">18087</span> --productName=集群项目名称</div><div class="line"></div><div class="line">* <span class="number">10</span>测试redis-cli客户端访问</div></pre></td></tr></table></figure>
+<ul>
+<li>使用supervisord管理codis-ha进程</li>
+</ul>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">yum -y install supervisord</div><div class="line">/etc/supervisord.conf中添加如下内容：</div><div class="line">[program:codis-ha]</div><div class="line"><span class="attr">autorestart</span> = True</div><div class="line"><span class="attr">stopwaitsecs</span> = <span class="number">10</span></div><div class="line"><span class="attr">startsecs</span> = <span class="number">1</span></div><div class="line"><span class="attr">stopsignal</span> = QUIT</div><div class="line"><span class="attr">command</span> = /data/go/src/github.com/wandoulabs/codis/bin/codis-ha <span class="attr">--codis-config=10.10.32.17:18087</span> <span class="attr">--productName=zh_news</span></div><div class="line"><span class="attr">user</span> = root</div><div class="line"><span class="attr">startretries</span> = <span class="number">3</span></div><div class="line"><span class="attr">autostart</span> = True</div><div class="line"><span class="attr">exitcodes</span> = <span class="number">0</span>,<span class="number">2</span></div><div class="line"></div><div class="line">/etc/init.d/supervisord start</div><div class="line">chkconfig supervisord  on</div></pre></td></tr></table></figure>
+<p>1.停止任意zookeeper节点，检查codis-proxy，dashboard是否正常.</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">[root@vmware-132 scripts]<span class="comment"># zkServer.sh status</span></div><div class="line">JMX enabled <span class="keyword">by</span> <span class="keyword">default</span></div><div class="line">Using config: <span class="regexp">/usr/local/zookeeper/bin/</span>../conf/zoo.cfg</div><div class="line">Mode: leader                                     <span class="string">\\目前此节点提供服务</span></div><div class="line">[root@vmware-132 scripts]<span class="comment"># zkServer.sh stop           \\停止此服务，模拟leader挂掉。</span></div><div class="line">JMX enabled <span class="keyword">by</span> <span class="keyword">default</span></div><div class="line">Using config: <span class="regexp">/usr/local/zookeeper/bin/</span>../conf/zoo.cfg</div><div class="line">Stopping zookeeper ... STOPPED</div><div class="line"></div><div class="line">检查zookeeper其他节点是否重新选取 leader。</div><div class="line">[root@vmware-131 ~]<span class="comment"># zkServer.sh status</span></div><div class="line">JMX enabled <span class="keyword">by</span> <span class="keyword">default</span></div><div class="line">Using config: <span class="regexp">/usr/local/zookeeper/bin/</span>../conf/zoo.cfg</div><div class="line">Mode: leader                                     <span class="string">\\可以看到，vmware-131已经选举为leader.</span></div><div class="line">[root@vmware-130 ~]<span class="comment"># zkServer.sh status</span></div><div class="line">JMX enabled <span class="keyword">by</span> <span class="keyword">default</span></div><div class="line">Using config: <span class="regexp">/usr/local/zookeeper/bin/</span>../conf/zoo.cfg</div><div class="line">Mode: follower</div><div class="line"> </div><div class="line">redis客户端是否能正常访问到codis-proxy。</div><div class="line">[root@vmware-130 logs]<span class="comment"># redis-cli -h 192.168.43.100 -p 45001</span></div><div class="line"><span class="number">192.168</span>.<span class="number">43.100</span>:<span class="number">45001</span>&gt; get mike</div><div class="line"><span class="string">"liweizhong"</span></div><div class="line"><span class="number">192.168</span>.<span class="number">43.100</span>:<span class="number">45001</span>&gt; get benet</div><div class="line"><span class="string">"lwz"</span></div><div class="line"><span class="number">192.168</span>.<span class="number">43.100</span>:<span class="number">45001</span>&gt; get id</div><div class="line"><span class="string">"27"</span></div><div class="line"><span class="number">192.168</span>.<span class="number">43.100</span>:<span class="number">45001</span>&gt; exit</div><div class="line">[root@vmware-130 logs]<span class="comment">#</span></div><div class="line"> </div><div class="line">dashboard管理界面是否正常。</div><div class="line">打开浏览器，访问 http:<span class="regexp">//192.168.43.130:18087/admin/</span></div></pre></td></tr></table></figure>
+<p>2.停止group master,检查group slave是否自动切换主</p>
+<p>接下来，我们开始来模拟vmware-130机器上的codis-server master 6379端口挂掉<br><img src="http://www.msbgn.cn/msbgn/Codis22.png" alt="Codis"></p>
+<p>停止codis-master后，检查codis-ha日志输出如下信息:<br><img src="http://www.msbgn.cn/msbgn/Codis23.png" alt="Codis"></p>
+<p>打开管理界面，查看到如下信息：</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis24.png" alt="Codis"></p>
+<p>客户端写入新数据，切换后的主是否有新key增加。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="selector-attr">[root@vmware-130 ~]</span># <span class="selector-tag">redis-cli</span> <span class="selector-tag">-h</span> 192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span> <span class="selector-tag">-p</span> 45001</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">set</span> <span class="selector-tag">abc</span> 123</div><div class="line"><span class="selector-tag">OK</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">set</span> <span class="selector-tag">def</span> 456</div><div class="line"><span class="selector-tag">OK</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">get</span> <span class="selector-tag">abc</span></div><div class="line">"123"</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">get</span> <span class="selector-tag">def</span></div><div class="line">"456"</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">exit</span></div></pre></td></tr></table></figure>
+<p>打开管理界面，查看到keys增加两个。</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis25.png" alt="Codis"></p>
+<p>接下来我们恢复vmware-130 codis-server 6379</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-attr">[root@vmware-130 ~]</span># /<span class="selector-tag">usr</span>/<span class="selector-tag">local</span>/<span class="selector-tag">codis</span>/<span class="selector-tag">bin</span>/<span class="selector-tag">codis-server</span> /<span class="selector-tag">data</span>/<span class="selector-tag">codis_server</span>/<span class="selector-tag">conf</span>/<span class="selector-tag">6379</span><span class="selector-class">.conf</span> </div><div class="line"><span class="selector-attr">[root@vmware-130 ~]</span># <span class="selector-tag">ps</span> <span class="selector-tag">-ef</span> |<span class="selector-tag">grep</span> <span class="selector-tag">codis-server</span></div><div class="line"><span class="selector-tag">root</span>      <span class="selector-tag">2121</span>     <span class="selector-tag">1</span>  <span class="selector-tag">0</span> <span class="selector-tag">Apr30</span> ?        <span class="selector-tag">00</span><span class="selector-pseudo">:02</span><span class="selector-pseudo">:15</span> /<span class="selector-tag">usr</span>/<span class="selector-tag">local</span>/<span class="selector-tag">codis</span>/<span class="selector-tag">bin</span>/<span class="selector-tag">codis-server</span> *<span class="selector-pseudo">:6380</span>                           </div><div class="line"><span class="selector-tag">root</span>      <span class="selector-tag">7470</span>     <span class="selector-tag">1</span> <span class="selector-tag">21</span> <span class="selector-tag">16</span><span class="selector-pseudo">:58</span> ?        <span class="selector-tag">00</span><span class="selector-pseudo">:00</span><span class="selector-pseudo">:00</span> /<span class="selector-tag">usr</span>/<span class="selector-tag">local</span>/<span class="selector-tag">codis</span>/<span class="selector-tag">bin</span>/<span class="selector-tag">codis-server</span> *<span class="selector-pseudo">:6379</span>                           </div><div class="line"><span class="selector-tag">root</span>      <span class="selector-tag">7476</span>  <span class="selector-tag">1662</span>  <span class="selector-tag">0</span> <span class="selector-tag">16</span><span class="selector-pseudo">:58</span> <span class="selector-tag">pts</span>/<span class="selector-tag">0</span>    <span class="selector-tag">00</span><span class="selector-pseudo">:00</span><span class="selector-pseudo">:00</span> <span class="selector-tag">grep</span> <span class="selector-tag">codis-server</span></div></pre></td></tr></table></figure>
+<p>这时，我们在管理界面看到如下情况：</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis26.png" alt="Codis"></p>
+<p>备注：当master挂掉时候，redis-ha检测到自动将slave切换为master,但是master恢复后，仍为offline，需要将其删除在添加，就可以成为slave.</p>
+<p>按备注那样，我们需要将原来的master 6379先删除，然后再次添加。操作完成后，如下图所示</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis27.png" alt="Codis"></p>
+<p>3.通过dashboard管理界面添加codis-server组，在线迁移、扩展等。</p>
+<p>添加新组，添加master,slave . \此步省略，之前已经添加好group_3<br>通过Migrate Slot(s)选项，我们来迁移group_1组到group_3组：<br>为了模拟迁移是否会影响到业务，我在一台机器开启插入数据脚本，<br>[root@vmware-132 scripts]# sh redis-key.sh      \脚本里面连接codis群集请修改为虚拟IP.<br>现在又客户端在实时插入数据，接下来通过管理界面操作步骤如下：</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis28.png" alt="Codis"></p>
+<p>目前客户端在不断插入新数据，后端我们又在迁移组数据，那么我们现在在来get数据看看是否正常。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="selector-attr">[root@vmware-130 ~]</span># <span class="selector-tag">redis-cli</span> <span class="selector-tag">-h</span> 192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span> <span class="selector-tag">-p</span> 45001</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">get</span> <span class="selector-tag">abc</span></div><div class="line">"123"</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">get</span> <span class="selector-tag">benet</span></div><div class="line">"<span class="selector-tag">lwz</span>"</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">get</span> <span class="selector-tag">mike</span></div><div class="line">"<span class="selector-tag">liweizhong</span>"</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">get</span> <span class="selector-tag">id</span></div><div class="line">"27"</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">exit</span></div></pre></td></tr></table></figure>
+<p>可以看到后端在迁移数据，对业务访问不受影响。这点非常赞。<br>迁移完成后，如下图所示：<br><img src="http://www.msbgn.cn/msbgn/Codis29.png" alt="Codis"></p>
+<p>4.模拟codis-proxy节点挂掉，看haproxy服务是否会剔除节点。<br>我们仍继续用脚本插入数据，然后停止vmware-131上面的codis-proxy服务。<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@vmware</span><span class="number">-132</span> scripts]<span class="meta"># sh redis-key.sh</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis30.png" alt="Codis"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-attr">[root@vmware-130 ~]</span># <span class="selector-tag">redis-cli</span> <span class="selector-tag">-h</span> 192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span> <span class="selector-tag">-p</span> 45001</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">get</span> <span class="selector-tag">mike</span></div><div class="line">"<span class="selector-tag">liweizhong</span>"</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">get</span> <span class="selector-tag">benet</span></div><div class="line">"<span class="selector-tag">lwz</span>"</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">get</span> <span class="selector-tag">id</span></div><div class="line">"27"</div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.43</span><span class="selector-class">.100</span><span class="selector-pseudo">:45001</span>&gt; <span class="selector-tag">get</span> <span class="selector-tag">abc</span></div><div class="line">"123"</div></pre></td></tr></table></figure>
+<p>codis-proxy代理节点挂掉一个，haproxy自动剔除此节点，插入数据脚本由于之前连接的socket挂掉，会中断重新连接新的socket.  业务正常访问，以下为haproxy监控页面信息：</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis31.png" alt="Codis"></p>
+<p>codis管理界面我们可以看到codis_proxy_2已经没有显示出来：</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis32.png" alt="Codis"></p>
+<p>当codis_proxy_2恢复的时候，haproxy又自动加入此节点，并正常提供服务。</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis33.png" alt="Codis"></p>
+<p>codis管理界面又正常显示codis_proxy_2节点。</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis34.png" alt="Codis"></p>
+<p>5.keepalived+haproxy群集故障测试<br>一、停止haproxy-master ,  观察/var/log/message日志<br>照样启动redis-key.sh插入数据脚本</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@vmware-132 <span class="keyword">scripts]# </span><span class="keyword">sh </span>redis-key.<span class="keyword">sh </span></div><div class="line">停止 haproxy master</div></pre></td></tr></table></figure>
+<p><img src="http://www.msbgn.cn/msbgn/Codis35.png" alt="Codis"></p>
+<p>以下为截取到的日志信息:<br>keepalived master 130  tail -f /var/log/message<br><img src="http://www.msbgn.cn/msbgn/Codis36.png" alt="Codis"></p>
+<p>插入数据脚本会出现中断，然后又正常插入数据。<br>虚拟IP出现一次掉包，然后马上恢复了。<br><img src="http://www.msbgn.cn/msbgn/Codis37.png" alt="Codis"></p>
+<p>二、恢复haproxy-master, 观察/var/log/message日志，看是否被抢占，正常情况主haproxy恢复后，不会进行切换，防止业务来回切换。。。<br>接下来我们恢复haproxy-master</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> logs]<span class="meta"># service haproxy start</span></div><div class="line">Starting haproxy:                                          [  OK  ]</div><div class="line">tail -f /var/<span class="built_in">log</span>/message</div></pre></td></tr></table></figure>
+<p><img src="http://www.msbgn.cn/msbgn/Codis38.png" alt="Codis"></p>
+<p>以上截图我们可以看到恢复haproxy-master后，VIP不会进行漂移，keepalived进入BACKUP状态，这是因为设置了nopreempt参数，不抢占，防止业务来回切换。。。</p>
+<p>三、停止haproxy-backup, 观察 /var/log/message日志，是否进行切换。<br>以上我们模拟了haproxy-master故障和恢复，现在我们再次模拟现在的haproxy-master也就是原先的haproxy-backup.<br>模拟haproxy-backup进程挂掉：</p>
+<p>keepalived master 130  tail -f /var/log/message</p>
+<p>keepalived backup 132  tail -f /var/log/message<br>VIP进行了漂移，keepalived也切换身份。<br>再次恢复haproxy-backup ,VIP不进行漂移，与以上类似，不在描述。</p>
+<p>四、模拟keepalived进程挂掉</p>
+<p><code>keepalived-master</code>挂掉，<code>keepalived</code>主备切换，VIP进行漂移。<br>当<code>keepalived-master</code>恢复时，直接进入BACKUP状态，不进行主备切换，VIP不漂移。</p>
+<p>»至此已经完成。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2016/11/04/Codis2/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/11/04/Codis2/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+	<!-- css -->
+	<style type="text/css">
+	    .center {
+	        text-align: center;
+	    }
+	    .hidden {
+	        display: none;
+	    }
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+			_background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+			<!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
+			     因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+	</style>
+	<!-- /css -->
+    <!-- Donate Module -->
+    <div id="donate_module">
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_board donate_bar center">
+	    <br>
+	    ------------------------------------------------------------------------------------------------------------------------------
+	    <br>
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			打赏我的人，据说都找到了女朋友~~
+		</span>
+
+
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+
+	<div id="donate_guide" class="donate_bar center hidden">
+        <br>
+	    ------------------------------------------------------------------------------------------------------------------------------
+	    <br>
+	    
+	    <div width="100%" align="center"><div name="dashmain" id="dash-main-id-878d88" class="dash-main-3 878d88-0.88"></div><script
+	    type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
+		
+		<a href="http://www.msbgn.cn/msbgn/xpchatpay.png" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+			<img src="http://www.msbgn.cn/msbgn/xpchatpay.png" title="微信打赏 Donate" height="190px" width="203px"/>
+		</a>
+
+        &nbsp;&nbsp;
+		<a href="http://www.msbgn.cn/msbgn/wechatpay.png" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+			<img src="http://www.msbgn.cn/msbgn/wechatpay.png" title="支付宝打赏 Donate" height="190px" width="214px"/>
+		</a>
+		<span class="donate_txt">
+			打赏我的人，据说都找到了女朋友~~
+		</span>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		$('.btn_donate').click(function(){
+		var par = $(this).parent('.donate_board');
+		par.addClass('hidden');
+		par.next().removeClass('hidden');
+		})
+		
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+   
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2016/11/08/Hexoblog/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    hexo博客搭建
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2016/11/03/Codis01/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Codis 高可用负载均衡群集的搭建与使用</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2016/11/04/Codis2/" data-title="Codis 高可用负载均衡群集的搭建与使用2" data-url="/2016/11/04/Codis2/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/15/ELKShield/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/ELK1.png)" alt="ELK添加Shield插件管理权限" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/ELK/">ELK</a></p>
+                            <p class="item-title"><a href="/2016/12/15/ELKShield/" class="title">ELK添加Shield插件管理权限</a></p>
+                            <p class="item-date"><time datetime="2016-12-15T07:15:05.363Z" itemprop="datePublished">2016-12-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/15/elk1/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/ELK1.png)" alt="elk实时日志分析平台搭建详细过程" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/ELK/">ELK</a></p>
+                            <p class="item-title"><a href="/2016/12/15/elk1/" class="title">elk实时日志分析平台搭建详细过程</a></p>
+                            <p class="item-date"><time datetime="2016-12-15T06:55:30.547Z" itemprop="datePublished">2016-12-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/09/Pythondate2/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/day2.png)" alt="Python 流程控制" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
+                            <p class="item-title"><a href="/2016/12/09/Pythondate2/" class="title">Python 流程控制</a></p>
+                            <p class="item-date"><time datetime="2016-12-09T08:01:50.697Z" itemprop="datePublished">2016-12-09</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/09/Pythonys/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/pythonys.png)" alt="Python 运算符" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
+                            <p class="item-title"><a href="/2016/12/09/Pythonys/" class="title">Python 运算符</a></p>
+                            <p class="item-date"><time datetime="2016-12-09T02:59:05.547Z" itemprop="datePublished">2016-12-09</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/08/Lambda/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/lambda.jpg)" alt="Lambda表达式以及python的内置函数" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
+                            <p class="item-title"><a href="/2016/12/08/Lambda/" class="title">Lambda表达式以及python的内置函数</a></p>
+                            <p class="item-date"><time datetime="2016-12-08T07:40:56.606Z" itemprop="datePublished">2016-12-08</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 15px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.cm">Linux公社</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2016 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

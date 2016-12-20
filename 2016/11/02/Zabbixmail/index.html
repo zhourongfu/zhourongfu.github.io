@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>zabbix邮件报警设置 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="邮件报警有两种情况：1、Zabbix服务端只是单纯的发送报警邮件到指定邮箱，发送报警邮件的这个邮箱账号是Zabbix服务端的本地邮箱账号（例如：root@localhost)2、使用一个可以在互联网上正常收发邮件的邮箱账号（例如：xxx@163.com），通过在Zabbix服务端中设置，使其能够发送报警邮件到指定邮箱。（这里我们使用第二种）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zabbix邮件报警设置">
+<meta property="og:url" content="/2016/11/02/Zabbixmail/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:description" content="邮件报警有两种情况：1、Zabbix服务端只是单纯的发送报警邮件到指定邮箱，发送报警邮件的这个邮箱账号是Zabbix服务端的本地邮箱账号（例如：root@localhost)2、使用一个可以在互联网上正常收发邮件的邮箱账号（例如：xxx@163.com），通过在Zabbix服务端中设置，使其能够发送报警邮件到指定邮箱。（这里我们使用第二种）">
+<meta property="og:image" content="http://www.msbgn.cn/msbgn/zabbixmail1.png">
+<meta property="og:updated_time" content="2016-11-02T08:55:13.457Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zabbix邮件报警设置">
+<meta name="twitter:description" content="邮件报警有两种情况：1、Zabbix服务端只是单纯的发送报警邮件到指定邮箱，发送报警邮件的这个邮箱账号是Zabbix服务端的本地邮箱账号（例如：root@localhost)2、使用一个可以在互联网上正常收发邮件的邮箱账号（例如：xxx@163.com），通过在Zabbix服务端中设置，使其能够发送报警邮件到指定邮箱。（这里我们使用第二种）">
+<meta name="twitter:image" content="http://www.msbgn.cn/msbgn/zabbixmail1.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">Time Flies(岁月如梭)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                24
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                18
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Zabbixmail" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            zabbix邮件报警设置
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2016/11/02/Zabbixmail/">
+            <time datetime="2016-11-02T08:55:13.457Z" itemprop="datePublished">2016-11-02</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/zabbix/">zabbix</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/zabbix/">zabbix</a>, <a class="tag-link" href="/tags/监控/">监控</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p><img src="http://www.msbgn.cn/msbgn/zabbixmail1.png" alt="zabbixmaildex"></p>
+<p>邮件报警有两种情况：<br>1、Zabbix服务端只是单纯的发送报警邮件到指定邮箱，发送报警邮件的这个邮箱账号是Zabbix服务端的本地邮箱账号（例如：root@localhost)<br>2、使用一个可以在互联网上正常收发邮件的邮箱账号（例如：xxx@163.com），通过在Zabbix服务端中设置，使其能够发送报警邮件到指定邮箱。（这里我们使用第二种）</p>
+<a id="more"></a>
+<hr>
+<h2 id="1、使用外部邮箱账号发送报警邮件设置"><a href="#1、使用外部邮箱账号发送报警邮件设置" class="headerlink" title="1、使用外部邮箱账号发送报警邮件设置"></a>1、使用外部邮箱账号发送报警邮件设置</h2><p>一、关闭sendmail或者postfix<br><figure class="highlight vbnet"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">service sendmail <span class="keyword">stop</span> <span class="meta">#关闭</span></div><div class="line">chkconfig sendmail <span class="keyword">off</span> <span class="meta">#禁止开机启动</span></div><div class="line">service postfix <span class="keyword">stop</span></div><div class="line">chkconfig postfix <span class="keyword">off</span></div><div class="line">备注：</div><div class="line">使用外部邮箱账号时，不需要启动sendmail或者postfix</div><div class="line">如果在sendmail或者postfix启动的同时使用外部邮箱发送报警邮件，</div><div class="line">首先会读取外部邮箱配置信息。</div></pre></td></tr></table></figure></p>
+<p>二、安装邮件发送工具mailx</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum <span class="keyword">install</span> mailx <span class="comment">#安装</span></div></pre></td></tr></table></figure>
+<p>CentOS 5.x 编译安装mailx，直接yum安装的mailx版本太旧，使用外部邮件发送会有问题。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum <span class="keyword">remove</span> mailx <span class="comment">#卸载系统自带的旧版mailx</span></div></pre></td></tr></table></figure>
+<p>下载mailx：<br><a href="http://nchc.dl.sourceforge.net/project/heirloom/heirloom-mailx/12.4/mailx-12.4.tar.bz2" target="_blank" rel="external">http://nchc.dl.sourceforge.net/project/heirloom/heirloom-mailx/12.4/mailx-12.4.tar.bz2</a></p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">tar jxvf mailx<span class="number">-12.4</span>.tar.bz2 <span class="meta">#解压</span></div><div class="line">cd mailx<span class="number">-12.4</span> <span class="meta">#进入目录</span></div><div class="line">make <span class="meta">#编译</span></div><div class="line">make install UCBINSTALL=<span class="meta-keyword">/usr/</span>bin/install <span class="meta">#安装</span></div><div class="line">ln -s <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/bin/</span>mailx <span class="meta-keyword">/bin/</span>mail <span class="meta">#创建mailx到mail的软连接</span></div><div class="line">ln -s <span class="meta-keyword">/etc/</span>nail.rc <span class="meta-keyword">/etc/</span>mail.rc <span class="meta">#创建mailx配置文件软连接</span></div><div class="line">whereis mailx <span class="meta">#查看安装路径</span></div><div class="line">mailx -V <span class="meta">#查看版本信息</span></div></pre></td></tr></table></figure>
+<p>三、配置Zabbix服务端外部邮箱<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">vi</span> /etc/mail.rc #编辑，添加以下信息</div><div class="line"><span class="keyword">set</span> from=xxx@<span class="number">163</span>.<span class="keyword">com</span> smtp=smtp.<span class="number">163</span>.<span class="keyword">com</span></div><div class="line"><span class="keyword">set</span> smtp-auth-user=xxx@<span class="number">163</span>.<span class="keyword">com</span> smtp-auth-password=<span class="number">123456</span></div><div class="line"><span class="keyword">set</span> smtp-auth=login</div><div class="line">:wq! #保存退出</div><div class="line"><span class="keyword">echo</span> <span class="string">"zabbix test mail"</span> |mail -s <span class="string">"zabbix"</span> yyy@<span class="number">163</span>.<span class="keyword">com</span></div><div class="line">#测试发送邮件，标题zabbix，邮件内容：zabbix test mail，发送到的邮箱：yyy@<span class="number">163</span>.<span class="keyword">com</span></div><div class="line">#这时候，邮箱yyy@<span class="number">163</span>.<span class="keyword">com</span>会收到来自xxx@<span class="number">163</span>.<span class="keyword">com</span>的测试邮件</div></pre></td></tr></table></figure></p>
+<p>四、配置Zabbix服务端邮件报警</p>
+<p><strong>1、打开Zabbix</strong><br>管理-示警媒介类型-Email<br><img src="http://www.msbgn.cn/msbgn/zabbixmail1.png" alt="zabbixmail1"><br><img src="http://www.msbgn.cn/msbgn/zabbixmail2.png" alt="zabbixmail2"><br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">名称：Email</div><div class="line">类型：电子邮件</div><div class="line">SMTP伺服器：zabbix<span class="selector-class">.sa</span><span class="selector-class">.huanqiu</span><span class="selector-class">.com</span></div><div class="line">SMTP HELO：zabbix<span class="selector-class">.sa</span><span class="selector-class">.huanqiu</span><span class="selector-class">.com</span></div><div class="line">SMTP电邮：zabbix@zabbix<span class="selector-class">.sa</span><span class="selector-class">.huanqiu</span><span class="selector-class">.com</span></div><div class="line">已经用：勾选</div><div class="line">存档</div></pre></td></tr></table></figure></p>
+<p><strong>2、设置Zabbix用户报警邮箱地址</strong><br>组态-用户-Admin (Zabbix Administrator)<br><img src="http://www.msbgn.cn/msbgn/zabbixmail3.png" alt="zabbixmail3"><br><img src="http://www.msbgn.cn/msbgn/zabbixmail4.png" alt="zabbixmail4"><br>切换到示警媒介-添加<br><img src="http://www.msbgn.cn/msbgn/zabbixmail5.png" alt="zabbixmail5"><br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">类型：<span class="selector-tag">Email</span></div><div class="line">收件人：<span class="selector-tag">xxx</span>@<span class="keyword">163</span>.<span class="keyword">com</span></div><div class="line">其他默认即可，也可以根据需要设置</div><div class="line">状态：已启用</div><div class="line">存档</div></pre></td></tr></table></figure></p>
+<p><strong>3、设置Zabbix触发报警的动作</strong></p>
+<p>组态-动作-创建动作<br><img src="http://www.msbgn.cn/msbgn/zabbixmail6.png" alt="zabbixmail6"><br><figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="xml">名称：Action-Email</span></div><div class="line">默认接收人：故障<span class="template-variable">&#123;TRIGGER.STATUS&#125;</span><span class="xml">,服务器:</span><span class="template-variable">&#123;Zabbix server&#125;</span><span class="xml">发生: </span><span class="template-variable">&#123;TRIGGER.NAME&#125;</span><span class="xml">故障!</span></div><div class="line">默认信息：</div><div class="line">告警主机:<span class="template-variable">&#123;Zabbix server&#125;</span><span class="xml"></span></div><div class="line">告警时间:<span class="template-variable">&#123;EVENT.DATE&#125;</span><span class="xml"> </span><span class="template-variable">&#123;EVENT.TIME&#125;</span><span class="xml"></span></div><div class="line">告警等级:<span class="template-variable">&#123;TRIGGER.SEVERITY&#125;</span><span class="xml"></span></div><div class="line">告警信息: <span class="template-variable">&#123;TRIGGER.NAME&#125;</span><span class="xml"></span></div><div class="line">告警项目:<span class="template-variable">&#123;TRIGGER.KEY1&#125;</span><span class="xml"></span></div><div class="line">问题详情:<span class="template-variable">&#123;ITEM.NAME&#125;</span><span class="xml">:</span><span class="template-variable">&#123;ITEM.VALUE&#125;</span><span class="xml"></span></div><div class="line">当前状态:<span class="template-variable">&#123;TRIGGER.STATUS&#125;</span><span class="xml">:</span><span class="template-variable">&#123;ITEM.VALUE1&#125;</span><span class="xml"></span></div><div class="line">事件ID:<span class="template-variable">&#123;EVENT.ID&#125;</span><span class="xml"></span></div><div class="line">恢复信息：打钩</div><div class="line">恢复主旨：恢复<span class="template-variable">&#123;TRIGGER.STATUS&#125;</span><span class="xml">, 服务器:</span><span class="template-variable">&#123;Zabbix server&#125;</span><span class="xml">: </span><span class="template-variable">&#123;TRIGGER.NAME&#125;</span><span class="xml">已恢复!</span></div><div class="line">恢复信息：</div><div class="line">告警主机:<span class="template-variable">&#123;Zabbix server&#125;</span><span class="xml"></span></div><div class="line">告警时间:<span class="template-variable">&#123;EVENT.DATE&#125;</span><span class="xml"> </span><span class="template-variable">&#123;EVENT.TIME&#125;</span><span class="xml"></span></div><div class="line">告警等级:<span class="template-variable">&#123;TRIGGER.SEVERITY&#125;</span><span class="xml"></span></div><div class="line">告警信息: <span class="template-variable">&#123;TRIGGER.NAME&#125;</span><span class="xml"></span></div><div class="line">告警项目:<span class="template-variable">&#123;TRIGGER.KEY1&#125;</span><span class="xml"></span></div><div class="line">问题详情:<span class="template-variable">&#123;ITEM.NAME&#125;</span><span class="xml">:</span><span class="template-variable">&#123;ITEM.VALUE&#125;</span><span class="xml"></span></div><div class="line">当前状态:<span class="template-variable">&#123;TRIGGER.STATUS&#125;</span><span class="xml">:</span><span class="template-variable">&#123;ITEM.VALUE1&#125;</span><span class="xml"></span></div><div class="line">事件ID:<span class="template-variable">&#123;EVENT.ID&#125;</span><span class="xml"></span></div><div class="line">已启用：打钩</div></pre></td></tr></table></figure></p>
+<p><img src="http://www.msbgn.cn/msbgn/zabbixmail7.png" alt="zabbixmail7"><br>切换到操作选项<br>新的</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">操作类型：送出信息</div><div class="line">送到用户：添加</div><div class="line">默认信息：打钩</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">用户：勾选Admin</div><div class="line">选择</div></pre></td></tr></table></figure>
+<p>仅送到：Email<br>存档</p>
+<p><strong>4、添加Zabbix服务端邮件发送脚本</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/zabbix/share/zabbix/alertscripts <span class="comment">#进入脚本存放目录</span></div><div class="line">vi sendmail.sh <span class="comment">#编辑，添加以下代码</span></div><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"<span class="variable">$3</span>"</span> | mail <span class="_">-s</span> <span class="string">"<span class="variable">$2</span>"</span> <span class="variable">$1</span></div><div class="line">:wq! <span class="comment">#保存退出</span></div><div class="line">chown zabbix.zabbix /usr/<span class="built_in">local</span>/zabbix/share/zabbix/alertscripts/sendmail.sh</div><div class="line"><span class="comment">#设置脚本所有者为zabbix用户</span></div><div class="line">chmod +x /usr/<span class="built_in">local</span>/zabbix/share/zabbix/alertscripts/sendmail.sh</div><div class="line"><span class="comment">#设置脚本执行权限</span></div></pre></td></tr></table></figure></p>
+<p><strong>五、测试Zabbix报警</strong><br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">关闭Zabbix客户端服务</div><div class="line">service zabbix_agentd <span class="keyword">stop</span></div><div class="line">查看xxx@<span class="number">163</span>.<span class="keyword">com</span>邮箱，会收到报警邮件</div><div class="line">再开启Zabbix客户端服务</div><div class="line">service zabbix_agentd start</div><div class="line">查看xxx@<span class="number">163</span>.<span class="keyword">com</span>邮箱，会收到恢复邮件</div></pre></td></tr></table></figure></p>
+<p>使用外部邮箱账号发送报警邮件设置完成。至此，Zabbix邮件报警设置完成。</p>
+<p>» 文章出自链接：<a href="http://www.osyunwei.com/archives/8113.html" target="_blank" rel="external">http://www.osyunwei.com/archives/8113.html</a></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2016/11/02/Zabbixmail/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/11/02/Zabbixmail/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+	<!-- css -->
+	<style type="text/css">
+	    .center {
+	        text-align: center;
+	    }
+	    .hidden {
+	        display: none;
+	    }
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+			_background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+			<!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
+			     因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+	</style>
+	<!-- /css -->
+    <!-- Donate Module -->
+    <div id="donate_module">
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_board donate_bar center">
+	    <br>
+	    ------------------------------------------------------------------------------------------------------------------------------
+	    <br>
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			打赏我的人，据说都找到了女朋友~~
+		</span>
+
+
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+
+	<div id="donate_guide" class="donate_bar center hidden">
+        <br>
+	    ------------------------------------------------------------------------------------------------------------------------------
+	    <br>
+	    
+	    <div width="100%" align="center"><div name="dashmain" id="dash-main-id-878d88" class="dash-main-3 878d88-0.88"></div><script
+	    type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
+		
+		<a href="http://www.msbgn.cn/msbgn/xpchatpay.png" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+			<img src="http://www.msbgn.cn/msbgn/xpchatpay.png" title="微信打赏 Donate" height="190px" width="203px"/>
+		</a>
+
+        &nbsp;&nbsp;
+		<a href="http://www.msbgn.cn/msbgn/wechatpay.png" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+			<img src="http://www.msbgn.cn/msbgn/wechatpay.png" title="支付宝打赏 Donate" height="190px" width="214px"/>
+		</a>
+		<span class="donate_txt">
+			打赏我的人，据说都找到了女朋友~~
+		</span>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		$('.btn_donate').click(function(){
+		var par = $(this).parent('.donate_board');
+		par.addClass('hidden');
+		par.next().removeClass('hidden');
+		})
+		
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+   
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2016/11/03/python01/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    我和python的第一次接触
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2016/11/02/zabbix/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Zabbix 源码安装配置</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2016/11/02/Zabbixmail/" data-title="zabbix邮件报警设置" data-url="/2016/11/02/Zabbixmail/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/15/ELKShield/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/ELK1.png)" alt="ELK添加Shield插件管理权限" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/ELK/">ELK</a></p>
+                            <p class="item-title"><a href="/2016/12/15/ELKShield/" class="title">ELK添加Shield插件管理权限</a></p>
+                            <p class="item-date"><time datetime="2016-12-15T07:15:05.363Z" itemprop="datePublished">2016-12-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/15/elk1/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/ELK1.png)" alt="elk实时日志分析平台搭建详细过程" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/ELK/">ELK</a></p>
+                            <p class="item-title"><a href="/2016/12/15/elk1/" class="title">elk实时日志分析平台搭建详细过程</a></p>
+                            <p class="item-date"><time datetime="2016-12-15T06:55:30.547Z" itemprop="datePublished">2016-12-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/09/Pythondate2/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/day2.png)" alt="Python 流程控制" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
+                            <p class="item-title"><a href="/2016/12/09/Pythondate2/" class="title">Python 流程控制</a></p>
+                            <p class="item-date"><time datetime="2016-12-09T08:01:50.697Z" itemprop="datePublished">2016-12-09</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/09/Pythonys/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/pythonys.png)" alt="Python 运算符" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
+                            <p class="item-title"><a href="/2016/12/09/Pythonys/" class="title">Python 运算符</a></p>
+                            <p class="item-date"><time datetime="2016-12-09T02:59:05.547Z" itemprop="datePublished">2016-12-09</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/08/Lambda/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/lambda.jpg)" alt="Lambda表达式以及python的内置函数" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
+                            <p class="item-title"><a href="/2016/12/08/Lambda/" class="title">Lambda表达式以及python的内置函数</a></p>
+                            <p class="item-date"><time datetime="2016-12-08T07:40:56.606Z" itemprop="datePublished">2016-12-08</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 15px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.cm">Linux公社</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2016 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

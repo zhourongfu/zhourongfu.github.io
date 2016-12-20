@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Codis 高可用负载均衡群集的搭建与使用 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="codis-proxy 提供连接集群redis服务的入口
+codis-redis-group 实现vredis`读写的水平扩展，高性能
+codis-redis 实现redis实例服务，通过codis-ha实现服务的高可用
+
+一、实验环境：网络拓扑图:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Codis 高可用负载均衡群集的搭建与使用">
+<meta property="og:url" content="/2016/11/03/Codis01/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:description" content="codis-proxy 提供连接集群redis服务的入口
+codis-redis-group 实现vredis`读写的水平扩展，高性能
+codis-redis 实现redis实例服务，通过codis-ha实现服务的高可用
+
+一、实验环境：网络拓扑图:">
+<meta property="og:image" content="http://www.msbgn.cn/msbgn/Codis1.png">
+<meta property="og:updated_time" content="2016-11-03T09:41:52.559Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Codis 高可用负载均衡群集的搭建与使用">
+<meta name="twitter:description" content="codis-proxy 提供连接集群redis服务的入口
+codis-redis-group 实现vredis`读写的水平扩展，高性能
+codis-redis 实现redis实例服务，通过codis-ha实现服务的高可用
+
+一、实验环境：网络拓扑图:">
+<meta name="twitter:image" content="http://www.msbgn.cn/msbgn/Codis1.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">Time Flies(岁月如梭)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                24
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                18
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Codis01" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Codis 高可用负载均衡群集的搭建与使用
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2016/11/03/Codis01/">
+            <time datetime="2016-11-03T09:41:52.559Z" itemprop="datePublished">2016-11-03</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Codis/">Codis</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Codis/">Codis</a>, <a class="tag-link" href="/tags/负载/">负载</a>, <a class="tag-link" href="/tags/集群/">集群</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <ul>
+<li><code>codis-proxy</code> 提供连接集群<code>redis</code>服务的入口</li>
+<li><code>codis-redis-group</code> 实现vredis`读写的水平扩展，高性能</li>
+<li><code>codis-redis</code> 实现<code>redis</code>实例服务，通过<code>codis-ha</code>实现服务的高可用</li>
+</ul>
+<h2 id="一、实验环境："><a href="#一、实验环境：" class="headerlink" title="一、实验环境："></a>一、实验环境：</h2><p>网络拓扑图:<br><img src="http://www.msbgn.cn/msbgn/Codis.png" alt="Codis"></p>
+<a id="more"></a>
+<p>群集架构图:<br><img src="http://www.msbgn.cn/msbgn/Codis1.png" alt="Codis"></p>
+<ul>
+<li><p>机器与应用列表</p>
+<p>  操作系统：<code>System version: CentOS 6.7</code></p>
+<p>  <code>IP</code>: 192.168.43.130    <code>hostname</code>: vmware-130<br>  <code>apps</code>: keepalived + haproxy Master,  zookeeper_1, codis_proxy_1, codis_config, codis_server_master,slave </p>
+<p>  <code>IP</code>: 192.168.43.131    <code>hostname</code>: vmware-131<br> <code>apps</code>: zookeeper_2, codis_proxy_2,   codis_server_master,slave</p>
+<p> <code>IP</code>: 192.168.43.132    <code>hostname</code>: vmware-132<br>  <code>apps</code>: keepalived + haproxy Backup,   zookeeper_3, codis_proxy_3,   codis_server_master,slave</p>
+<p>  <code>VIP</code>: 192.168.43.100  Port: 45001</p>
+</li>
+</ul>
+<p><code>备注</code>：由于是虚拟测试环境，非生产环境，所以一台机器跑多个应用，如应用于生产环境，只需把应用分开部署到相应机器上即可。</p>
+<h4 id="1、初始化CentOS系统"><a href="#1、初始化CentOS系统" class="headerlink" title="1、初始化CentOS系统"></a>1、初始化CentOS系统</h4><ul>
+<li>使用镜像站点配置好的yum安装源配置文件</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/</div><div class="line">/bin/mv CentOS-Base<span class="selector-class">.repo</span> CentOS-Base<span class="selector-class">.repo</span><span class="selector-class">.bak</span></div><div class="line">wget http:<span class="comment">//mirrors.163.com/.help/CentOS6-Base-163.repo</span></div></pre></td></tr></table></figure>
+<ul>
+<li>接下来执行如下命令，检测yum是否正常</li>
+</ul>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum clean <span class="built_in">all</span>      <span class="meta">#清空yum缓存</span></div><div class="line">yum makecache      <span class="meta">#建立yum缓存</span></div></pre></td></tr></table></figure>
+<ul>
+<li>然后使用如下命令将系统更新到最新</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">rpm --import <span class="regexp">/etc/</span>pki<span class="regexp">/rpm-gpg/</span>RPM-GPG-KEY*     <span class="comment">#导入签名KEY到RPM</span></div><div class="line">yum  upgrade -y</div></pre></td></tr></table></figure>
+<h3 id="2-关闭不必要的服务"><a href="#2-关闭不必要的服务" class="headerlink" title="2. 关闭不必要的服务"></a>2. 关闭不必要的服务</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> sun <span class="keyword">in</span> `chkconfig --<span class="keyword">list</span>|grep 3:<span class="keyword">on</span>|awk '&#123;<span class="keyword">print</span> <span class="variable">$1&#125;</span>'`;<span class="keyword">do</span> chkconfig --level 3 <span class="variable">$sun</span> off;done</div><div class="line"><span class="keyword">for</span> sun <span class="keyword">in</span> `chkconfig --<span class="keyword">list</span>|grep 5:<span class="keyword">on</span>|awk '&#123;<span class="keyword">print</span> <span class="variable">$1&#125;</span>'`;<span class="keyword">do</span> chkconfig --level 5 <span class="variable">$sun</span> off;done</div><div class="line"><span class="keyword">for</span> sun <span class="keyword">in</span> crond rsyslog sshd network;<span class="keyword">do</span> chkconfig --level 3 <span class="variable">$sun</span> <span class="keyword">on</span>;done</div><div class="line"><span class="keyword">for</span> sun <span class="keyword">in</span> crond rsyslog sshd network;<span class="keyword">do</span> chkconfig --level 5 <span class="variable">$sun</span> <span class="keyword">on</span>;done</div></pre></td></tr></table></figure>
+<h3 id="3-安装依赖包"><a href="#3-安装依赖包" class="headerlink" title="3. 安装依赖包"></a>3. 安装依赖包</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y gcc make gcc-c++ automake lrzsz openssl-devel zlib-<span class="bullet">* bzip2-*</span> readline<span class="bullet">* zlib-*</span> bzip2-*</div></pre></td></tr></table></figure>
+<h3 id="4-创建软件存放目录"><a href="#4-创建软件存放目录" class="headerlink" title="4. 创建软件存放目录"></a>4. 创建软件存放目录</h3><figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">mkdir</span> /<span class="class"><span class="keyword">data</span>/packages</span></div></pre></td></tr></table></figure>
+<h3 id="5-软件包版本以及下载地址"><a href="#5-软件包版本以及下载地址" class="headerlink" title="5. 软件包版本以及下载地址"></a>5. 软件包版本以及下载地址</h3><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">jdk1<span class="meta">.8</span><span class="meta">.0_45</span></div><div class="line">zookeeper-<span class="number">3.4</span><span class="meta">.8</span></div><div class="line">go1<span class="meta">.6</span><span class="meta">.2</span></div><div class="line">pcre-<span class="number">8.37</span></div><div class="line">haproxy-<span class="number">1.4</span><span class="meta">.22</span></div><div class="line">keepalived-<span class="number">1.4</span><span class="meta">.26</span></div><div class="line"></div><div class="line">cd /data/packages</div><div class="line">wget http://apache.fayea.com/zookeeper/zookeeper-<span class="number">3.4</span><span class="meta">.6</span>/zookeeper-<span class="number">3.4</span><span class="meta">.6</span>.tar.gz</div><div class="line">wget http://golangtc.com/static/go/go1<span class="meta">.6</span><span class="meta">.2</span>.linux-amd64.tar.gz</div><div class="line">wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-<span class="number">8.37</span>.tar.gz</div><div class="line">wget http://www.keepalived.org/software/keepalived-<span class="number">1.2</span><span class="meta">.16</span>.tar.gz</div></pre></td></tr></table></figure>
+<p>通过浏览器自行下载</p>
+<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="external">http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a><br><a href="http://www.haproxy.org/download/1.4/src/haproxy-1.4.26.tar.gz" target="_blank" rel="external">http://www.haproxy.org/download/1.4/src/haproxy-1.4.26.tar.gz</a> </p>
+<h3 id="6-重启系统"><a href="#6-重启系统" class="headerlink" title="6. 重启系统"></a>6. 重启系统</h3><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># init 6</span></div></pre></td></tr></table></figure>
+<h3 id="二、部署Zookeeper群集"><a href="#二、部署Zookeeper群集" class="headerlink" title="二、部署Zookeeper群集"></a>二、部署Zookeeper群集</h3><ul>
+<li>配置hosts文件 ( zookeeper节点机器上配置 )</li>
+</ul>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@vmware<span class="number">-130</span> ~]#  vim /etc/hosts</div><div class="line"><span class="number">192.168</span><span class="number">.43</span><span class="number">.130</span>    vmware<span class="number">-130</span></div><div class="line"><span class="number">192.168</span><span class="number">.43</span><span class="number">.131</span>    vmware<span class="number">-131</span></div><div class="line"><span class="number">192.168</span><span class="number">.43</span><span class="number">.132</span>    vmware<span class="number">-132</span></div></pre></td></tr></table></figure>
+<ul>
+<li>安装java 坏境  ( zookeeper节点机器上配置 )</li>
+</ul>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># cd /data/packages</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> packages ]<span class="meta"># tar zxvf jdk-8u45-linux-x64.tar.gz -C /usr/local</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> packages ]<span class="meta"># cd /usr/local</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> <span class="keyword">local</span> ]<span class="meta"># ln -s jdk1.8.0_45 java</span></div></pre></td></tr></table></figure>
+<ul>
+<li>安装Zookeeper  ( zookeeper节点机器上配置 )</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /data/packages</div><div class="line">tar zxvf zookeeper-3.4.6.tar.gz -C /usr/<span class="built_in">local</span></div><div class="line">ln <span class="_">-s</span> zookeeper-3.4.6 zookeeper</div><div class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/zookeeper/</div></pre></td></tr></table></figure>
+<ul>
+<li>设置环境变量  ( <code>zookeeper</code>节点机器上配置 )</li>
+</ul>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">vim /etc/profile</div><div class="line">JAVA_HOME=<span class="regexp">/usr/local</span><span class="regexp">/java</span></div><div class="line">JRE_HOME=$JAVA_HOME/jre</div><div class="line">ZOOKEEPER_HOME=<span class="regexp">/usr/local</span><span class="regexp">/zookeeper</span></div><div class="line">JAVA_FONTS=/usr<span class="regexp">/local/java</span><span class="regexp">/jdk1.8.0_102/jre</span><span class="regexp">/lib/fonts</span> </div><div class="line">CLASSPATH=$JAVA_HOME/<span class="class"><span class="keyword">lib</span>:$<span class="title">JAVA_HOME</span>/<span class="title">lib</span>/<span class="title">tools</span>.<span class="title">jar</span></span></div><div class="line">PATH=$<span class="symbol">PATH:</span>$JAVA_HOME/<span class="symbol">bin:</span>$JAVA_HOME/jre/<span class="symbol">bin:</span>$ZOOKEEPER_HOME/bin </div><div class="line">export JAVA_HOME PATH CLASSPATH JRE_HOME ZOOKEEPER_HOME</div><div class="line"></div><div class="line"><span class="comment">#生效环境变量</span></div><div class="line">source /etc/profile</div></pre></td></tr></table></figure>
+<ul>
+<li>修改zookeeper配置文件 ( <code>zookeeper</code>节点机器上配置 )</li>
+</ul>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">vi /usr/local/zookeeper/conf/zoo.cfg</div><div class="line"><span class="attr">tickTime=2000</span></div><div class="line"><span class="attr">initLimit=10</span></div><div class="line"><span class="attr">syncLimit=5</span></div><div class="line"><span class="attr">clientPort=2181</span></div><div class="line">autopurge.<span class="attr">snapRetainCount=500</span> </div><div class="line">autopurge.<span class="attr">purgeInterval=24</span></div><div class="line"><span class="attr">dataDir=/data/zookeeper/data</span></div><div class="line"><span class="attr">dataLogDir=/data/zookeeper/logs</span></div><div class="line">server.<span class="number">1</span>=<span class="number">192.168</span>.<span class="number">43.130</span>:<span class="number">2888</span>:<span class="number">3888</span></div><div class="line">server.<span class="number">2</span>=<span class="number">192.168</span>.<span class="number">43.131</span>:<span class="number">2888</span>:<span class="number">3888</span></div><div class="line">server.<span class="number">3</span>=<span class="number">192.168</span>.<span class="number">43.132</span>:<span class="number">2888</span>:<span class="number">3888</span></div><div class="line"><span class="comment">#生效环境变量</span></div><div class="line">source /etc/profile</div></pre></td></tr></table></figure>
+<ul>
+<li>创建数据目录和日志目录 ( <code>zookeeper</code>节点机器上配置 )</li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="title">mkdir</span> -p /<span class="class"><span class="keyword">data</span>/zookeeper/<span class="keyword">data</span></span></div><div class="line"><span class="title">mkdir</span> -p /<span class="class"><span class="keyword">data</span>/zookeeper/logs</span></div></pre></td></tr></table></figure>
+<ul>
+<li>在zookeeper节点机器上创建myid文件，节点对应id<br>在43.130机器上创建myid，并设置为1与配置文件<code>zoo.cfg</code>里面<code>server.1</code>对应。</li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">echo</span> <span class="string">"1"</span> &gt; /<span class="class"><span class="keyword">data</span>/zookeeper/<span class="keyword">data</span>/myid</span></div></pre></td></tr></table></figure>
+<ul>
+<li>在zookeeper节点机器上创建myid文件，节点对应id<br>  在43.131机器上创建myid，并设置为1与配置文件zoo.cfg里面server.2对应。</li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">echo</span> <span class="string">"2"</span> &gt; /<span class="class"><span class="keyword">data</span>/zookeeper/<span class="keyword">data</span>/myid</span></div></pre></td></tr></table></figure>
+<ul>
+<li>在zookeeper节点机器上创建myid文件，节点对应id<br>在43.132机器上创建myid，并设置为1与配置文件zoo.cfg里面server.3对应。</li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">echo</span> <span class="string">"3"</span> &gt; /<span class="class"><span class="keyword">data</span>/zookeeper/<span class="keyword">data</span>/myid</span></div></pre></td></tr></table></figure>
+<ul>
+<li>启动zookeeper服务, 以vmware-130为例：</li>
+</ul>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@vmware-130 ~]<span class="comment"># zkServer.sh start</span></div><div class="line">JMX enabled <span class="keyword">by</span> <span class="keyword">default</span></div><div class="line">Using config: <span class="regexp">/usr/local/zookeeper/bin/</span>../conf/zoo.cfg</div><div class="line">Starting zookeeper ... STARTED</div></pre></td></tr></table></figure>
+<ul>
+<li>检查zookeeper所有节点状态</li>
+</ul>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@vmware<span class="number">-130</span> ~]<span class="meta"># zkServer.sh status</span></div><div class="line">JMX enabled by default</div><div class="line">Using config: <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/zookeeper/</span>bin/..<span class="meta-keyword">/conf/</span>zoo.cfg</div><div class="line"><span class="symbol">Mode:</span> follower</div><div class="line"> </div><div class="line">[root@vmware<span class="number">-131</span> ~]<span class="meta"># zkServer.sh status</span></div><div class="line">JMX enabled by default</div><div class="line">Using config: <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/zookeeper/</span>bin/..<span class="meta-keyword">/conf/</span>zoo.cfg</div><div class="line"><span class="symbol">Mode:</span> follower</div><div class="line"> </div><div class="line">[root@vmware<span class="number">-132</span> ~]<span class="meta"># zkServer.sh status</span></div><div class="line">JMX enabled by default</div><div class="line">Using config: <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/zookeeper/</span>bin/..<span class="meta-keyword">/conf/</span>zoo.cfg</div><div class="line"><span class="symbol">Mode:</span> leader</div></pre></td></tr></table></figure>
+<h3 id="三、部署Codis群集"><a href="#三、部署Codis群集" class="headerlink" title="三、部署Codis群集"></a>三、部署Codis群集</h3><ul>
+<li>安装<code>go</code>语言环境 ( 所有codis机器上配置 )</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/data/packages</div><div class="line">tar zxvf go1.<span class="number">4.2</span><span class="selector-class">.linux-amd64</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span> -C /usr/local</div></pre></td></tr></table></figure>
+<ul>
+<li>添加GO环境变量，其他环境变量不变</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">vim /etc/profile</div><div class="line">GOROOT=/usr/<span class="built_in">local</span>/go</div><div class="line">GOPATH=/usr/<span class="built_in">local</span>/codis</div><div class="line">PATH=<span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$JAVA_HOME</span>/jre/bin:<span class="variable">$ZOOKEEPER_HOME</span>/bin:<span class="variable">$GOROOT</span>/bin</div><div class="line"><span class="built_in">export</span> JAVA_HOME PATH CLASSPATH JRE_HOME ZOOKEEPER_HOME GOROOT GOPATH</div><div class="line"></div><div class="line"><span class="built_in">source</span> /etc/profile</div></pre></td></tr></table></figure>
+<ul>
+<li>安装<code>codis</code> ( 所有<code>codis</code>机器上配置 )</li>
+</ul>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">yum install -y git</div><div class="line">go get -u -d github.com/CodisLabs/codis</div><div class="line">cd $GOPATH<span class="meta-keyword">/src/</span>github.com/CodisLabs/codis</div><div class="line"><span class="meta">#执行编译测试脚本，编译go和reids。 </span></div><div class="line">make</div><div class="line">make gotest</div><div class="line"><span class="meta"># 将编译好后，把bin目录和一些脚本复制过去/usr/local/codis目录下：</span></div><div class="line">mkdir -p <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/codis/</span>&#123;logs,conf,scripts&#125;        <span class="meta">#创建codis日志，配置文件，脚本目录</span></div><div class="line">mkdir -p <span class="meta-keyword">/data/</span>codis_server<span class="class">/&#123;logs,conf,data&#125;         #创建codis_server 日志，配置文件，数据目录</span></div><div class="line">cp -rf <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/codis/</span>src/github.com/CodisLabs<span class="meta-keyword">/codis/</span>bin <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/codis/</span>                         #复制bin目录到自定义的安装目录</div><div class="line">cp <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/codis/</span>src/github.com/CodisLabs<span class="meta-keyword">/codis/</span>config.ini <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/codis/</span>conf/          #复制模板配置文件到安装目录</div><div class="line">cp <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/codis/</span>src/github.com/CodisLabs<span class="meta-keyword">/codis/</span>sample/redis_conf/<span class="number">6381.</span>conf <span class="meta-keyword">/data/</span>codis_server<span class="meta-keyword">/conf/</span>            #复制codis_server配置文件到配置目录</div><div class="line">cp -rf <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/codis/</span>src/github.com/CodisLabs<span class="meta-keyword">/codis/</span>sample/usage.md <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/codis/</span>scripts/   #复制模板启动流程文件到脚本目录下</div></pre></td></tr></table></figure>
+<ul>
+<li>配置<code>codis_proxy_1</code>  (<code>vmware-130</code> 机器上配置)</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/codis</div><div class="line">vim config.ini </div><div class="line">zk=vmware-130:2181,vmware-131:2181,vmware-132:2181                              </div><div class="line">product=codis                                         </div><div class="line">proxy_id=codis_proxy_1                                   </div><div class="line">net_timeout=5</div><div class="line">dashboard_addr=192.168.43.130:18087         </div><div class="line">coordinator=zookeeper</div></pre></td></tr></table></figure>
+<p>配置codis_proxy_1  (<code>vmware-131</code> 机器上配置)</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/codis</div><div class="line">vim config.ini </div><div class="line">zk=vmware-130:2181,vmware-131:2181,vmware-132:2181                              </div><div class="line">product=codis                                         </div><div class="line">proxy_id=codis_proxy_2                                   </div><div class="line">net_timeout=5</div><div class="line">dashboard_addr=192.168.43.130:18087         </div><div class="line">coordinator=zookeeper</div></pre></td></tr></table></figure>
+<p>配置codis_proxy_1  (<code>vmware-132</code> 机器上配置)</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/codis</div><div class="line">vim config.ini </div><div class="line">zk=vmware-130:2181,vmware-131:2181,vmware-132:2181                              </div><div class="line">product=codis                                         </div><div class="line">proxy_id=codis_proxy_3                                   </div><div class="line">net_timeout=5</div><div class="line">dashboard_addr=192.168.43.130:18087         </div><div class="line">coordinator=zookeeper</div></pre></td></tr></table></figure>
+<ul>
+<li>修改配置文件，启动codis-server服务. ( 所有<code>codis-server</code>机器上 )</li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">cd</span> /data/codis_server/<span class="keyword">conf</span>/</div><div class="line">mv 6381.<span class="keyword">conf</span> 6379.<span class="keyword">conf</span></div><div class="line">vim 6379.<span class="keyword">conf</span></div><div class="line">修改如下参数: (生产环境，参数适当进行调整)</div><div class="line">daemonize yes</div><div class="line">pidfile /<span class="keyword">var</span>/<span class="keyword">run</span>/redis_6379.pid</div><div class="line">port 6379</div><div class="line">logfile <span class="string">"/data/codis_server/logs/codis_6379.log"</span></div><div class="line"><span class="keyword">save</span> 900 1</div><div class="line"><span class="keyword">save</span> 300 10</div><div class="line"><span class="keyword">save</span> 60 10000</div><div class="line">dbfilename 6379.rdb</div><div class="line"><span class="keyword">dir</span> /data/codis_server/data</div></pre></td></tr></table></figure>
+<p>复制6380配置文件</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp <span class="number">6379</span><span class="selector-class">.conf</span> <span class="number">6380</span><span class="selector-class">.conf</span></div><div class="line">sed -<span class="selector-tag">i</span> <span class="string">'s/6379/6380/g'</span> <span class="number">6380</span>.conf</div></pre></td></tr></table></figure>
+<p>添加内核参数</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">echo <span class="string">"vm.overcommit_memory = 1"</span> <span class="meta">&gt;&gt;  </span>/etc/sysctl.conf</div><div class="line">sysctl -p</div></pre></td></tr></table></figure>
+<p>启动codis-server服务  ( 所有codis-server机器上 )</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/codis/</span>bin/codis-server <span class="meta-keyword">/data/</span>codis_server<span class="meta-keyword">/conf/</span><span class="number">6379.</span>conf</div><div class="line"><span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/codis/</span>bin/codis-server <span class="meta-keyword">/data/</span>codis_server<span class="meta-keyword">/conf/</span><span class="number">6380.</span>conf</div></pre></td></tr></table></figure>
+<ul>
+<li>查看一下启动流程：( 以<code>vmware-130</code>机器为例 )</li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@vmware-130 ~]# <span class="keyword">cat</span> /usr/<span class="keyword">local</span>/codis/scripts/usage.md</div><div class="line">0. start zookeeper                               <span class="comment">//启动zookeeper服务</span></div><div class="line">1. change config items <span class="keyword">in</span> config.ini   <span class="comment">//修改codis配置文件</span></div><div class="line">2. ./start_dashboard.<span class="keyword">sh</span>                       <span class="comment">//启动 dashboard</span></div><div class="line">3. ./start_redis.<span class="keyword">sh</span>                                <span class="comment">//启动redis实例</span></div><div class="line">4. ./add_group.<span class="keyword">sh</span>                               <span class="comment">//添加redis组，一个redis组只能有一个master</span></div><div class="line">5. ./initslot.<span class="keyword">sh</span>                                     <span class="comment">//初始化槽</span></div><div class="line">6. ./start_proxy.<span class="keyword">sh</span>                              <span class="comment">//启动codis_proxy</span></div><div class="line">7. ./set_proxy_online.<span class="keyword">sh</span>                     <span class="comment">//上线proxy项目</span></div><div class="line">8. <span class="keyword">open</span> browser to http:<span class="comment">//localhost:18087/admin     //访问管理界面</span></div></pre></td></tr></table></figure>
+<p>这只是一个参考，有些顺序不是必须的，但启动dashboard前，必须启动zookeeper服务，这是必须的，后面有很多操作，都可以在管理页面完成，例如添加/删除组、数据分片、添加/删除redis实例等</p>
+<p> 创建dashboard启动脚本。可参考/usr/local/codis/src/github.com/wandoulabs/codis/sample/模板脚本( 只需在一台机器上启动即可。43.130上启动 )</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@vmware-130 ~]<span class="comment"># vim /usr/local/codis/scripts/start_dashboard.sh</span></div><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line">CODIS_HOME=/usr/<span class="built_in">local</span>/codis </div><div class="line">nohup <span class="variable">$CODIS_HOME</span>/bin/codis-config -c <span class="variable">$CODIS_HOME</span>/conf/config.ini -L <span class="variable">$CODIS_HOME</span>/logs/dashboard.log dashboard --addr=:18087 --http-log=<span class="variable">$CODIS_HOME</span>/logs/requests.log &amp;&gt;/dev/null &amp;</div></pre></td></tr></table></figure>
+<p>启动dashboard</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta"># cd /usr/local/codis/scripts/</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> scripts ]<span class="meta"># sh start_dashboard.sh</span></div></pre></td></tr></table></figure>
+<p>创建初始化槽脚本，可参考<code>/usr/local/codis/src/github.com/wandoulabs/codis/sample/</code>模板脚本( 在任一台机器上机器上配置，此环境在<code>43.130</code>机器上配置 )</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@vmware-130 ~]<span class="comment"># vim /usr/local/codis/scripts/initslot.sh</span></div><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line">CODIS_HOME=/usr/<span class="built_in">local</span>/codis</div><div class="line"><span class="built_in">echo</span> <span class="string">"slots initializing..."</span></div><div class="line"><span class="variable">$CODIS_HOME</span>/bin/codis-config -c <span class="variable">$CODIS_HOME</span>/conf/config.ini slot init <span class="_">-f</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"done"</span></div></pre></td></tr></table></figure>
+<p>执行初始化槽脚本：</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> ~]<span class="meta">#  cd /usr/local/codis/scripts</span></div><div class="line">[root<span class="symbol">@vmware</span><span class="number">-130</span> scripts ]<span class="meta"># sh initslot.sh</span></div></pre></td></tr></table></figure>
+<p>配置<code>codis-server</code>,启动<code>codis-server master</code> ,<code>slave</code>实例 ，以上步骤已经启动，不在描述。</p>
+<p>通过管理页面添加组<code>ID</code>，为组添加主从实例，一个组里只能有一个<code>master</code>，设置<code>slot</code>分片数据等。</p>
+<p><a href="http://192.168.43.130:18087（最好用Firefox浏览器或者谷歌浏览器，别的浏览器比较坑爹！！！）" target="_blank" rel="external">http://192.168.43.130:18087（最好用Firefox浏览器或者谷歌浏览器，别的浏览器比较坑爹！！！）</a><br>如下图所示：<br><img src="http://www.msbgn.cn/msbgn/Codis3.png" alt="Codis3"></p>
+<p>接下来，依次添加 Server Group 1,2,3 ( 共添加3组 )</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis4.png" alt="Codis4"></p>
+<p>添加好后，图为下:<br><img src="http://www.msbgn.cn/msbgn/Codis5.png" alt="Codis5"></p>
+<p>接下来添加<code>codis-server</code>实例包括<code>master</code>,<code>slave</code></p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis6.png" alt="Codis6"></p>
+<p>全部添加完成后，如下图所示：</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis7.png" alt="Codis7"></p>
+<p>为组分配Slot(槽)范围</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">group_1   <span class="number">0</span> - <span class="number">511</span></div><div class="line">group_2   <span class="number">512</span> - <span class="number">1023</span></div><div class="line">group_3   暂时不分配，以下测试中，用来迁移其他组使用。</div></pre></td></tr></table></figure>
+<p>如下图操作所示：group_1  ( 0 - 511 )</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis8.png" alt="Codis8"></p>
+<p>添加成功后，页面会显示success窗口，如下图所示。</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis9.png" alt="Codis9"></p>
+<p>如下图操作所示：group_2  ( 512 - 1023 )</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis10.png" alt="Codis10"></p>
+<p>添加成功后，页面会显示success窗口，如下图所示。</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis11.png" alt="Codis11"></p>
+<p>查看整个Slots分布情况: 选择 Slots Status 或者 右上角那个 Slots 都可以看到分布情况。</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis12.png" alt="Codis12"></p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis13.png" alt="Codis13"></p>
+<p>配置codis-ha服务，主从自动切换。( 随便找个节点机器上配置即可,此环境中在43.131机器上配置 )</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@vmware-<span class="number">131</span> ~]# <span class="keyword">go</span> <span class="built_in">get</span> github.<span class="keyword">com</span>/ngaut/codis-<span class="keyword">ha</span></div><div class="line">[root@vmware-<span class="number">131</span> ~]# <span class="keyword">cd</span> /usr/local/codis/src/github.<span class="keyword">com</span>/ngaut</div><div class="line">[root@vmware-<span class="number">131</span> ~]# <span class="keyword">cp</span> -r codis-<span class="keyword">ha</span> /usr/local/</div><div class="line">[root@vmware-<span class="number">131</span> ~]# <span class="keyword">cd</span> /usr/local/codis-<span class="keyword">ha</span></div><div class="line">[root@vmware-<span class="number">131</span> codis-<span class="keyword">ha</span> ]# <span class="keyword">go</span> build</div></pre></td></tr></table></figure>
+<p>创建启动脚本，启动codis-ha服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@vmware-131 ~]<span class="comment"># vim /usr/local/codis-ha/start_codis_ha.sh</span></div><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line">./codis-ha --codis-config=192.168.43.130:18087 -log-level=<span class="string">"info"</span> --productName=vmware-Codis &amp;&gt; ./logs/codis-ha.log &amp;</div></pre></td></tr></table></figure>
+<p>创建日志目录</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@vmware-<span class="number">131</span> ~]# <span class="built_in">mkdir</span> /usr/local/codis-<span class="keyword">ha</span>/logs</div><div class="line">[root@vmware-<span class="number">131</span> ~]# <span class="keyword">cd</span> /usr/local/codis-<span class="keyword">ha</span>/</div><div class="line">[root@vmware-<span class="number">131</span> codis-<span class="keyword">ha</span> ]# <span class="keyword">sh</span> start_codis_ha.<span class="keyword">sh</span></div></pre></td></tr></table></figure>
+<p>修改start_proxy.sh，启动codis-proxy服务 ( 以130机器配置为例，其余codis-proxy只需修改下名称即可。)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">[root@vmware-130 scripts]<span class="comment"># vim /usr/local/codis/scripts/start_proxy.sh </span></div><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line">CODIS_HOME=/usr/<span class="built_in">local</span>/codis</div><div class="line"><span class="built_in">echo</span> <span class="string">"shut down codis_proxy_1..."</span></div><div class="line"><span class="variable">$CODIS_HOME</span>/bin/codis-config -c <span class="variable">$CODIS_HOME</span>/conf/config.ini proxy offline codis_proxy_1</div><div class="line"><span class="built_in">echo</span> <span class="string">"done"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"start new codis_proxy_1..."</span></div><div class="line">nohup <span class="variable">$CODIS_HOME</span>/bin/codis-proxy --log-level error -c <span class="variable">$CODIS_HOME</span>/conf/config.ini -L <span class="variable">$CODIS_HOME</span>/logs/codis_proxy_1.log  --cpu=8 --addr=0.0.0.0:19000 --http-addr=0.0.0.0:11000 &amp;</div><div class="line"><span class="built_in">echo</span> <span class="string">"done"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"sleep 3s"</span></div><div class="line">sleep 3</div><div class="line">tail -n 30 <span class="variable">$CODIS_HOME</span>/logs/codis_proxy_1.log</div><div class="line">[root@vmware-130 scripts]<span class="comment"># vim /usr/local/codis/scripts/set_proxy_online.sh </span></div><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line">CODIS_HOME=/usr/<span class="built_in">local</span>/codis</div><div class="line"><span class="built_in">echo</span> <span class="string">"set codis_proxy_1 online"</span></div><div class="line"><span class="variable">$CODIS_HOME</span>/bin/codis-config -c <span class="variable">$CODIS_HOME</span>/conf/config.ini proxy online codis_proxy_1</div><div class="line"><span class="built_in">echo</span> <span class="string">"done"</span></div><div class="line">启动codis-proxy</div><div class="line">./start_proxy.sh</div><div class="line">上线codis_proxy_1</div><div class="line">./set_proxy_online.sh</div><div class="line">备注：其他codis_proxy只需修改start_proxy.sh和set_proxy_online.sh启动脚本里面的codis_proxy_1名称即可。</div></pre></td></tr></table></figure>
+<p>通过redis-cli客户端直接访问codis-proxy,写入数据，看组里面的master和slave 是否同步。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-attr">[root@vmware-130 scripts]</span># <span class="selector-tag">redis-cli</span> <span class="selector-tag">-p</span> 19000</div><div class="line">127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span><span class="selector-pseudo">:19000</span>&gt; <span class="selector-tag">set</span> <span class="selector-tag">mike</span> <span class="selector-tag">liweizhong</span></div><div class="line"><span class="selector-tag">OK</span></div><div class="line">127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span><span class="selector-pseudo">:19000</span>&gt; <span class="selector-tag">set</span> <span class="selector-tag">benet</span> <span class="selector-tag">lwz</span></div><div class="line"><span class="selector-tag">OK</span></div><div class="line">127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span><span class="selector-pseudo">:19000</span>&gt; <span class="selector-tag">exit</span></div><div class="line"><span class="selector-attr">[root@vmware-130 scripts]</span>#</div></pre></td></tr></table></figure>
+<p>通过管理界面看到如下图所示：</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis14.png" alt="Codis14"></p>
+<p>codis-server master,slave 同步数据正常，slots槽分片数据正常</p>
+<p>接下来在通过codis-proxy去取数据看看</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@vmware-<span class="number">130</span> scripts]<span class="comment"># redis-cli -p 19000</span></div><div class="line"><span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">19000</span>&gt; get mike</div><div class="line"><span class="string">"liweizhong"</span></div><div class="line"><span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">19000</span>&gt; get benet</div><div class="line"><span class="string">"lwz"</span></div><div class="line"><span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">19000</span>&gt; <span class="keyword">exit</span></div><div class="line">[root@vmware-<span class="number">130</span> scripts]<span class="comment">#</span></div></pre></td></tr></table></figure>
+<p>以下用shell简单的写了个插入redis数据脚本，此脚本会插入20W个key,每运行一次，需要调整INSTANCE_NAME参数里面的数字，才可重新插入新数据。仅供测试使用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@vmware-132 scripts]<span class="comment"># cat redis-key.sh </span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">REDISCLI=<span class="string">"redis-cli -h 192.168.43.131 -p 19000 -n 0 SET"</span></div><div class="line">ID=1</div><div class="line"><span class="keyword">while</span> [ <span class="variable">$ID</span> -le 50000 ]</div><div class="line"><span class="keyword">do</span></div><div class="line">  INSTANCE_NAME=<span class="string">"i-2-<span class="variable">$ID</span>-VM"</span></div><div class="line">  UUID=`cat /proc/sys/kernel/random/uuid`</div><div class="line">  CREATED=`date <span class="string">"+%Y-%m-%d %H:%M:%S"</span>`</div><div class="line">  <span class="variable">$REDISCLI</span> vm_instance:<span class="variable">$ID</span>:instance_name <span class="string">"<span class="variable">$INSTANCE_NAME</span>"</span></div><div class="line">  <span class="variable">$REDISCLI</span> vm_instance:<span class="variable">$ID</span>:uuid <span class="string">"<span class="variable">$UUID</span>"</span></div><div class="line">  <span class="variable">$REDISCLI</span> vm_instance:<span class="variable">$ID</span>:created <span class="string">"<span class="variable">$CREATED</span>"</span></div><div class="line">  <span class="variable">$REDISCLI</span> vm_instance:<span class="variable">$INSTANCE_NAME</span>:id <span class="string">"<span class="variable">$ID</span>"</span></div><div class="line">ID=`expr <span class="variable">$ID</span> + 1`</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+<p>执行插入脚本</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@vmware</span><span class="number">-132</span> scripts]<span class="meta"># sh redis-key.sh</span></div></pre></td></tr></table></figure>
+<p>通过管理界面，我们可以看到如下图所示</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis15.png" alt="Codis15"></p>
+<p>数据插完后，最终如下图所示</p>
+<p><img src="http://www.msbgn.cn/msbgn/Codis16.png" alt="Codis16"></p>
+<p>»第三部分部，署Keepalived + haproxy 高可用负载均衡请看下一节，至此第一、二部分已经完成。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2016/11/03/Codis01/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/11/03/Codis01/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+	<!-- css -->
+	<style type="text/css">
+	    .center {
+	        text-align: center;
+	    }
+	    .hidden {
+	        display: none;
+	    }
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+			_background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+			<!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
+			     因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+	</style>
+	<!-- /css -->
+    <!-- Donate Module -->
+    <div id="donate_module">
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_board donate_bar center">
+	    <br>
+	    ------------------------------------------------------------------------------------------------------------------------------
+	    <br>
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			打赏我的人，据说都找到了女朋友~~
+		</span>
+
+
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+
+	<div id="donate_guide" class="donate_bar center hidden">
+        <br>
+	    ------------------------------------------------------------------------------------------------------------------------------
+	    <br>
+	    
+	    <div width="100%" align="center"><div name="dashmain" id="dash-main-id-878d88" class="dash-main-3 878d88-0.88"></div><script
+	    type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
+		
+		<a href="http://www.msbgn.cn/msbgn/xpchatpay.png" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+			<img src="http://www.msbgn.cn/msbgn/xpchatpay.png" title="微信打赏 Donate" height="190px" width="203px"/>
+		</a>
+
+        &nbsp;&nbsp;
+		<a href="http://www.msbgn.cn/msbgn/wechatpay.png" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+			<img src="http://www.msbgn.cn/msbgn/wechatpay.png" title="支付宝打赏 Donate" height="190px" width="214px"/>
+		</a>
+		<span class="donate_txt">
+			打赏我的人，据说都找到了女朋友~~
+		</span>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		$('.btn_donate').click(function(){
+		var par = $(this).parent('.donate_board');
+		par.addClass('hidden');
+		par.next().removeClass('hidden');
+		})
+		
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+   
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2016/11/04/Codis2/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Codis 高可用负载均衡群集的搭建与使用2
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2016/11/03/python01/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">我和python的第一次接触</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2016/11/03/Codis01/" data-title="Codis 高可用负载均衡群集的搭建与使用" data-url="/2016/11/03/Codis01/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/15/ELKShield/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/ELK1.png)" alt="ELK添加Shield插件管理权限" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/ELK/">ELK</a></p>
+                            <p class="item-title"><a href="/2016/12/15/ELKShield/" class="title">ELK添加Shield插件管理权限</a></p>
+                            <p class="item-date"><time datetime="2016-12-15T07:15:05.363Z" itemprop="datePublished">2016-12-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/15/elk1/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/ELK1.png)" alt="elk实时日志分析平台搭建详细过程" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/ELK/">ELK</a></p>
+                            <p class="item-title"><a href="/2016/12/15/elk1/" class="title">elk实时日志分析平台搭建详细过程</a></p>
+                            <p class="item-date"><time datetime="2016-12-15T06:55:30.547Z" itemprop="datePublished">2016-12-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/09/Pythondate2/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/day2.png)" alt="Python 流程控制" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
+                            <p class="item-title"><a href="/2016/12/09/Pythondate2/" class="title">Python 流程控制</a></p>
+                            <p class="item-date"><time datetime="2016-12-09T08:01:50.697Z" itemprop="datePublished">2016-12-09</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/09/Pythonys/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/pythonys.png)" alt="Python 运算符" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
+                            <p class="item-title"><a href="/2016/12/09/Pythonys/" class="title">Python 运算符</a></p>
+                            <p class="item-date"><time datetime="2016-12-09T02:59:05.547Z" itemprop="datePublished">2016-12-09</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/08/Lambda/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/lambda.jpg)" alt="Lambda表达式以及python的内置函数" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
+                            <p class="item-title"><a href="/2016/12/08/Lambda/" class="title">Lambda表达式以及python的内置函数</a></p>
+                            <p class="item-date"><time datetime="2016-12-08T07:40:56.606Z" itemprop="datePublished">2016-12-08</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 15px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.cm">Linux公社</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2016 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
