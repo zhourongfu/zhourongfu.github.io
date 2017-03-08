@@ -155,11 +155,11 @@
 	 </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                24
+                27
                 <span>文章</span>
             </div>
             <div class="article-info-block">
-                18
+                20
                 <span>标签</span>
             </div>
         
@@ -249,16 +249,16 @@
 <li>主机名：</li>
 </ul>
 <p>##第二、linux环境安装</p>
-<p>###1.前期准备<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@knode1 ~]# groupadd  -g 201  zabbix</div><div class="line">[root@knode1 ~]# useradd -M -s /sbin/nologin -g zabbix zabbix</div><div class="line">[root@knode1 ~]# yum  -y groupinstall  &quot;Development Tools&quot;</div></pre></td></tr></table></figure></p>
-<p>###2.安装zabbix_agentd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@knode1 ~]# tar xf zabbix-2.4.7.tar.gz </div><div class="line">[root@knode1 ~]# cd zabbix-2.4.7</div><div class="line">[root@knode1 zabbix-2.4.7]# ./configure --prefix=/usr/local/zabbix_agent/ --enable-agent</div><div class="line">可以增加--sysconfdir=/etc/zabbix/把配置文件放到指定位置</div><div class="line">[root@knode1 zabbix-2.4.7]# make &amp;&amp; make install</div></pre></td></tr></table></figure></p>
-<p>###3.编辑配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@knode1 zabbix-2.4.7]# vim /usr/local/zabbix_agent/etc/zabbix_agentd.conf</div><div class="line">修改为：</div><div class="line">Server=10.199.200.15</div><div class="line">ListenPort=10050</div><div class="line">ServerActive=10.199.200.15</div><div class="line">Hostname=knode1.allposs.com</div><div class="line">User=zabbix</div><div class="line">UnsafeUserParameters=1</div></pre></td></tr></table></figure></p>
-<p>###4.设置开机启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@knode1 zabbix-2.4.7]# ln -s /usr/local/zabbix_agent/sbin/zabbix_agentd /usr/local/sbin/zabbix_agentd</div><div class="line">[root@knode1 zabbix-2.4.7]# cp misc/init.d/fedora/core/zabbix_agentd /etc/init.d/</div><div class="line">[root@knode1 zabbix-2.4.7]# chmod u+x /etc/init.d/zabbix_agentd </div><div class="line">[root@knode1 zabbix-2.4.7]# chkconfig --add zabbix_agentd</div><div class="line">[root@knode1 zabbix-2.4.7]# chkconfig zabbix_agentd on</div><div class="line">[root@knode1 zabbix-2.4.7]# service zabbix_agentd start</div></pre></td></tr></table></figure></p>
+<p>###1.前期准备<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@knode1</span> ~]<span class="meta"># groupadd  -g 201  zabbix</span></div><div class="line">[root<span class="symbol">@knode1</span> ~]<span class="meta"># useradd -M -s /sbin/nologin -g zabbix zabbix</span></div><div class="line">[root<span class="symbol">@knode1</span> ~]<span class="meta"># yum  -y groupinstall  <span class="string">"Development Tools"</span></span></div></pre></td></tr></table></figure></p>
+<p>###2.安装zabbix_agentd<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@knode1 ~]<span class="comment"># tar xf zabbix-2.4.7.tar.gz </span></div><div class="line">[root@knode1 ~]<span class="comment"># cd zabbix-2.4.7</span></div><div class="line">[root@knode1 zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="comment"># ./configure --prefix=/usr/local/zabbix_agent/ --enable-agent</span></div><div class="line">可以增加--sysconfdir=<span class="regexp">/etc/zabbix/</span>把配置文件放到指定位置</div><div class="line">[root@knode1 zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="comment"># make &amp;&amp; make install</span></div></pre></td></tr></table></figure></p>
+<p>###3.编辑配置文件<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@knode1 zabbix<span class="number">-2.4</span><span class="number">.7</span>]# vim /usr/local/zabbix_agent/etc/zabbix_agentd.conf</div><div class="line">修改为：</div><div class="line">Server=<span class="number">10.199</span><span class="number">.200</span><span class="number">.15</span></div><div class="line">ListenPort=<span class="number">10050</span></div><div class="line">ServerActive=<span class="number">10.199</span><span class="number">.200</span><span class="number">.15</span></div><div class="line">Hostname=knode1.allposs.com</div><div class="line">User=zabbix</div><div class="line">UnsafeUserParameters=<span class="number">1</span></div></pre></td></tr></table></figure></p>
+<p>###4.设置开机启动<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@knode1</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># ln -s /usr/local/zabbix_agent/sbin/zabbix_agentd /usr/local/sbin/zabbix_agentd</span></div><div class="line">[root<span class="symbol">@knode1</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># cp misc/init.d/fedora/core/zabbix_agentd /etc/init.d/</span></div><div class="line">[root<span class="symbol">@knode1</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># chmod u+x /etc/init.d/zabbix_agentd </span></div><div class="line">[root<span class="symbol">@knode1</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># chkconfig --add zabbix_agentd</span></div><div class="line">[root<span class="symbol">@knode1</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># chkconfig zabbix_agentd on</span></div><div class="line">[root<span class="symbol">@knode1</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># service zabbix_agentd start</span></div></pre></td></tr></table></figure></p>
 <p>##widows端安装</p>
 <p>###1.下载与解压<br>地址: <a href="http://www.zabbix.com/downloads/2.4.0/zabbix_agents_2.4.0.win.zip" target="_blank" rel="external">http://www.zabbix.com/downloads/2.4.0/zabbix_agents_2.4.0.win.zip</a><br>解压zabbix_agents_2.4.0.win.zip<br>conf目录存放是agent配置文件 bin文件存放windows下32位和64位安装程序</p>
 <p>###2.配置与安装</p>
-<p>####2.1配置zabbix agent相关配置<br>找到conf下的配置文件 zabbix_agentd.win.conf，修改LogFile、Server、Hostname这三个参数。具体配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">LogFile=c:\zabbix\zabbix_agentd.log #日志存放位置</div><div class="line">Server=10.199.0.105 #zabbix服务器地址</div><div class="line">Hostname=WHUAFFS    #本主机主机名</div><div class="line">ServerActive=10.199.0.105 #zabbix server地址</div></pre></td></tr></table></figure></p>
-<p>####2.2 安装agent<br>在cmd下执行以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd c:\zabbix\win64\</div><div class="line">zabbix_agentd.exe  -c E:\zabbix\conf\zabbix_agentd.win.conf –i</div></pre></td></tr></table></figure></p>
-<p>####2.3 启动agent客户端<br>启动命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zabbix_agentd.exe  -c E:\zabbix\conf\zabbix_agentd.win.conf –s</div></pre></td></tr></table></figure></p>
+<p>####2.1配置zabbix agent相关配置<br>找到conf下的配置文件 zabbix_agentd.win.conf，修改LogFile、Server、Hostname这三个参数。具体配置如下：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="attr">LogFile</span>=c:\zabbix\zabbix_agentd.log #日志存放位置</div><div class="line"><span class="attr">Server</span>=<span class="number">10.199</span>.<span class="number">0.105</span> #zabbix服务器地址</div><div class="line"><span class="attr">Hostname</span>=WHUAFFS    #本主机主机名</div><div class="line"><span class="attr">ServerActive</span>=<span class="number">10.199</span>.<span class="number">0.105</span> #zabbix server地址</div></pre></td></tr></table></figure></p>
+<p>####2.2 安装agent<br>在cmd下执行以下命令：<br><figure class="highlight tex"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd c:<span class="tag">\<span class="name">zabbix</span></span><span class="tag">\<span class="name">win</span></span>64<span class="tag">\<span class="name"></span></span></div><div class="line">zabbix_agentd.exe  -c E:<span class="tag">\<span class="name">zabbix</span></span><span class="tag">\<span class="name">conf</span></span><span class="tag">\<span class="name">zabbix</span></span>_agentd.win.conf –i</div></pre></td></tr></table></figure></p>
+<p>####2.3 启动agent客户端<br>启动命令如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zabbix_agentd<span class="selector-class">.exe</span>  -c E:\zabbix\conf\zabbix_agentd<span class="selector-class">.win</span><span class="selector-class">.conf</span> –s</div></pre></td></tr></table></figure></p>
 <p>启动的程序将以控制台的形式开启。判定是否启动可以查看启动的日志，或者使用netstat –an查看端口是否监听。</p>
 
         
@@ -458,6 +458,63 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
+                            <a href="/2017/01/04/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/01/04/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-01-04T07:44:54.456Z" itemprop="datePublished">2017-01-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/22/LinuxRinetd/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/Rinetd.png)" alt="Linux使用Rinetd来实现端口转发" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/linux/">linux</a></p>
+                            <p class="item-title"><a href="/2016/12/22/LinuxRinetd/" class="title">Linux使用Rinetd来实现端口转发</a></p>
+                            <p class="item-date"><time datetime="2016-12-22T03:02:56.851Z" itemprop="datePublished">2016-12-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/22/gxng/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/gxng.png)" alt="高性能WEB服务器nginx" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/nginx/">nginx</a></p>
+                            <p class="item-title"><a href="/2016/12/22/gxng/" class="title">高性能WEB服务器nginx</a></p>
+                            <p class="item-date"><time datetime="2016-12-22T02:04:28.823Z" itemprop="datePublished">2016-12-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
                             <a href="/2016/12/15/ELKShield/" class="thumbnail">
     
     
@@ -493,63 +550,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         </div>
                     </li>
                 
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/09/Pythondate2/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/day2.png)" alt="Python 流程控制" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
-                            <p class="item-title"><a href="/2016/12/09/Pythondate2/" class="title">Python 流程控制</a></p>
-                            <p class="item-date"><time datetime="2016-12-09T08:01:50.697Z" itemprop="datePublished">2016-12-09</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/09/Pythonys/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/pythonys.png)" alt="Python 运算符" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
-                            <p class="item-title"><a href="/2016/12/09/Pythonys/" class="title">Python 运算符</a></p>
-                            <p class="item-date"><time datetime="2016-12-09T02:59:05.547Z" itemprop="datePublished">2016-12-09</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/08/Lambda/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/lambda.jpg)" alt="Lambda表达式以及python的内置函数" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
-                            <p class="item-title"><a href="/2016/12/08/Lambda/" class="title">Lambda表达式以及python的内置函数</a></p>
-                            <p class="item-date"><time datetime="2016-12-08T07:40:56.606Z" itemprop="datePublished">2016-12-08</time></p>
-                        </div>
-                    </li>
-                
             </ul>
         </div>
     </div>
@@ -559,7 +559,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
         </div>
     </div>
 
@@ -568,7 +568,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -577,7 +577,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
         </div>
     </div>
 
@@ -586,7 +586,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 15px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
         </div>
     </div>
 
@@ -618,7 +618,11 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     </li>
                 
                     <li>
-                        <a href="http://www.linuxidc.cm">Linux公社</a>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
                     </li>
                 
             </ul>
@@ -634,7 +638,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <footer id="footer">
     <div class="outer">
         <div id="footer-info" class="inner">
-            &copy; 2016 Rongfu Zhou<br>
+            &copy; 2017 Rongfu Zhou<br>
             
         </div>
     </div>

@@ -155,11 +155,11 @@
 	 </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                24
+                27
                 <span>文章</span>
             </div>
             <div class="article-info-block">
-                18
+                20
                 <span>标签</span>
             </div>
         
@@ -246,13 +246,13 @@
 <h2 id="2、使用openssl实现证书中心"><a href="#2、使用openssl实现证书中心" class="headerlink" title="2、使用openssl实现证书中心"></a>2、使用openssl实现证书中心</h2><p>由于是使用openssl架设私有证书中心，因此要保证以下字段在证书中心的证书、服务端证书、客户端证书中都相同</p>
 <h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Country Name</div><div class="line"> State <span class="keyword">or</span> Province Name</div><div class="line"> Locality Name</div><div class="line"> Organization Name</div><div class="line"> Organizational Unit Name</div></pre></td></tr></table></figure>
 <p>编辑证书中心配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">vim /etc/pki/tls/openssl.cnf</div><div class="line">[ ca ]</div><div class="line">default_ca      = CA_default            # The default ca section</div><div class="line">####################################################################</div><div class="line">[ CA_default ]</div><div class="line">dir             = /etc/pki/CA           # Where everything is kept</div><div class="line">certs           = $dir/certs            # Where the issued certs are kept</div><div class="line">crl_dir         = $dir/crl              # Where the issued crl are kept</div><div class="line">database        = $dir/index.txt        # database index file.</div><div class="line">#unique_subject = no                    # Set to &apos;no&apos; to allow creation of                                      # several ctificates with same subject.</div><div class="line">new_certs_dir   = $dir/newcerts         # default place for new certs.</div><div class="line">certificate     = $dir/cacert.pem       # The CA certificate</div><div class="line">serial          = $dir/serial           # The current serial number</div><div class="line">crlnumber       = $dir/crlnumber        # the current crl number                                      # must be commented out to leave a V1 CRL</div><div class="line">crl             = $dir/crl.pem          # The current CRL</div><div class="line">private_key     = $dir/private/cakey.pem# The private key</div><div class="line">RANDFILE        = $dir/private/.rand    # private random number file</div><div class="line">x509_extensions = usr_cert              # The extentions to add to the cert</div><div class="line"># Comment out the following two lines for the &quot;traditional&quot;</div><div class="line"># (and highly broken) format.</div><div class="line">name_opt        = ca_default            # Subject Name options</div><div class="line">cert_opt        = ca_default            # Certificate field options</div></pre></td></tr></table></figure>
-<p>创建证书私钥<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/pki/CA/private</div><div class="line">(umask 077;openssl genrsa -out cakey.pem 2048)</div></pre></td></tr></table></figure></p>
-<p>生成自签证书（我这里申请的自签证书为10年，如有报错，请检查vim /etc/pki/tls/openssl.cnf）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd /etc/pki/CA/</div><div class="line">openssl req -new -x509 -key private/cakey.pem -out cacert.pem -days=3655</div></pre></td></tr></table></figure></p>
-<h2 id="3、创建服务器证书"><a href="#3、创建服务器证书" class="headerlink" title="3、创建服务器证书"></a>3、创建服务器证书</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir /usr/local/nginx/ssl</div><div class="line"> cd /usr/local/nginx/ssl</div><div class="line"> (umask 077;openssl genrsa -out nginx.key 1024)</div><div class="line"> openssl req -new -key nginx.key -out nginx.csr</div><div class="line"> openssl ca -in nginx.csr -out nginx.crt -days=3650</div></pre></td></tr></table></figure>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">vim /etc/pki/tls/openssl.cnf</div><div class="line">[ ca ]</div><div class="line"><span class="attr">default_ca</span>      = CA_default            <span class="comment"># The default ca section</span></div><div class="line"><span class="comment">####################################################################</span></div><div class="line">[ CA_default ]</div><div class="line"><span class="attr">dir</span>             = /etc/pki/CA           <span class="comment"># Where everything is kept</span></div><div class="line"><span class="attr">certs</span>           = $dir/certs            <span class="comment"># Where the issued certs are kept</span></div><div class="line"><span class="attr">crl_dir</span>         = $dir/crl              <span class="comment"># Where the issued crl are kept</span></div><div class="line"><span class="attr">database</span>        = $dir/index.txt        <span class="comment"># database index file.</span></div><div class="line"><span class="comment">#unique_subject = no                    # Set to 'no' to allow creation of                                      # several ctificates with same subject.</span></div><div class="line"><span class="attr">new_certs_dir</span>   = $dir/newcerts         <span class="comment"># default place for new certs.</span></div><div class="line"><span class="attr">certificate</span>     = $dir/cacert.pem       <span class="comment"># The CA certificate</span></div><div class="line"><span class="attr">serial</span>          = $dir/serial           <span class="comment"># The current serial number</span></div><div class="line"><span class="attr">crlnumber</span>       = $dir/crlnumber        <span class="comment"># the current crl number                                      # must be commented out to leave a V1 CRL</span></div><div class="line"><span class="attr">crl</span>             = $dir/crl.pem          <span class="comment"># The current CRL</span></div><div class="line"><span class="attr">private_key</span>     = $dir/private/cakey.pem<span class="comment"># The private key</span></div><div class="line"><span class="attr">RANDFILE</span>        = $dir/private/.rand    <span class="comment"># private random number file</span></div><div class="line"><span class="attr">x509_extensions</span> = usr_cert              <span class="comment"># The extentions to add to the cert</span></div><div class="line"><span class="comment"># Comment out the following two lines for the "traditional"</span></div><div class="line"><span class="comment"># (and highly broken) format.</span></div><div class="line"><span class="attr">name_opt</span>        = ca_default            <span class="comment"># Subject Name options</span></div><div class="line"><span class="attr">cert_opt</span>        = ca_default            <span class="comment"># Certificate field options</span></div></pre></td></tr></table></figure>
+<p>创建证书私钥<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd <span class="regexp">/etc/</span>pki<span class="regexp">/CA/</span><span class="keyword">private</span></div><div class="line">(umask <span class="number">077</span>;openssl genrsa -out cakey.pem <span class="number">2048</span>)</div></pre></td></tr></table></figure></p>
+<p>生成自签证书（我这里申请的自签证书为10年，如有报错，请检查vim /etc/pki/tls/openssl.cnf）<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd <span class="regexp">/etc/</span>pki<span class="regexp">/CA/</span></div><div class="line">openssl req -<span class="keyword">new</span> -x509 -key <span class="keyword">private</span><span class="regexp">/cakey.pem -out cacert.pem -days=3655</span></div></pre></td></tr></table></figure></p>
+<h2 id="3、创建服务器证书"><a href="#3、创建服务器证书" class="headerlink" title="3、创建服务器证书"></a>3、创建服务器证书</h2><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mkdir</span> /usr/<span class="keyword">local</span>/nginx/ssl</div><div class="line"> <span class="keyword">cd</span> /usr/<span class="keyword">local</span>/nginx/ssl</div><div class="line"> (umask 077;openssl genrsa -<span class="keyword">out</span> nginx.key 1024)</div><div class="line"> openssl req -new -key nginx.key -<span class="keyword">out</span> nginx.csr</div><div class="line"> openssl <span class="keyword">ca</span> -<span class="keyword">in</span> nginx.csr -<span class="keyword">out</span> nginx.crt -days=3650</div></pre></td></tr></table></figure>
 <p>##4、创建客户端浏览器证书</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(umask 077;openssl genrsa -out client.key 1024)</div><div class="line"> openssl req -new -key client.key -out client.csr</div><div class="line"> openssl ca -in client.csr -out client.crt -days=3650</div><div class="line"> 将文本格式的证书转换成可以导入浏览器的证书，最好是设置客户端证书访问密码，并且报存好客户端证书p12</div><div class="line"> openssl pkcs12 -export -clcerts -in client.crt -inkey client.key -out client.p12</div></pre></td></tr></table></figure>
-<h2 id="5、配置nginx服务器验证"><a href="#5、配置nginx服务器验证" class="headerlink" title="5、配置nginx服务器验证"></a>5、配置nginx服务器验证</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">vim /usr/local/nginx/conf/nginx.conf</div><div class="line"> ssl on;</div><div class="line"> ssl_certificate         /usr/local/nginx/ssl/nginx.crt;</div><div class="line"> ssl_certificate_key     /usr/local/nginx/ssl/nginx.key;</div><div class="line"> ssl_client_certificate  /usr/local/nginx/ssl/cacert.pem;</div><div class="line"> ssl_session_timeout     5m;</div><div class="line"> #ssl_verify_client       on;                         服务器验证客户端，暂时不开启，让没有证书的客户端可以访问，先完成单向验证</div><div class="line"> ssl_protocols           SSLv2 SSLv3 TLSv1;</div></pre></td></tr></table></figure>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(umask <span class="number">077</span>;openssl genrsa -out <span class="keyword">client</span>.key <span class="number">1024</span>)</div><div class="line"> openssl req -<span class="keyword">new</span> -key <span class="keyword">client</span>.key -out <span class="keyword">client</span>.csr</div><div class="line"> openssl ca -in <span class="keyword">client</span>.csr -out <span class="keyword">client</span>.crt -days=<span class="number">3650</span></div><div class="line"> 将文本格式的证书转换成可以导入浏览器的证书，最好是设置客户端证书访问密码，并且报存好客户端证书p12</div><div class="line"> openssl pkcs12 -export -clcerts -in <span class="keyword">client</span>.crt -inkey <span class="keyword">client</span>.key -out <span class="keyword">client</span>.p12</div></pre></td></tr></table></figure>
+<h2 id="5、配置nginx服务器验证"><a href="#5、配置nginx服务器验证" class="headerlink" title="5、配置nginx服务器验证"></a>5、配置nginx服务器验证</h2><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">vim <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/nginx/</span>conf/nginx.conf</div><div class="line"> ssl on;</div><div class="line"> ssl_certificate         <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/nginx/</span>ssl/nginx.crt;</div><div class="line"> ssl_certificate_key     <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/nginx/</span>ssl/nginx.key;</div><div class="line"> ssl_client_certificate  <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/nginx/</span>ssl/cacert.pem;</div><div class="line"> ssl_session_timeout     <span class="number">5</span>m;</div><div class="line"> <span class="meta">#ssl_verify_client       on;                         服务器验证客户端，暂时不开启，让没有证书的客户端可以访问，先完成单向验证</span></div><div class="line"> ssl_protocols           SSLv2 SSLv3 TLSv1;</div></pre></td></tr></table></figure>
 <h2 id="6、打开浏览器安装客户端证书"><a href="#6、打开浏览器安装客户端证书" class="headerlink" title="6、打开浏览器安装客户端证书"></a>6、打开浏览器安装客户端证书</h2><p><img src="http://www.msbgn.cn/msbgn/toiss.png" alt="client1"><br><img src="http://www.msbgn.cn/msbgn/mima1.png" alt="client2"><br>点击安装生成的证书下一步输入证书密码(密码就是之前生成证书时候设置的密码)，下一步安装成功。</p>
 <h2 id="7、验证证书的使用"><a href="#7、验证证书的使用" class="headerlink" title="7、验证证书的使用"></a>7、验证证书的使用</h2><h3 id="没有导入证书访问"><a href="#没有导入证书访问" class="headerlink" title="没有导入证书访问"></a>没有导入证书访问</h3><p><img src="http://www.msbgn.cn/msbgn/catsd.png" alt="client3"><br>没有导入浏览器安装的证书显示为400</p>
 <h3 id="导入证书访问"><a href="#导入证书访问" class="headerlink" title="导入证书访问"></a>导入证书访问</h3><p><img src="http://www.msbgn.cn/msbgn/nhkk.png" alt="client4"><br>注意:安装证书的时候，记得安装完成证书关闭浏览器重新打开访问。<br>感谢阅读这份帮助文档。请点击右上角开启分享体验吧。</p>
@@ -454,6 +454,63 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
+                            <a href="/2017/01/04/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/01/04/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-01-04T07:44:54.456Z" itemprop="datePublished">2017-01-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/22/LinuxRinetd/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/Rinetd.png)" alt="Linux使用Rinetd来实现端口转发" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/linux/">linux</a></p>
+                            <p class="item-title"><a href="/2016/12/22/LinuxRinetd/" class="title">Linux使用Rinetd来实现端口转发</a></p>
+                            <p class="item-date"><time datetime="2016-12-22T03:02:56.851Z" itemprop="datePublished">2016-12-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/22/gxng/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/gxng.png)" alt="高性能WEB服务器nginx" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/nginx/">nginx</a></p>
+                            <p class="item-title"><a href="/2016/12/22/gxng/" class="title">高性能WEB服务器nginx</a></p>
+                            <p class="item-date"><time datetime="2016-12-22T02:04:28.823Z" itemprop="datePublished">2016-12-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
                             <a href="/2016/12/15/ELKShield/" class="thumbnail">
     
     
@@ -489,63 +546,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         </div>
                     </li>
                 
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/09/Pythondate2/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/day2.png)" alt="Python 流程控制" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
-                            <p class="item-title"><a href="/2016/12/09/Pythondate2/" class="title">Python 流程控制</a></p>
-                            <p class="item-date"><time datetime="2016-12-09T08:01:50.697Z" itemprop="datePublished">2016-12-09</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/09/Pythonys/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/pythonys.png)" alt="Python 运算符" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
-                            <p class="item-title"><a href="/2016/12/09/Pythonys/" class="title">Python 运算符</a></p>
-                            <p class="item-date"><time datetime="2016-12-09T02:59:05.547Z" itemprop="datePublished">2016-12-09</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/08/Lambda/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/lambda.jpg)" alt="Lambda表达式以及python的内置函数" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
-                            <p class="item-title"><a href="/2016/12/08/Lambda/" class="title">Lambda表达式以及python的内置函数</a></p>
-                            <p class="item-date"><time datetime="2016-12-08T07:40:56.606Z" itemprop="datePublished">2016-12-08</time></p>
-                        </div>
-                    </li>
-                
             </ul>
         </div>
     </div>
@@ -555,7 +555,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
         </div>
     </div>
 
@@ -564,7 +564,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -573,7 +573,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
         </div>
     </div>
 
@@ -582,7 +582,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 15px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
         </div>
     </div>
 
@@ -614,7 +614,11 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     </li>
                 
                     <li>
-                        <a href="http://www.linuxidc.cm">Linux公社</a>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
                     </li>
                 
             </ul>
@@ -630,7 +634,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <footer id="footer">
     <div class="outer">
         <div id="footer-info" class="inner">
-            &copy; 2016 Rongfu Zhou<br>
+            &copy; 2017 Rongfu Zhou<br>
             
         </div>
     </div>

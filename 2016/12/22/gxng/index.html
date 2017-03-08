@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>高性能WEB服务器nginx | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta property="og:type" content="article">
+<meta property="og:title" content="高性能WEB服务器nginx">
+<meta property="og:url" content="/2016/12/22/gxng/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:image" content="http://www.msbgn.cn/msbgn/gxng.png">
+<meta property="og:updated_time" content="2016-12-22T02:04:28.823Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高性能WEB服务器nginx">
+<meta name="twitter:image" content="http://www.msbgn.cn/msbgn/gxng.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">Time Flies(岁月如梭)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                27
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                20
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-gxng" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            高性能WEB服务器nginx
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2016/12/22/gxng/">
+            <time datetime="2016-12-22T02:04:28.823Z" itemprop="datePublished">2016-12-22</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/nginx/">nginx</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/nginx/">nginx</a>, <a class="tag-link" href="/tags/科技/">科技</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p><img src="http://www.msbgn.cn/msbgn/gxng.png" alt=""></p>
+<a id="more"></a>
+<h3 id="高性能WEB服务器nginx的介绍"><a href="#高性能WEB服务器nginx的介绍" class="headerlink" title="高性能WEB服务器nginx的介绍"></a>高性能WEB服务器nginx的介绍</h3><p>Nginx（发音同 engine x）是一款轻量级的Web 服务器／反向代理服务器及电子邮件（IMAP/POP3）代理服务器，并在一个BSD-like 协议下发行。由俄罗斯的程序设计师Igor Sysoev所开发，最初供俄国大型的入口网站及搜寻引擎Rambler（俄文：Рамблер）使用。  其特点是占有内存少，并发能力强，事实上nginx的并发能力确实在同类型的网页伺服器中表现较好.目前中国大陆使用nginx网站用户有：新浪、网易、 腾讯,另外知名的微网志Plurk也使用nginx。</p>
+<h3 id="Nginx的组成原理与工作原理"><a href="#Nginx的组成原理与工作原理" class="headerlink" title="Nginx的组成原理与工作原理"></a>Nginx的组成原理与工作原理</h3><p>Nginx由内核和模块组成，其中，内核的设计非常微小和简洁，完成的工作也非常简单，仅仅通过查找配置文件将客户端请求映射到一个location block（location是Nginx配置中的一个指令，用于URL匹配），而在这个location中所配置的每个指令将会启动不同的模块去完成相应的工作。<br>Nginx的模块从结构上分为核心模块、基础模块和第三方模块， HTTP模块、EVENT模块和MAIL模块等属于核心模块，HTTP Access模块、HTTP FastCGI模块、HTTP Proxy模块和HTTP Rewrite模块属于基础模块，而HTTP Upstream Request Hash模块、Notice模块和HTTP Access Key模块属于第三方模块，用户根据自己的需要开发的模块都属于第三方模块。正是有了这么多模块的支撑，Nginx的功能才会如此强大。<br>Nginx的模块从功能上分为如下三类。<br>Handlers（处理器模块）。此类模块直接处理请求，并进行输出内容和修改headers信息等操作。Handlers处理器模块一般只能有一个。<br>Filters （过滤器模块）。此类模块主要对其他处理器模块输出的内容进行修改操作，最后由Nginx输出。<br>Proxies （代理类模块）。此类模块是Nginx的HTTP Upstream之类的模块，这些模块主要与后端一些服务比如FastCGI等进行交互，实现服务代理和负载均衡等功能。<br>图1-1展示了Nginx模块常规的HTTP请求和响应的过程。</p>
+<p><img src="http://www.msbgn.cn/msbgn/gxng.png" alt=""></p>
+<p>在工作方式上，Nginx分为单工作进程和多工作进程两种模式。在单工作进程模式下，除主进程外，还有一个工作进程，工作进程是单线程的；在多工作进程模式下，每个工作进程包含多个线程。Nginx默认为单工作进程模式。<br>Nginx的模块直接被编译进Nginx，因此属于静态编译方式。启动Nginx后，Nginx的模块被自动加载，不像Apache，首先将模块编译为一个so文件，然后在配置文件中指定是否进行加载。在解析配置文件时，Nginx的每个模块都有可能去处理某个请求，但是同一个处理请求只能由一个模块来完成。</p>
+<h3 id="Nginx的性能优势"><a href="#Nginx的性能优势" class="headerlink" title="Nginx的性能优势"></a>Nginx的性能优势</h3><p>Nginx的性能优势<br>作为WEB服务器，nginx处理静态文件，索引以及自动索引的效率非常高<br>作为负载均衡服务器，nginx既可以直接支持Rails和PHP，也可以支持HTTP反向代理服务器，对外进行服务，还支持简单的容错。<br>在性能方面，nginx采用了分阶段的资源分配技术，使用CPU跟内存非常低<br>高可用方面 我个人觉得这个很不错。在master管理进程与worker工作进程的分离设计，使的Nginx具有热部署的功能，那么在7×24小时不间断服务的前提下，升级Nginx的可执行文件。也可以在不停止服务的情况下修改配置文件，更换日志文件等功能。</p>
+<p>Nginx的安装请见地址：<a href="http://www.msbgn.cn/2016/11/01/nginxbianyi/" target="_blank" rel="external">http://www.msbgn.cn/2016/11/01/nginxbianyi/</a></p>
+<h3 id="Nginx的配置与调试"><a href="#Nginx的配置与调试" class="headerlink" title="Nginx的配置与调试"></a>Nginx的配置与调试</h3><p>Nginx配置文件主要分成四部分：main（全局设置）、server（主机设置）、upstream（负载均衡服务器设置）和 location（URL匹配特定位置的设置）。main部分设置的指令将影响其他所有设置；server部分的指令主要用于指定主机和端口；upstream指令主要用于负载均衡，设置一系列的后端服务器；location部分用于匹配网页位置。这四者之间的关系式：server继承main，location继承server，upstream既不会继承其他设置也不会被继承。<br>         在这四个部分当中，每个部分都包含若干指令，这些指令主要包含Nginx的主模块指令、事件模块指令、HTTP核心模块指令，同时每个部分还可以使用其他HTTP模块指令，例如Http SSL模块、HttpGzip Static模块和Http Addition模块等。<br>下面通过一个Nginx配置实例，详细介绍下nginx.conf每个指令的含义。</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">user  nobody nobody<span class="comment">;</span></div><div class="line"> worker_processes  <span class="number">4</span><span class="comment">;</span></div><div class="line"> error_log  logs/error.log  notice<span class="comment">;</span></div><div class="line"> pid        logs/nginx.pid<span class="comment">;</span></div><div class="line"> worker_rlimit_nofile <span class="number">65535</span><span class="comment">; </span></div><div class="line"> events&#123;</div><div class="line">  use epoll<span class="comment">;</span></div><div class="line">  worker_connections      <span class="number">65536</span><span class="comment">;</span></div><div class="line">       &#125;</div></pre></td></tr></table></figure>
+<p><code>user</code>：是个主模块指令，指定Nginx Worker进程运行用户以及用户组，默认由nobody账号运行。<br><code>worker_processes</code>：是个主模块指令，指定了Nginx要开启的进程数。每个Nginx进程平均耗费10M~12M内存。根据经验，一般指定一个进程足够了，如果是多核CPU，建议指定和CPU的数量一样的进程数即可。</p>
+<p><code>error_log</code>是个主模块指令，用来定义全局错误日志文件。日志输出级别有debug、info、notice、warn、error、crit可供选择，其中，debug输出日志最为最详细，而crit输出日志最少。</p>
+<p><code>pid</code>是个主模块指令，用来指定进程id的存储文件位置。<br><code>worker_rlimit_nofile</code>用于指定一个nginx进程可以打开的最多文件描述符数目，这里是65535，需要使用命令“ulimit -n 65535”来设置。<br><code>events</code>指令是设定Nginx的工作模式及连接数上限。</p>
+<p>Nginx案列1</p>
+<h3 id="Nginx作为WEB缓存服务器应用"><a href="#Nginx作为WEB缓存服务器应用" class="headerlink" title="Nginx作为WEB缓存服务器应用"></a>Nginx作为WEB缓存服务器应用</h3><p>从0.7.48版本开始，Nginx支持类似Squid的缓存功能。Nginx的web缓存服务主要由proxy_cache相关命令集合fastcgi_cache相关命令集构成，前者用于反向代理时对后端内容源服务器进行缓存，后者主要用于对FastCGI的动态程序进行缓存。此外，如果不想使用Nginx自带的缓存功能，也可使用第三方模块ngx_slowfs_cache来实现缓存服务器的配置。</p>
+<p>这里使用Nginx自带的缓存模块，通过proxy命令来实现数据的缓存,所以在编译的时候要加上ngx_cache_purge模块</p>
+<p>下面介绍nginx作为缓存服务器的安装步骤<br>Prce的安装不再重复<br><code>Wget http://labs.frickle.com/files/ngx_cache_purge-2.1.tar.gz</code><br><code>Tar –zxvf –C /app/ngx_cache_purge-2.1.tar.gz</code></p>
+<p>在网上下载ngx_cache_purge插件的最新版本，然后重新编译安装nginx。<br><code>./configure --prefix=/usr/local/nginx --without-http_memcached_module --user=www --group=www --with-http_stub_status_module --with-openssl=/usr/ --with-pcre=/usr/local/src/pcre-8.31 --add-module=/usr/local/src/ngx_cache_purge-2.3</code>（文件解压后存放的位置）<br> 最后通过”/usr/local/nginx/nginx-v”查看是否已经安装的成功的版本和加载模块信息</p>
+<p>配置nginx缓存服务器</p>
+<p>Nginx缓存服务器的配置主要通过proxy_cache相关命令来实现</p>
+<p><code>proxy_cache_path /backup/proxy_cache_dir levels=1:2 keys_zone=cache_one:4096m inactive=1d max_size=3g;</code><br>•    <code>poxy_cache_path</code>:用于设置缓存的目录，后面跟缓存路径。最好将缓存目录放在一个独立的硬盘上。<br>•    <code>levels=1:2</code>：levels用来设置目录深度，这里是两层目录深度，第一层是一个字符，第二层是两个字符。<br>•    <code>keys_zne</code>：用来设置web缓存区名称，这里的cache_one后面的4096，表示内存缓存空间大小为4GB<br>•    <code>inactive</code>：表示自动清除缓存文件的时间，这里的“d”表示1天没有被访问的内容自动清除，还可以使用分钟和小时计数，5m，5h。<br>•    <code>max_size</code>:表示硬盘缓存空间可使用的最大值，默认情况下经访问的文件常将被放到内存中进行缓存，而在内存缓存空间不足时，Nginx会将不经常访问的数据从内存写到磁盘。</p>
+<p><code>proxy_temp_path /backup/proxy_temp_dir</code>;<br>•    用于指定临时缓存文件的存储路径，这里需要注意的是，两个存放缓存文件的目录必须在同一磁盘分区。<br>•<code>location / {
+•        root   html;
+•        index  index.html index.htm index.php;
+•        proxy_cache cache_one</code>;           #反向代理缓存设置命令，语法为“proxy_cache zone|off“，默认为off，需要将proxy_cache命令放在location字段，这样匹配以此location的url才能被缓存。<br>•       <code>proxy_cache_valid 200 304 12h</code>;       #对不懂HTTP状态码设置不同的缓存时间<br>•       <code>proxy_cache_key $host$uri$is_args$args</code>;      #这个命令是设置以什么样的参数得到缓存的文件名，默认为”$scheme$proxy_host$request_uri”,表示以协议，主机名，请求uri（包括参数）做MD5得出缓存的文件名。这里以域名，URI，参数组合成Web缓存的key值，nginx会根据key哈希，存储缓存内容到二级缓存目录内<br>•        }<br>•            </p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">       下面配置手动清除缓存策略：</div><div class="line">         location ~ /purge(/.*) &#123;</div><div class="line">       allow <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>;</div><div class="line">       allow <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span>/<span class="number">24</span>;</div><div class="line">        deny all;</div><div class="line">	        proxy_cache_purge cache_one $host$<span class="number">1</span>$is_args$args;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>•    这里设置可以清除缓存的ip和网段，下面说的是清除的内容<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">•	         <span class="keyword">location</span> <span class="title">~ \.php</span>?$ &#123;</div><div class="line">•	            root           html;</div><div class="line">•	            fastcgi_pass   <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">9000</span>;</div><div class="line">•	            fastcgi_index  index.php;</div><div class="line">•	            fastcgi_param  SCRIPT_FILENAME  /usr/local/nginx/html/$fastcgi_script_name;</div><div class="line">•	            include        fastcgi_params;</div><div class="line">•	&#125;</div></pre></td></tr></table></figure></p>
+<p>•    以.php结尾的文件不用缓存<br>•    手动清除缓存的方法<br>•    <a href="http://192.168.1.120/index.html" target="_blank" rel="external">http://192.168.1.120/index.html</a>                                                  访问<br>•    <a href="http://192.168.1.120/purge/index.html" target="_blank" rel="external">http://192.168.1.120/purge/index.html</a>                                      清除缓存策略<br>•     t<br>•    验证我们的缓存服务是否成功启动</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-attr">[root@Goun conf]</span># <span class="selector-tag">ps</span> <span class="selector-tag">-ef</span> | <span class="selector-tag">grep</span> <span class="selector-tag">nginx</span></div><div class="line"><span class="selector-tag">root</span>       <span class="selector-tag">9390</span>      <span class="selector-tag">1</span>  <span class="selector-tag">0</span> <span class="selector-tag">20</span><span class="selector-pseudo">:52</span> ?        <span class="selector-tag">00</span><span class="selector-pseudo">:00</span><span class="selector-pseudo">:00</span> <span class="selector-tag">nginx</span>: <span class="selector-tag">master</span> <span class="selector-tag">process</span> /<span class="selector-tag">usr</span>/<span class="selector-tag">local</span>/<span class="selector-tag">nginx</span>/<span class="selector-tag">sbin</span>/<span class="selector-tag">nginx</span> <span class="selector-tag">-c</span> /<span class="selector-tag">usr</span>/<span class="selector-tag">local</span>/<span class="selector-tag">nginx</span>/<span class="selector-tag">conf</span>/<span class="selector-tag">nginx</span><span class="selector-class">.conf</span></div><div class="line"><span class="selector-tag">www</span>        <span class="selector-tag">9392</span>   <span class="selector-tag">9390</span>  <span class="selector-tag">0</span> <span class="selector-tag">20</span><span class="selector-pseudo">:52</span> ?        <span class="selector-tag">00</span><span class="selector-pseudo">:00</span><span class="selector-pseudo">:00</span> <span class="selector-tag">nginx</span>: <span class="selector-tag">worker</span> <span class="selector-tag">process</span>                                         </div><div class="line"><span class="selector-tag">www</span>        <span class="selector-tag">9393</span>   <span class="selector-tag">9390</span>  <span class="selector-tag">0</span> <span class="selector-tag">20</span><span class="selector-pseudo">:52</span> ?        <span class="selector-tag">00</span><span class="selector-pseudo">:00</span><span class="selector-pseudo">:00</span> <span class="selector-tag">nginx</span>: <span class="selector-tag">cache</span> <span class="selector-tag">manager</span> <span class="selector-tag">process</span></div></pre></td></tr></table></figure>
+<p>进程nginx：cache manager process这个进程是用来管理缓存服务和文件的。<br>如何清除指定的URL缓存</p>
+<p>如果有时候修改了页面内容，如果不想等到缓存文件过期后自动清理，还可以手动方式清理缓存，清理方式在上面已经说明，只需叜清除缓存网页的URL地址钱增加<code>purge</code>即可<br>列如清除<code>http://localhost:8088/forestRight/1.html</code>;<br>那么：<code>http://localhost:8088/pirge/forestRight/1.html;</code>即可</p>
+<h2 id="Nginx作为负载均衡服务器应用"><a href="#Nginx作为负载均衡服务器应用" class="headerlink" title="Nginx作为负载均衡服务器应用"></a>Nginx作为负载均衡服务器应用</h2><p>nginx的负载均衡功能是通过upstream命令实现的，因此他的负载均衡机制比较简单，是一个基于内容和应用的7层交换负载均衡的实现。Nginx负载均衡默认对后端服务器有健康监测能力，但是监测能力较弱，仅限于端口监测，在后端服务器比较少的情况下（10台以下）负载均衡能力表现突出。而对于有大量后端节点的负载应用，由于所有访问请求都从一台服务器进出，容易发生请求堵塞进而引发连接失败，因此无法充分发挥后端服务器的性能。</p>
+<h2 id="Nginx负载均衡算法"><a href="#Nginx负载均衡算法" class="headerlink" title="Nginx负载均衡算法"></a>Nginx负载均衡算法</h2><p>Nginx的负载均衡模块目前支持4中调度算法，下面分别进行介绍，其中，后两种属于第三方调度方法：</p>
+<p>•    轮询（默认）：每个请求按时间顺序逐一分配到不同的后端服务器，如果后端某台服务器死机，自动剔除故障系统，使用户访问不受影响。<br>•    weight：指定轮询权值，weight值越大，分配到访问概率越高，主要用于后端每台服务器性能不均衡的情况下。<br>•    ip_hash:每个请求按照ip的哈希结果分配，这样来自同一个ip的访客固定访问一台后端服务器，有效解决动态网页存在的session共享问题。<br>•    fair：它是比上面两种更加智能的负载均衡算法。此种算法可以依据页面大小和加载时间长短智能的进行负载均衡，也就是根据后端服务器的响应时间来分配请求，响应时间短的优先分配。Nginx本身是不支持fair的，如果需要使用这种调度算法，必须下载nginx的upstream_fair模块。<br>•    url_hash：按访问URL的哈希结果来分配请求，使每个URL定向到同一台后端服务器，可以进一步提高后端缓存服务器的效率。Nginx本身不支持url_hash的，如果需要使用这种调度算法，必须安装Nginx的hash软件包。</p>
+<p>在HTTP Upstream模块中，可以通过server命令指定后端服务器的IP地址和端口，同时还可以设定每台后端服务器在负载均衡调度中的状态。常用的状态有：<br>•    down：表示当前的server暂时不参与负载均衡。<br>•    backup：预留的备份机器。当其他所有的非backup机器出现故障或者忙的时候，才会请求backup机器，因此这台机器的访问压力最轻。<br>•    max_fails:允许请求失败的次数，默认为1.当超过最大次数时，返回proxy_next_upstream模块定义的错误。<br>•    fail_timeout:在经历了max_fails次失败后，暂停服务的时间。max_fails可以和fail_timeout一起使用。<br>注意：当调度算法为ip_hash时，后端服务器在负载均衡调度中的调度状态不能是weight和backup。<br>Nginx的负载均衡配置实例</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="section">http</span> &#123;</div><div class="line">         <span class="attribute">upstream</span> myserver &#123;</div><div class="line">    <span class="attribute">server</span> <span class="number">192.168.1.120:80</span> weight=<span class="number">1</span> max_fails=<span class="number">3</span> fail_timeout=<span class="number">20s</span>;</div><div class="line">    <span class="attribute">server</span> <span class="number">192.168.1.121:80</span> weight=<span class="number">1</span> max_fails=<span class="number">3</span> fail_timeout=<span class="number">20s</span>;</div><div class="line">&#125;</div><div class="line">    <span class="section">server</span> &#123;</div><div class="line">        <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">        <span class="attribute">server_name</span>  localhost;</div><div class="line">        <span class="attribute">index</span>  index.html index.htm;</div><div class="line">        <span class="comment">#ciharset koi8-r;</span></div><div class="line">        <span class="attribute">root</span> html;</div><div class="line">        <span class="comment">#access_log  logs/host.access.log  main;</span></div><div class="line"> </div><div class="line">        <span class="attribute">location</span> / &#123;</div><div class="line">        <span class="attribute">proxy_pass</span> http://myserver;</div><div class="line">        <span class="attribute">proxy_next_upstream</span> http_500 http_502 http_503 <span class="literal">error</span> timeout invalid_header;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在上面这段配置中，upstream关键字标识负载均衡配置开始，upstream是Nginx的HTTP Upstream模块，这个模块通过一个简单的调度算法来实现客户端IP到后端服务器的负载均衡。在上面。通过upstream制定一个负载均衡器的名称为myserver。这个名称可以任意指定，在后面需要的地方直接调用即可。<br>另外，proxy_next_upstream 参数用来定义故障转移策略，当后端服务节点返回500、502、503、504和执行超时等错误时，自动将请求转发到upstream负载均衡组中的另一台服务器，实现故障转移</p>
+<h3 id="服务器Nginx-Nginx性能优化技巧"><a href="#服务器Nginx-Nginx性能优化技巧" class="headerlink" title="服务器Nginx(Nginx性能优化技巧)"></a>服务器Nginx(Nginx性能优化技巧)</h3><h3 id="一、-编译安装过程优化"><a href="#一、-编译安装过程优化" class="headerlink" title="一、    编译安装过程优化"></a>一、    编译安装过程优化</h3><p>1.减小Nginx编译后的文件大小<br>在编译Nginx时，默认以debug模式进行，而在debug模式下会插入很多跟踪和ASSERT之类的信息，编译完成后，一个Nginx要有好几兆字节。在编译前取消Nginx的debug模式，编译完成后Nginx只有几百千字节，因此可以在编译之前，修改相关源码，取消debug模式，具体方法如下：<br>在Nginx源码文件被解压后，找到源码目录下的auto/cc/gcc文件，在其中找到如下几行：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="number">1.</span>	<span class="meta"># debug  </span></div><div class="line"><span class="number">2.</span>	<span class="built_in">CFLAGS</span>=”$<span class="built_in">CFLAGS</span> -g”</div></pre></td></tr></table></figure>
+<p>注释掉或删掉这两行，即可取消debug模式。</p>
+<p>2.为特定的CPU指定CPU类型编译优化</p>
+<p>在编译Nginx时，默认的GCC编译参数是“-O”，要优化GCC编译，可以使用以下两个参数：<br>–with-cc-opt=’-O3’<br>–with-cpu-opt=CPU  #为特定的 CPU 编译，有效的值包括：pentium, pentiumpro, pentium3, pentium4, athlon, opteron, amd64, sparc32, sparc64, ppc64<br>要确定CPU类型，可以通过如下命令:<br>[root@localhost home]#cat /proc/cpuinfo | grep “model name”</p>
+<p><code>TCMalloc</code>的全称是 Thread-Caching Malloc,是谷歌开发的开源工具google-perftools中的一个成员。与标准的glibc库的Malloc相比，TCMalloc库在内存分配效率和速度上要高很多，这在很大程度上提高了服务器在高并发情况下的性能，从而降低了系统的负载。下面简单介绍如何为Nginx添加TCMalloc库支持</p>
+<p>要安装TCMalloc库，需要安装libunwind 和 gperftools两个软件包，libunwind库为基于64为CPU何操作系统的程序提供了基本函数调用链和函数调用寄存器功能，32位操作系统部需要安装。</p>
+<p>1 安装libunwind库</p>
+<p>可以从LinuxIDC.com的FTP下载libunwind-1.1.tar.gz<br>libunwind-1.1.tar.gz下载地址：</p>
+<p>免费下载地址在 <a href="http://linux.linuxidc.com/" target="_blank" rel="external">http://linux.linuxidc.com/</a><br>用户名与密码都是www.linuxidc.com<br>具体下载目录在 /2013年资料/4月/21日/利用TCMalloc优化Nginx的性能</p>
+<p>安装过程如下：<br>tar -xvf libunwind-1.1.tar.gz<br>cd libunwind-1.1<br>CFLAGS=-fPIC ./configure<br>make CFLAGS=-fPIC<br>make CFLAGS=-fPIC install<br>2.安装gperftools 可以从 这里 下载2.0版本<br>tar -xvf gperftools-2.0.tar.gz<br>cd gperftools-2.0<br>./configure<br>make &amp;&amp; make install<br>echo “/usr/local/lib” &gt; /etc/ld.so.conf.d/usr_local_lib.conf<br>ldconfig<br>支持gperftools安装完成<br>3.重新编译Nginx.<br>./configure –prefix=/usr/local/nginx \  指定nginx的安装目录<br>–with-http_stub_status_module \  启用nginx的status功能，可以监控nginx当前状态<br>–with-http_gzip_static_module \  支持在线实时压缩输出数据流<br>–with-google_perftools_module \  支持TCMalloc对Nginx性能的优化<br>make &amp;&amp; make install<br>到这里Nginx安装完成。<br>4.为gperftools添加线程目录<br>创建一个线程目录，这里讲文件放在/tmp/tcmalloc下。操作如下：<br>mkdir /tmp/tcmalloc<br>chmod 0777 /tmp/tcmalloc<br>5.修改nginx主配置文件，在pid这行的下面添加如下代码：<br>pid  logs/nginx.pid;<br>google_perftools_profiles /tmp/tcmalloc;<br>接着重启nginx即可完成gperftools的加载。<br>6.验证运行状态<br>为了验证gperftools已经正常加载，可以通过如下命令查看：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">lsof -n | grep tcmalloc</div><div class="line">nginx    <span class="number">2395</span> nobody    <span class="number">9</span>w REG    <span class="number">8</span>,<span class="number">8</span>    <span class="number">0</span>    <span class="number">1599440</span> /tmp/tcmalloc<span class="number">.2395</span></div><div class="line">nginx    <span class="number">2396</span> nobody    <span class="number">11</span>w REG    <span class="number">8</span>,<span class="number">8</span>    <span class="number">0</span>    <span class="number">1599443</span> /tmp/tcmalloc<span class="number">.2396</span></div><div class="line">nginx    <span class="number">2397</span> nobody    <span class="number">13</span>w REG    <span class="number">8</span>,<span class="number">8</span>    <span class="number">0</span>    <span class="number">1599441</span> /tmp/tcmalloc<span class="number">.2397</span></div><div class="line">nginx    <span class="number">2398</span> nobody    <span class="number">15</span>w REG    <span class="number">8</span>,<span class="number">8</span>    <span class="number">0</span>    <span class="number">1599442</span> /tmp/tcmalloc<span class="number">.2398</span></div></pre></td></tr></table></figure>
+<p>由于在Nginx配置文件中设置worker_processes的值为4 ，因此开启了4个Nginx线程，每个线程都会有一行记录。每个线程文件后面的数字值就是启动Nginx的pid值。<br>至此，利用TCMalloc优化Nginx的操作完成。</p>
+<h3 id="Nginx内核参数的优化"><a href="#Nginx内核参数的优化" class="headerlink" title="Nginx内核参数的优化"></a>Nginx内核参数的优化</h3><p>内核参数的优化，主要是在linux系统中针对Nginx应用而进行的系统内核参数的优化。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">下面给出的一个优化实例以供参考。</div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_max_tw_buckets</span> = <span class="number">6000</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.ip_local_port_range</span> = <span class="number">1024</span> <span class="number">65000</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_tw_recycle</span> = <span class="number">1</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_tw_reuse</span> = <span class="number">1</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_syncookies</span> = <span class="number">1</span></div><div class="line">net<span class="selector-class">.core</span><span class="selector-class">.somaxconn</span> = <span class="number">262144</span></div><div class="line">net<span class="selector-class">.core</span><span class="selector-class">.netdev_max_backlog</span> = <span class="number">262144</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_max_orphans</span> = <span class="number">262144</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_max_syn_backlog</span> = <span class="number">262144</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_synack_retries</span> = <span class="number">1</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_syn_retries</span> = <span class="number">1</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_fin_timeout</span> = <span class="number">1</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.tcp_keepalive_time</span> = <span class="number">30</span></div><div class="line">将上面的内核参数值 加入到/etc/sysctl.conf文件中，然后执行如下命令使之生效</div><div class="line">/sbin/sysctl -p</div></pre></td></tr></table></figure>
+<p>下面对上面的参数进行介绍一下：</p>
+<p>net.ipv4.tcp_max_tw_buckets 用来设定timewait的数量 默认是180000，这里改为6000<br>net.ipv4.ip_local_port_range 用来设定允许系统打开的端口范围最小值1024<br>net.ipv4.tcp_tw_recycle 用来设置启动timewait快速回收。<br>net.ipv4.tcp_tw_reuse 用来设置开启重用，允许将time-wait sockets重新用于新的tcp连接<br>net.ipv4.tcp_syncookies 用来开启syn cookies,当出现syn等待队列一处时，启用cookies处理<br>net.core.somaxconn 默认是128，参数用于调节系统同时发起的tcp连接数，在高并发的请求中，默认的值可能会导致连接超时或者重传，因此，需要结合并发请求数来调节此值。<br>net.core.netdev_max_backlog 表示当每个网络接口接受数据包的速率比内核处理这些包的速率快时，允许发送到队列的数据包的最大数目。<br>net.ipv4.tcp_max_orphans  用于设定系统中最多有多少个tcp套接字不被关联到任何一个用户文件句柄上。如果超过这个数字，孤立连接将立即被复位并打印出警告信息。这个限制值是为了防止简单的DOS攻击。不能过分依靠这个限制甚至人为减小这个值，更多的情况下应该增加这个值。<br>net.ipv4.tcp_max_syn_backlog 用于记录那些尚未收到客户端确认信息的连接请求的最大值。对于有128MB内存的系统而言，次参数默认值是1024，对小内存的系统则是128<br>net.ipv4.tcp_synack_retries 参数的值决定了内核放弃连接之前发送SYN+ACK包的数量<br>net.ipv4.tcp_syn_retries 表示在内核放弃简历连接之前发送SYN包的数量<br>net.ipv4.tcp_fin_timeout 决定了套接字保持在FIN-WAIT-2 状态的时间。默认值是60秒。正确设置这个值非常重要，有时即使一个负载很小的web服务器，也会出现大量的死套接字而产生内存溢出的风险。<br>net.ipv4.tcp_keepalive_time 表示当keepalive启动的时候，tcp发送keepalive消息的频度。默认值是2（单位是小时）。</p>
+<p>详细查看地址： <a href="http://linux.linuxidc.com/" target="_blank" rel="external">http://linux.linuxidc.com/</a> </p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2016/12/22/gxng/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/12/22/gxng/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+	<!-- css -->
+	<style type="text/css">
+	    .center {
+	        text-align: center;
+	    }
+	    .hidden {
+	        display: none;
+	    }
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+			_background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+			<!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
+			     因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+	</style>
+	<!-- /css -->
+    <!-- Donate Module -->
+    <div id="donate_module">
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_board donate_bar center">
+	    <br>
+	    ------------------------------------------------------------------------------------------------------------------------------
+	    <br>
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			打赏我的人，据说都找到了女朋友~~
+		</span>
+
+
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+
+	<div id="donate_guide" class="donate_bar center hidden">
+        <br>
+	    ------------------------------------------------------------------------------------------------------------------------------
+	    <br>
+	    
+	    <div width="100%" align="center"><div name="dashmain" id="dash-main-id-878d88" class="dash-main-3 878d88-0.88"></div><script
+	    type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
+		
+		<a href="http://www.msbgn.cn/msbgn/xpchatpay.png" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+			<img src="http://www.msbgn.cn/msbgn/xpchatpay.png" title="微信打赏 Donate" height="190px" width="203px"/>
+		</a>
+
+        &nbsp;&nbsp;
+		<a href="http://www.msbgn.cn/msbgn/wechatpay.png" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+			<img src="http://www.msbgn.cn/msbgn/wechatpay.png" title="支付宝打赏 Donate" height="190px" width="214px"/>
+		</a>
+		<span class="donate_txt">
+			打赏我的人，据说都找到了女朋友~~
+		</span>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		$('.btn_donate').click(function(){
+		var par = $(this).parent('.donate_board');
+		par.addClass('hidden');
+		par.next().removeClass('hidden');
+		})
+		
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+   
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2016/12/22/LinuxRinetd/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Linux使用Rinetd来实现端口转发
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2016/12/15/ELKShield/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">ELK添加Shield插件管理权限</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2016/12/22/gxng/" data-title="高性能WEB服务器nginx" data-url="/2016/12/22/gxng/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/01/04/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/01/04/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-01-04T07:44:54.456Z" itemprop="datePublished">2017-01-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/22/LinuxRinetd/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/Rinetd.png)" alt="Linux使用Rinetd来实现端口转发" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/linux/">linux</a></p>
+                            <p class="item-title"><a href="/2016/12/22/LinuxRinetd/" class="title">Linux使用Rinetd来实现端口转发</a></p>
+                            <p class="item-date"><time datetime="2016-12-22T03:02:56.851Z" itemprop="datePublished">2016-12-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/22/gxng/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/gxng.png)" alt="高性能WEB服务器nginx" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/nginx/">nginx</a></p>
+                            <p class="item-title"><a href="/2016/12/22/gxng/" class="title">高性能WEB服务器nginx</a></p>
+                            <p class="item-date"><time datetime="2016-12-22T02:04:28.823Z" itemprop="datePublished">2016-12-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/15/ELKShield/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/ELK1.png)" alt="ELK添加Shield插件管理权限" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/ELK/">ELK</a></p>
+                            <p class="item-title"><a href="/2016/12/15/ELKShield/" class="title">ELK添加Shield插件管理权限</a></p>
+                            <p class="item-date"><time datetime="2016-12-15T07:15:05.363Z" itemprop="datePublished">2016-12-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/15/elk1/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/ELK1.png)" alt="elk实时日志分析平台搭建详细过程" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/ELK/">ELK</a></p>
+                            <p class="item-title"><a href="/2016/12/15/elk1/" class="title">elk实时日志分析平台搭建详细过程</a></p>
+                            <p class="item-date"><time datetime="2016-12-15T06:55:30.547Z" itemprop="datePublished">2016-12-15</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

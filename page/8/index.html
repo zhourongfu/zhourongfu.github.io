@@ -152,11 +152,11 @@
 	 </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                24
+                27
                 <span>文章</span>
             </div>
             <div class="article-info-block">
-                18
+                20
                 <span>标签</span>
             </div>
         
@@ -194,7 +194,7 @@
 
             
             <section id="main">
-    <article id="post-nginxbianyi" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-zabbixFping" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -202,7 +202,7 @@
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/11/01/nginxbianyi/">nginx的编译安装</a>
+            <a class="article-title" href="/2016/11/02/zabbixFping/">Zabbix 配置Fping</a>
         </h1>
     
 
@@ -211,8 +211,8 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/11/01/nginxbianyi/">
-            <time datetime="2016-11-01T03:36:03.634Z" itemprop="datePublished">2016-11-01</time>
+        <a href="/2016/11/02/zabbixFping/">
+            <time datetime="2016-11-02T04:38:31.168Z" itemprop="datePublished">2016-11-02</time>
         </a>
     </div>
 
@@ -220,13 +220,13 @@
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/nginx/">nginx</a>
+        <a class="article-category-link" href="/categories/zabbix/">zabbix</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/nginx/">nginx</a>, <a class="tag-link" href="/tags/科技/">科技</a>
+        <a class="tag-link" href="/tags/zabbix/">zabbix</a>, <a class="tag-link" href="/tags/监控/">监控</a>
     </div>
 
                     </div>
@@ -236,10 +236,19 @@
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><hr>
-<p><img src="http://www.msbgn.cn/msbgn/0.jpg" alt="nginx实现原理"><br></p>
+            <p><p><img src="http://www.msbgn.cn/msbgn/Fping.png" alt="zabbix Fping"><br>本文是继之前安装后做的一些相关工作，所有前提在前文提到。这次是安装Fping利用ICMP协议进行判断网络主机是否存活。</p>
+<p>[TOC]</p>
+<p>##第一、安装环境</p>
+<ul>
+<li>操作系统：CentOS6.5 X86_64</li>
+<li>Yum源：163源</li>
+<li>IP地址：Server:10.199.255.200</li>
+<li>DNS：10.199.255.15</li>
+<li>主机名：moniter</li>
+</ul>
+<p>###1. 源码包<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@Moniter ~]<span class="meta"># wget http:<span class="comment">//www.fping.org/dist/fping-3.10.tar.gz</span></span></div></pre></td></tr></table></figure></p></p>
             <p class="article-more-link">
-                <a href="/2016/11/01/nginxbianyi/#more">查看更多</a>
+                <a href="/2016/11/02/zabbixFping/#more">查看更多</a>
             </p>
         
         </div>
@@ -287,7 +296,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
            
     
-        <a href="/2016/11/01/nginxbianyi/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/11/01/nginxbianyi/">评论</a>
+        <a href="/2016/11/02/zabbixFping/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/11/02/zabbixFping/">评论</a>
     
 
 ~        
@@ -386,7 +395,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-nginxrenzhen" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-zabbixagent" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -394,7 +403,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/11/01/nginxrenzhen/">nginx配置SSL双向认证</a>
+            <a class="article-title" href="/2016/11/01/zabbixagent/">Zabbix agent的安装部署</a>
         </h1>
     
 
@@ -403,8 +412,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/11/01/nginxrenzhen/">
-            <time datetime="2016-11-01T03:10:04.106Z" itemprop="datePublished">2016-11-01</time>
+        <a href="/2016/11/01/zabbixagent/">
+            <time datetime="2016-11-01T09:21:17.459Z" itemprop="datePublished">2016-11-01</time>
         </a>
     </div>
 
@@ -412,13 +421,13 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/nginx/">nginx</a>
+        <a class="article-category-link" href="/categories/zabbix/">zabbix</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/nginx/">nginx</a>, <a class="tag-link" href="/tags/ssl/">ssl</a>
+        <a class="tag-link" href="/tags/zabbix/">zabbix</a>, <a class="tag-link" href="/tags/监控/">监控</a>
     </div>
 
                     </div>
@@ -428,10 +437,9 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p><img src="http://www.msbgn.cn/msbgn/gup12ks.png" alt="nginxSSL"></p>
-<p><strong>https双向认证</strong> 双向认证SSL 协议的具体通讯过程，这种情况要求服务器和客户端双方都有证书。 单向认证SSL 协议不需要客户端拥有CA证书，以及在协商对称密码方案，对称通话密钥时，服务器发送给客户端的是没有加过密的（这并不影响SSL过程的安全性）密码方案。这样，双方具体的通讯内容，就是加密过的数据。如果有第三方攻击，获得的只是加密的数据，第三方要获得有用的信息，就需要对加密的数据进行解密，这时候的安全就依赖于密码方案的安全。而幸运的是，目前所用的密码方案，只要通讯密钥长度足够的长，就足够的安全。这也是我们强调要求使用128位加密通讯的原因。<br>一般Web应用都是采用单向认证的，原因很简单，用户数目广泛，且无需做在通讯层做用户身份验证，一般都在应用逻辑层来保证用户的合法登入。但如果是企业应用对接，情况就不一样，可能会要求对客户端（相对而言）做身份验证。这时就需要做双向认证。<br></p>
+            <p><p><img src="http://www.msbgn.cn/msbgn/zabbix1.png" alt="zabbix agent"><br>zabbix server可以通过SNMP，zabbix agent，ping，端口监视等方法提供对远程服务器/网络状态的监视，数据收集等功能，它可以运行在Linux，Solaris，HP-UX，AIX，Free BSD，Open BSD，OS X等平台上。这里讲的是zabbix_agent的功能。<br></p>
             <p class="article-more-link">
-                <a href="/2016/11/01/nginxrenzhen/#more">查看更多</a>
+                <a href="/2016/11/01/zabbixagent/#more">查看更多</a>
             </p>
         
         </div>
@@ -479,7 +487,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
            
     
-        <a href="/2016/11/01/nginxrenzhen/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/11/01/nginxrenzhen/">评论</a>
+        <a href="/2016/11/01/zabbixagent/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/11/01/zabbixagent/">评论</a>
     
 
 ~        
@@ -578,7 +586,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-nginxw" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-SSL" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -586,7 +594,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/10/25/nginxw/">nginx的URL重定向功能</a>
+            <a class="article-title" href="/2016/11/01/SSL/">StartSSL免费https证书申请安装</a>
         </h1>
     
 
@@ -595,8 +603,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/10/25/nginxw/">
-            <time datetime="2016-10-25T07:21:39.375Z" itemprop="datePublished">2016-10-25</time>
+        <a href="/2016/11/01/SSL/">
+            <time datetime="2016-11-01T09:21:13.718Z" itemprop="datePublished">2016-11-01</time>
         </a>
     </div>
 
@@ -604,13 +612,13 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/nginx/">nginx</a>
+        <a class="article-category-link" href="/categories/SSL/">SSL</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/nginx/">nginx</a>, <a class="tag-link" href="/tags/科技/">科技</a>
+        <a class="tag-link" href="/tags/StartSSL/">StartSSL</a>, <a class="tag-link" href="/tags/科技/">科技</a>
     </div>
 
                     </div>
@@ -620,14 +628,11 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>location</p>
-<p>语法:location [=|~|~<em>|^~] /uri/ { … }<br>默认:否<br>这个指令随URL不同而接受不同的结构。你可以配置使用常规字符串和正则表达式。如果使用正则表达式，你必须使用 ~</em> 前缀选择不区分大小写的匹配或者 ~ 选择区分大小写的匹配。</p>
-<p>确定 哪个location 指令匹配一个特定指令，常规字符串第一个测试。常规字符串匹配请求的开始部分并且区分大小写，最明确的匹配将会被使用（查看下文明白 nginx 怎么确定它）。然后正则表达式按照配置文件里的顺序测试。找到第一个比配的正则表达式将停止搜索。如果没有找到匹配的正则表达式，使用常规字符串的结果。</p>
-<p>有两个方法修改这个行为。第一个方法是使用 “=”前缀，将只执行严格匹配。如果这个查询匹配，那么将停止搜索并立即处理这个请求。例子：如果经常发生”/”请求，那么使用 “location = /” 将加速处理这个请求。</p>
-<p>第二个是使用 ^~ 前缀。如果把这个前缀用于一个常规字符串那么告诉nginx 如果路径匹配那么不测试正则表达式。</p>
-<p>而且它重要在于 NGINX 做比较没有 URL 编码，所以如果你有一个 URL 链接’/images/%20/test’ , 那么使用 “images/ /test” 限定location。<br></p>
+            <p><p>StartSSL是比较早的免费https提供商，由于之前的沃通SSL证书被禁用后，目前只有StartSSL免费提供着第三方证书，当然你也可以选择购买StartSSL的收费版证书，由于本人自己测试以及使用着免费的StartSSL证书，所以废话不多说直接说明StartSSL的配置安装说明。</p>
+<p>第一、StartSSL官方网站<br><a href="https://www.startssl.com/">https://www.startssl.com/</a></p>
+<p><img src="http://www.msbgn.cn/msbgn/startssl-index.png" alt="startssl"><br><em>打开startssl官网新用户进行注册，老用户直接跳过注册，进行登录。</em><br></p>
             <p class="article-more-link">
-                <a href="/2016/10/25/nginxw/#more">查看更多</a>
+                <a href="/2016/11/01/SSL/#more">查看更多</a>
             </p>
         
         </div>
@@ -675,7 +680,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
            
     
-        <a href="/2016/10/25/nginxw/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/10/25/nginxw/">评论</a>
+        <a href="/2016/11/01/SSL/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/11/01/SSL/">评论</a>
     
 
 ~        
@@ -775,7 +780,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
     <nav id="page-nav">
-        <a class="extend prev" rel="prev" href="/page/7/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
+        <a class="extend prev" rel="prev" href="/page/7/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/9/">下一页 &raquo;</a>
     </nav>
 </section>
             
@@ -786,6 +791,63 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <h3 class="widget-title">最新文章</h3>
         <div class="widget">
             <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/01/04/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/01/04/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-01-04T07:44:54.456Z" itemprop="datePublished">2017-01-04</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/22/LinuxRinetd/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/Rinetd.png)" alt="Linux使用Rinetd来实现端口转发" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/linux/">linux</a></p>
+                            <p class="item-title"><a href="/2016/12/22/LinuxRinetd/" class="title">Linux使用Rinetd来实现端口转发</a></p>
+                            <p class="item-date"><time datetime="2016-12-22T03:02:56.851Z" itemprop="datePublished">2016-12-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2016/12/22/gxng/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/gxng.png)" alt="高性能WEB服务器nginx" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/nginx/">nginx</a></p>
+                            <p class="item-title"><a href="/2016/12/22/gxng/" class="title">高性能WEB服务器nginx</a></p>
+                            <p class="item-date"><time datetime="2016-12-22T02:04:28.823Z" itemprop="datePublished">2016-12-22</time></p>
+                        </div>
+                    </li>
                 
                     <li>
                         
@@ -825,63 +887,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         </div>
                     </li>
                 
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/09/Pythondate2/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/day2.png)" alt="Python 流程控制" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
-                            <p class="item-title"><a href="/2016/12/09/Pythondate2/" class="title">Python 流程控制</a></p>
-                            <p class="item-date"><time datetime="2016-12-09T08:01:50.697Z" itemprop="datePublished">2016-12-09</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/09/Pythonys/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/pythonys.png)" alt="Python 运算符" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
-                            <p class="item-title"><a href="/2016/12/09/Pythonys/" class="title">Python 运算符</a></p>
-                            <p class="item-date"><time datetime="2016-12-09T02:59:05.547Z" itemprop="datePublished">2016-12-09</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/08/Lambda/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/lambda.jpg)" alt="Lambda表达式以及python的内置函数" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/python/">python</a></p>
-                            <p class="item-title"><a href="/2016/12/08/Lambda/" class="title">Lambda表达式以及python的内置函数</a></p>
-                            <p class="item-date"><time datetime="2016-12-08T07:40:56.606Z" itemprop="datePublished">2016-12-08</time></p>
-                        </div>
-                    </li>
-                
             </ul>
         </div>
     </div>
@@ -891,7 +896,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
         </div>
     </div>
 
@@ -900,7 +905,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -909,7 +914,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
         </div>
     </div>
 
@@ -918,7 +923,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/nginx/" style="font-size: 13.33px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 15px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
         </div>
     </div>
 
@@ -950,7 +955,11 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     </li>
                 
                     <li>
-                        <a href="http://www.linuxidc.cm">Linux公社</a>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
                     </li>
                 
             </ul>
@@ -966,7 +975,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <footer id="footer">
     <div class="outer">
         <div id="footer-info" class="inner">
-            &copy; 2016 Rongfu Zhou<br>
+            &copy; 2017 Rongfu Zhou<br>
             
         </div>
     </div>
