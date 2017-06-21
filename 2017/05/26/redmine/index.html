@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>redmine的安装部署 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="安装
+操作系统：centos6.3redmine版本：2.3虚拟机IP：192.168.1.44mysql版本：mysql-5.1.69nginx版本: nginx/1.4.2ruby版本：ruby 1.9.3p392 (2013-02-22 revision 39386) [i686-linux]rubygems: 1.8.23">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redmine的安装部署">
+<meta property="og:url" content="/2017/05/26/redmine/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:description" content="安装
+操作系统：centos6.3redmine版本：2.3虚拟机IP：192.168.1.44mysql版本：mysql-5.1.69nginx版本: nginx/1.4.2ruby版本：ruby 1.9.3p392 (2013-02-22 revision 39386) [i686-linux]rubygems: 1.8.23">
+<meta property="og:image" content="https://www.msbgn.cn/msbgn/redmine1.jpg">
+<meta property="og:updated_time" content="2017-05-26T08:35:04.861Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redmine的安装部署">
+<meta name="twitter:description" content="安装
+操作系统：centos6.3redmine版本：2.3虚拟机IP：192.168.1.44mysql版本：mysql-5.1.69nginx版本: nginx/1.4.2ruby版本：ruby 1.9.3p392 (2013-02-22 revision 39386) [i686-linux]rubygems: 1.8.23">
+<meta name="twitter:image" content="https://www.msbgn.cn/msbgn/redmine1.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/press">新闻资讯</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/press">新闻资讯</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">(醉卧沙场君莫笑)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                29
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                21
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-redmine" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            redmine的安装部署
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/05/26/redmine/">
+            <time datetime="2017-05-26T08:35:04.861Z" itemprop="datePublished">2017-05-26</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/redmine/">redmine</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/redmine/">redmine</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p><img src="https://www.msbgn.cn/msbgn/redmine2.png" alt="redmine"></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><hr>
+<p>操作系统：centos6.3<br>redmine版本：2.3<br>虚拟机IP：192.168.1.44<br>mysql版本：mysql-5.1.69<br>nginx版本: nginx/1.4.2<br>ruby版本：ruby 1.9.3p392 (2013-02-22 revision 39386) [i686-linux]<br>rubygems: 1.8.23</p>
+<hr>
+<a id="more"></a>
+<h3 id="安装ruby-with-libyaml"><a href="#安装ruby-with-libyaml" class="headerlink" title="安装ruby with libyaml"></a>安装ruby with libyaml</h3><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget https:<span class="comment">//pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz</span></div><div class="line">tar -zxvf yaml<span class="number">-0.1</span><span class="number">.4</span>.tar.gz</div><div class="line">cd yaml<span class="number">-0.1</span><span class="number">.4</span></div><div class="line">./configure --prefix=/usr/<span class="keyword">local</span></div><div class="line"><span class="built_in">make</span> &amp;&amp; <span class="built_in">make</span> install</div></pre></td></tr></table></figure>
+<h3 id="安装ruby"><a href="#安装ruby" class="headerlink" title="安装ruby"></a>安装ruby</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">wget ftp://ftp.<span class="keyword">ruby</span>-lang.org/pub/<span class="keyword">ruby</span>/<span class="number">1.9</span>/<span class="keyword">ruby</span>-<span class="number">1.9</span>.<span class="number">3</span>-p392.tar.gz</div><div class="line">tar -zxvf <span class="keyword">ruby</span>-<span class="number">1.9</span>.<span class="number">3</span>-p392</div><div class="line">./configure --prefix=/usr/local --enable-shared-disable-install-doc-with-<span class="keyword">opt</span>-dir=/usr/local/lib</div><div class="line"><span class="keyword">make</span> &amp;&amp; <span class="keyword">make</span> install</div><div class="line">安装完成后查看<span class="keyword">ruby</span> 版本：</div><div class="line"><span class="keyword">ruby</span> -v</div></pre></td></tr></table></figure>
+<h3 id="安装mysqlserver"><a href="#安装mysqlserver" class="headerlink" title="安装mysqlserver"></a>安装mysqlserver</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y <span class="keyword">install</span> mysql-serverz</div></pre></td></tr></table></figure>
+<h3 id="redmine安装"><a href="#redmine安装" class="headerlink" title="redmine安装"></a>redmine安装</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">https:<span class="comment">//rubyforge.org/frs/?group_id=1850</span></div><div class="line"><span class="keyword">mkdir</span> data</div><div class="line"><span class="keyword">cd</span> data</div><div class="line"><span class="keyword">mkdir</span> web</div><div class="line"><span class="keyword">cd</span> web</div><div class="line">tar -zxvf redmine-2.3.2.tar.gz</div></pre></td></tr></table></figure>
+<h3 id="配置mysql数据库"><a href="#配置mysql数据库" class="headerlink" title="配置mysql数据库"></a>配置mysql数据库</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> redmine <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8;</div><div class="line"><span class="keyword">GRANT</span> ALL <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> redmine.* <span class="keyword">TO</span> <span class="string">'redmine'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'my_password'</span>;</div></pre></td></tr></table></figure>
+<h3 id="数据库连接配置"><a href="#数据库连接配置" class="headerlink" title="数据库连接配置"></a>数据库连接配置</h3><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cd <span class="meta-keyword">/data/</span>web/redmine<span class="number">-2.3</span><span class="number">.2</span></div><div class="line">cp config/database.yml.example config/database.yml</div><div class="line">打开database.yml</div><div class="line"><span class="symbol">production:</span></div><div class="line"><span class="symbol">  adapter:</span> mysql2</div><div class="line"><span class="symbol">  database:</span> redmine</div><div class="line"><span class="symbol">  host:</span> localhost</div><div class="line"><span class="symbol">  username:</span> redmine</div><div class="line"><span class="symbol">  password:</span> my_password</div></pre></td></tr></table></figure>
+<h3 id="安装依赖的bundler"><a href="#安装依赖的bundler" class="headerlink" title="安装依赖的bundler"></a>安装依赖的bundler</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gem <span class="keyword">install </span><span class="keyword">bundler</span></div><div class="line"><span class="keyword">bundle </span><span class="keyword">install </span>--without development test</div><div class="line"><span class="keyword">bundle </span><span class="keyword">install </span>--without development test rmagick</div></pre></td></tr></table></figure>
+<h3 id="生成session存储加密信息和数据表"><a href="#生成session存储加密信息和数据表" class="headerlink" title="生成session存储加密信息和数据表"></a>生成session存储加密信息和数据表</h3><figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rake <span class="keyword">ge</span><span class="symbol">nerate_secret_token</span></div></pre></td></tr></table></figure>
+<h3 id="创建数据库对象"><a href="#创建数据库对象" class="headerlink" title="创建数据库对象"></a>创建数据库对象</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">RAILS_ENV</span>=production rake db:migrate</div></pre></td></tr></table></figure>
+<h3 id="数据库默认数据集"><a href="#数据库默认数据集" class="headerlink" title="数据库默认数据集"></a>数据库默认数据集</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">RAILS_ENV</span>=production rake redmine:load_default_data</div><div class="line"><span class="attr">RAILS_ENV</span>=production REDMINE_LANG=fr rake redmine:load_default_data</div></pre></td></tr></table></figure>
+<h3 id="文件日志权限"><a href="#文件日志权限" class="headerlink" title="文件日志权限"></a>文件日志权限</h3><figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">groupadd redmine</div><div class="line">useradd -g redmine redmine</div><div class="line">mkdir -p /<span class="keyword">data</span>/web/redmine-<span class="number">2.3.</span><span class="number">2</span> /<span class="keyword">public</span>/plugin_assets</div><div class="line">sudo chown -R redmine:redmine files <span class="built_in">log</span> tmp <span class="keyword">public</span>/plugin_assets</div><div class="line">sudo chmod -R <span class="number">755</span> files <span class="built_in">log</span> tmp <span class="keyword">public</span>/plugin_assets</div></pre></td></tr></table></figure>
+<h3 id="测试安装"><a href="#测试安装" class="headerlink" title="测试安装"></a>测试安装</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ruby script/rails server webrick -e production</div><div class="line"><span class="string">login:</span> admin</div><div class="line"><span class="string">password:</span> admin</div><div class="line"><span class="string">http:</span><span class="string">localhost:</span><span class="number">3000</span></div></pre></td></tr></table></figure>
+<h2 id="安装方式2"><a href="#安装方式2" class="headerlink" title="安装方式2"></a>安装方式2</h2><h3 id="使用rbenv安装ruby"><a href="#使用rbenv安装ruby" class="headerlink" title="使用rbenv安装ruby"></a>使用rbenv安装ruby</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="built_in">get</span> install git</div><div class="line"></div><div class="line">git clone gi<span class="variable">t:</span>//github.<span class="keyword">com</span>/sstephenson/rbenv.git ~/.rbenv</div><div class="line"><span class="keyword">echo</span> <span class="string">'export PATH="$HOME/.rbenv/bin:$PATH"'</span> &gt;&gt; ~/.bash_profile</div><div class="line"><span class="keyword">echo</span> <span class="string">'eval "$(rbenv init -)"'</span> &gt;&gt; ~/.bash_profile</div><div class="line">### 安装 <span class="keyword">ruby</span>-build</div><div class="line"><span class="built_in">mkdir</span> -<span class="keyword">p</span> ~/.rbenv/plugins</div><div class="line"><span class="keyword">cd</span> ~/.rbenv/plugins</div><div class="line">git clone gi<span class="variable">t:</span>//github.<span class="keyword">com</span>/sstephenson/<span class="keyword">ruby</span>-build.git</div><div class="line"></div><div class="line"><span class="keyword">source</span> ~/.bash_profile</div></pre></td></tr></table></figure>
+<h2 id="安装-Ruby"><a href="#安装-Ruby" class="headerlink" title="安装 Ruby"></a>安装 Ruby</h2><figure class="highlight q"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> sudo apt-<span class="built_in">get</span> install build-essential autoconf automake bison libtool \</div><div class="line">openssl libreadline6 libreadline6-<span class="built_in">dev</span> curl zlib1g zlib1g-<span class="built_in">dev</span> libssl-<span class="built_in">dev</span> \</div><div class="line">libyaml-<span class="built_in">dev</span> libsqlite3-<span class="built_in">dev</span> sqlite3 libxml2-<span class="built_in">dev</span> libxslt-<span class="built_in">dev</span> libc6-<span class="built_in">dev</span> ncurses-<span class="built_in">dev</span></div><div class="line"></div><div class="line">rbenv install <span class="number">1.9</span><span class="number">.3</span>-p125</div><div class="line"> rbenv rehash</div></pre></td></tr></table></figure>
+<h2 id="安装mysql"><a href="#安装mysql" class="headerlink" title="安装mysql"></a>安装mysql</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get <span class="keyword">install</span> mysql-<span class="keyword">server</span></div></pre></td></tr></table></figure>
+<p>h3. 下载安装redmine<br>wget <a href="http://www.redmine.org/releases/redmine-2.4.1.tar.gz" target="_blank" rel="external">http://www.redmine.org/releases/redmine-2.4.1.tar.gz</a></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">tar -zxvf  redmine-2.4.1.tar.gz</div><div class="line">sudo vi config/ databases.yml</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> redmine <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8;</div><div class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">'redmine'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'my_password'</span>;</div><div class="line"><span class="keyword">GRANT</span> ALL <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> redmine.* <span class="keyword">TO</span> <span class="string">'redmine'</span>@<span class="string">'localhost'</span>;</div><div class="line"></div><div class="line">gem <span class="keyword">install</span> bundler</div><div class="line">bundle <span class="keyword">install</span> <span class="comment">--without development test</span></div></pre></td></tr></table></figure>
+<p>(报错1)<br>解决方式：sudo apt-get install libmysql-ruby libmysqlclient-dev<br>（报错2）<br>解决方式：gem install net-ldap –version 0.3.1<br>（报错3）<br>解决方式：sudo apt-get install imagemagick libmagickwand-dev</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">bundle <span class="keyword">install</span> <span class="comment">--without development test rmagick</span></div><div class="line">rake generate_secret_token</div><div class="line">RAILS_ENV=production rake db:migrate</div><div class="line">RAILS_ENV=production rake redmine:load_default_data</div><div class="line"></div><div class="line">mkdir -p tmp tmp/pdf <span class="keyword">public</span>/plugin_assets</div><div class="line">sudo chown -R redmine:redmine files <span class="keyword">log</span> tmp <span class="keyword">public</span>/plugin_assets</div><div class="line">sudo chmod -R <span class="number">755</span> files <span class="keyword">log</span> tmp <span class="keyword">public</span>/plugin_assets</div><div class="line">ruby script/rails <span class="keyword">server</span> webrick -e production</div></pre></td></tr></table></figure>
+<hr>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2017/05/26/redmine/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2017/05/26/redmine/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/05/26/Pythonys/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Python 运算符
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/05/26/SSL/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">StartSSL免费https证书申请安装</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2017/05/26/redmine/" data-title="redmine的安装部署" data-url="/2017/05/26/redmine/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/Prometheus入门/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/prometheus-arch.png)" alt="Prometheus入门" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Prometheus/">Prometheus</a></p>
+                            <p class="item-title"><a href="/2017/05/27/Prometheus入门/" class="title">Prometheus入门</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T09:41:15.536Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/press/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/05/27/press/" class="title">press</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T06:41:56.000Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/zabbixtomcat/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/tomcat211.png)" alt="zabbix 监控服务--------使用JMX监控tomcat" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/27/zabbixtomcat/" class="title">zabbix 监控服务--------使用JMX监控tomcat</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T03:56:37.548Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/zabbix/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/zabbix.png)" alt="Zabbix 源码安装配置" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/26/zabbix/" class="title">Zabbix 源码安装配置</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:36:31.962Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/05/26/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:35:06.510Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Prometheus/">Prometheus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">29</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prometheus/">Prometheus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Prometheus/" style="font-size: 10px;">Prometheus</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>nginx配置SSL双向认证 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="https双向认证 双向认证SSL 协议的具体通讯过程，这种情况要求服务器和客户端双方都有证书。 单向认证SSL 协议不需要客户端拥有CA证书，以及在协商对称密码方案，对称通话密钥时，服务器发送给客户端的是没有加过密的（这并不影响SSL过程的安全性）密码方案。这样，双方具体的通讯内容，就是加密过的数据。如果有第三方攻击，获得的只是加密的数据，第三方要获得有用的信息，就需要对加密的数据进行解密，这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx配置SSL双向认证">
+<meta property="og:url" content="/2017/05/26/nginxrenzhen/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:description" content="https双向认证 双向认证SSL 协议的具体通讯过程，这种情况要求服务器和客户端双方都有证书。 单向认证SSL 协议不需要客户端拥有CA证书，以及在协商对称密码方案，对称通话密钥时，服务器发送给客户端的是没有加过密的（这并不影响SSL过程的安全性）密码方案。这样，双方具体的通讯内容，就是加密过的数据。如果有第三方攻击，获得的只是加密的数据，第三方要获得有用的信息，就需要对加密的数据进行解密，这">
+<meta property="og:image" content="https://www.msbgn.cn/msbgn/gup12ks.png">
+<meta property="og:updated_time" content="2017-05-26T08:35:05.299Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx配置SSL双向认证">
+<meta name="twitter:description" content="https双向认证 双向认证SSL 协议的具体通讯过程，这种情况要求服务器和客户端双方都有证书。 单向认证SSL 协议不需要客户端拥有CA证书，以及在协商对称密码方案，对称通话密钥时，服务器发送给客户端的是没有加过密的（这并不影响SSL过程的安全性）密码方案。这样，双方具体的通讯内容，就是加密过的数据。如果有第三方攻击，获得的只是加密的数据，第三方要获得有用的信息，就需要对加密的数据进行解密，这">
+<meta name="twitter:image" content="https://www.msbgn.cn/msbgn/gup12ks.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/press">新闻资讯</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/press">新闻资讯</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">(醉卧沙场君莫笑)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                29
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                21
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-nginxrenzhen" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            nginx配置SSL双向认证
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/05/26/nginxrenzhen/">
+            <time datetime="2017-05-26T08:35:05.299Z" itemprop="datePublished">2017-05-26</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/nginx/">nginx</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/nginx/">nginx</a>, <a class="tag-link" href="/tags/ssl/">ssl</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p><img src="https://www.msbgn.cn/msbgn/gup12ks.png" alt="nginxSSL"></p>
+<p><strong>https双向认证</strong> 双向认证SSL 协议的具体通讯过程，这种情况要求服务器和客户端双方都有证书。 单向认证SSL 协议不需要客户端拥有CA证书，以及在协商对称密码方案，对称通话密钥时，服务器发送给客户端的是没有加过密的（这并不影响SSL过程的安全性）密码方案。这样，双方具体的通讯内容，就是加密过的数据。如果有第三方攻击，获得的只是加密的数据，第三方要获得有用的信息，就需要对加密的数据进行解密，这时候的安全就依赖于密码方案的安全。而幸运的是，目前所用的密码方案，只要通讯密钥长度足够的长，就足够的安全。这也是我们强调要求使用128位加密通讯的原因。<br>一般Web应用都是采用单向认证的，原因很简单，用户数目广泛，且无需做在通讯层做用户身份验证，一般都在应用逻辑层来保证用户的合法登入。但如果是企业应用对接，情况就不一样，可能会要求对客户端（相对而言）做身份验证。这时就需要做双向认证。<br><a id="more"></a></p>
+<h2 id="1、安装nginx"><a href="#1、安装nginx" class="headerlink" title="1、安装nginx"></a>1、安装nginx</h2><p>参考《nginx安装》：<a href="https://www.msbgn.cn/2016/11/01/nginxbianyi/" target="_blank" rel="external">https://www.msbgn.cn/2016/11/01/nginxbianyi/</a></p>
+<hr>
+<h2 id="2、使用openssl实现证书中心"><a href="#2、使用openssl实现证书中心" class="headerlink" title="2、使用openssl实现证书中心"></a>2、使用openssl实现证书中心</h2><p>由于是使用openssl架设私有证书中心，因此要保证以下字段在证书中心的证书、服务端证书、客户端证书中都相同</p>
+<h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Country Name</div><div class="line"> State <span class="keyword">or</span> Province Name</div><div class="line"> Locality Name</div><div class="line"> Organization Name</div><div class="line"> Organizational Unit Name</div></pre></td></tr></table></figure>
+<p>编辑证书中心配置文件</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">vim /etc/pki/tls/openssl.cnf</div><div class="line">[ ca ]</div><div class="line"><span class="attr">default_ca</span>      = CA_default            <span class="comment"># The default ca section</span></div><div class="line"><span class="comment">####################################################################</span></div><div class="line">[ CA_default ]</div><div class="line"><span class="attr">dir</span>             = /etc/pki/CA           <span class="comment"># Where everything is kept</span></div><div class="line"><span class="attr">certs</span>           = $dir/certs            <span class="comment"># Where the issued certs are kept</span></div><div class="line"><span class="attr">crl_dir</span>         = $dir/crl              <span class="comment"># Where the issued crl are kept</span></div><div class="line"><span class="attr">database</span>        = $dir/index.txt        <span class="comment"># database index file.</span></div><div class="line"><span class="comment">#unique_subject = no                    # Set to 'no' to allow creation of                                      # several ctificates with same subject.</span></div><div class="line"><span class="attr">new_certs_dir</span>   = $dir/newcerts         <span class="comment"># default place for new certs.</span></div><div class="line"><span class="attr">certificate</span>     = $dir/cacert.pem       <span class="comment"># The CA certificate</span></div><div class="line"><span class="attr">serial</span>          = $dir/serial           <span class="comment"># The current serial number</span></div><div class="line"><span class="attr">crlnumber</span>       = $dir/crlnumber        <span class="comment"># the current crl number                                      # must be commented out to leave a V1 CRL</span></div><div class="line"><span class="attr">crl</span>             = $dir/crl.pem          <span class="comment"># The current CRL</span></div><div class="line"><span class="attr">private_key</span>     = $dir/private/cakey.pem<span class="comment"># The private key</span></div><div class="line"><span class="attr">RANDFILE</span>        = $dir/private/.rand    <span class="comment"># private random number file</span></div><div class="line"><span class="attr">x509_extensions</span> = usr_cert              <span class="comment"># The extentions to add to the cert</span></div><div class="line"><span class="comment"># Comment out the following two lines for the "traditional"</span></div><div class="line"><span class="comment"># (and highly broken) format.</span></div><div class="line"><span class="attr">name_opt</span>        = ca_default            <span class="comment"># Subject Name options</span></div><div class="line"><span class="attr">cert_opt</span>        = ca_default            <span class="comment"># Certificate field options</span></div></pre></td></tr></table></figure>
+<p>创建证书私钥<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd <span class="regexp">/etc/</span>pki<span class="regexp">/CA/</span><span class="keyword">private</span></div><div class="line">(umask <span class="number">077</span>;openssl genrsa -out cakey.pem <span class="number">2048</span>)</div></pre></td></tr></table></figure></p>
+<p>生成自签证书（我这里申请的自签证书为10年，如有报错，请检查vim /etc/pki/tls/openssl.cnf）<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd <span class="regexp">/etc/</span>pki<span class="regexp">/CA/</span></div><div class="line">openssl req -<span class="keyword">new</span> -x509 -key <span class="keyword">private</span><span class="regexp">/cakey.pem -out cacert.pem -days=3655</span></div></pre></td></tr></table></figure></p>
+<h2 id="3、创建服务器证书"><a href="#3、创建服务器证书" class="headerlink" title="3、创建服务器证书"></a>3、创建服务器证书</h2><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mkdir</span> /usr/<span class="keyword">local</span>/nginx/ssl</div><div class="line"> <span class="keyword">cd</span> /usr/<span class="keyword">local</span>/nginx/ssl</div><div class="line"> (umask 077;openssl genrsa -<span class="keyword">out</span> nginx.key 1024)</div><div class="line"> openssl req -new -key nginx.key -<span class="keyword">out</span> nginx.csr</div><div class="line"> openssl <span class="keyword">ca</span> -<span class="keyword">in</span> nginx.csr -<span class="keyword">out</span> nginx.crt -days=3650</div></pre></td></tr></table></figure>
+<p>##4、创建客户端浏览器证书</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(umask <span class="number">077</span>;openssl genrsa -out <span class="keyword">client</span>.key <span class="number">1024</span>)</div><div class="line"> openssl req -<span class="keyword">new</span> -key <span class="keyword">client</span>.key -out <span class="keyword">client</span>.csr</div><div class="line"> openssl ca -in <span class="keyword">client</span>.csr -out <span class="keyword">client</span>.crt -days=<span class="number">3650</span></div><div class="line"> 将文本格式的证书转换成可以导入浏览器的证书，最好是设置客户端证书访问密码，并且报存好客户端证书p12</div><div class="line"> openssl pkcs12 -export -clcerts -in <span class="keyword">client</span>.crt -inkey <span class="keyword">client</span>.key -out <span class="keyword">client</span>.p12</div></pre></td></tr></table></figure>
+<h2 id="5、配置nginx服务器验证"><a href="#5、配置nginx服务器验证" class="headerlink" title="5、配置nginx服务器验证"></a>5、配置nginx服务器验证</h2><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">vim <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/nginx/</span>conf/nginx.conf</div><div class="line"> ssl on;</div><div class="line"> ssl_certificate         <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/nginx/</span>ssl/nginx.crt;</div><div class="line"> ssl_certificate_key     <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/nginx/</span>ssl/nginx.key;</div><div class="line"> ssl_client_certificate  <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/nginx/</span>ssl/cacert.pem;</div><div class="line"> ssl_session_timeout     <span class="number">5</span>m;</div><div class="line"> <span class="meta">#ssl_verify_client       on;                         服务器验证客户端，暂时不开启，让没有证书的客户端可以访问，先完成单向验证</span></div><div class="line"> ssl_protocols           SSLv2 SSLv3 TLSv1;</div></pre></td></tr></table></figure>
+<h2 id="6、打开浏览器安装客户端证书"><a href="#6、打开浏览器安装客户端证书" class="headerlink" title="6、打开浏览器安装客户端证书"></a>6、打开浏览器安装客户端证书</h2><p><img src="https://www.msbgn.cn/msbgn/toiss.png" alt="client1"><br><img src="https://www.msbgn.cn/msbgn/mima1.png" alt="client2"><br>点击安装生成的证书下一步输入证书密码(密码就是之前生成证书时候设置的密码)，下一步安装成功。</p>
+<h2 id="7、验证证书的使用"><a href="#7、验证证书的使用" class="headerlink" title="7、验证证书的使用"></a>7、验证证书的使用</h2><h3 id="没有导入证书访问"><a href="#没有导入证书访问" class="headerlink" title="没有导入证书访问"></a>没有导入证书访问</h3><p><img src="https://www.msbgn.cn/msbgn/catsd.png" alt="client3"><br>没有导入浏览器安装的证书显示为400</p>
+<h3 id="导入证书访问"><a href="#导入证书访问" class="headerlink" title="导入证书访问"></a>导入证书访问</h3><p><img src="https://www.msbgn.cn/msbgn/nhkk.png" alt="client4"><br>注意:安装证书的时候，记得安装完成证书关闭浏览器重新打开访问。<br>感谢阅读这份帮助文档。请点击右上角开启分享体验吧。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2017/05/26/nginxrenzhen/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2017/05/26/nginxrenzhen/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/05/26/nginxbianyi/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    nginx的编译安装
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/05/26/nginxw/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">nginx的URL重定向功能</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2017/05/26/nginxrenzhen/" data-title="nginx配置SSL双向认证" data-url="/2017/05/26/nginxrenzhen/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/Prometheus入门/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/prometheus-arch.png)" alt="Prometheus入门" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Prometheus/">Prometheus</a></p>
+                            <p class="item-title"><a href="/2017/05/27/Prometheus入门/" class="title">Prometheus入门</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T09:41:15.536Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/press/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/05/27/press/" class="title">press</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T06:41:56.000Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/zabbixtomcat/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/tomcat211.png)" alt="zabbix 监控服务--------使用JMX监控tomcat" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/27/zabbixtomcat/" class="title">zabbix 监控服务--------使用JMX监控tomcat</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T03:56:37.548Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/zabbix/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/zabbix.png)" alt="Zabbix 源码安装配置" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/26/zabbix/" class="title">Zabbix 源码安装配置</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:36:31.962Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/05/26/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:35:06.510Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Prometheus/">Prometheus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">29</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prometheus/">Prometheus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Prometheus/" style="font-size: 10px;">Prometheus</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Lambda表达式以及python的内置函数 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta property="og:type" content="article">
+<meta property="og:title" content="Lambda表达式以及python的内置函数">
+<meta property="og:url" content="/2017/05/26/Lambda/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:image" content="https://www.msbgn.cn/msbgn/lambda.jpg">
+<meta property="og:updated_time" content="2017-05-26T08:35:05.593Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lambda表达式以及python的内置函数">
+<meta name="twitter:image" content="https://www.msbgn.cn/msbgn/lambda.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/press">新闻资讯</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/press">新闻资讯</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">(醉卧沙场君莫笑)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                29
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                21
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Lambda" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Lambda表达式以及python的内置函数
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/05/26/Lambda/">
+            <time datetime="2017-05-26T08:35:05.593Z" itemprop="datePublished">2017-05-26</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/python/">python</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/python/">python</a>, <a class="tag-link" href="/tags/语言/">语言</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p><img src="https://www.msbgn.cn/msbgn/lambda.jpg" alt=" "></p>
+<a id="more"></a>
+<h5 id="Lambda表达式"><a href="#Lambda表达式" class="headerlink" title="Lambda表达式"></a>Lambda表达式</h5><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">temp= <span class="built_in">lambda</span> x,y:x+y</div><div class="line"></div><div class="line"><span class="built_in">print</span> temp(<span class="number">4</span>,<span class="number">5</span>)</div><div class="line">temp= <span class="built_in">lambda</span> x,y,z:x*y*z</div><div class="line"></div><div class="line"><span class="built_in">print</span> temp(<span class="number">4</span>,<span class="number">5</span>,<span class="number">2</span>)</div><div class="line"></div><div class="line">list(<span class="built_in">map</span>(<span class="built_in">lambda</span> x:x*<span class="number">2</span>,<span class="built_in">range</span>(<span class="number">10</span>)))</div></pre></td></tr></table></figure>
+<p><code>注意</code>: Lambda函数是匿名函数，一般结合<code>map</code></p>
+<hr>
+<hr>
+<h5 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h5><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">a=[]</div><div class="line">print dir() <span class="symbol">\\</span>列出来的是key</div><div class="line">print  vars() <span class="symbol">\\</span>列出来的是key - value</div><div class="line"></div><div class="line"></div><div class="line">['__builtins__', '__doc__', '__file__', '__name__', '__package__', 'a']</div><div class="line">&#123;'a': [], '__builtins__': &lt;module '__builtin__' (built-in)&gt;, '__file__': 'D:/distribute_project_py/shop.py', '__package__': None, '__name__': '__main__', '__doc__': '<span class="symbol">\n</span>product = &#123;<span class="symbol">\n</span><span class="symbol">\n</span>    <span class="symbol">\'</span><span class="symbol">\x</span>e8<span class="symbol">\x</span>8b<span class="symbol">\x</span>b9<span class="symbol">\x</span>e6<span class="symbol">\x</span>9e<span class="symbol">\x</span>9c<span class="symbol">\x</span>e6<span class="symbol">\x</span>89<span class="symbol">\x</span>8b<span class="symbol">\x</span>e6<span class="symbol">\x</span>9c<span class="symbol">\x</span>ba<span class="symbol">\'</span>:3000,<span class="symbol">\n</span>    <span class="symbol">\'</span>mackair<span class="symbol">\'</span>:8000,<span class="symbol">\n</span>    <span class="symbol">\'</span><span class="symbol">\x</span>e7<span class="symbol">\x</span>89<span class="symbol">\x</span>99<span class="symbol">\x</span>e5<span class="symbol">\x</span>88<span class="symbol">\x</span>b7<span class="symbol">\'</span>:8,<span class="symbol">\n</span>    <span class="symbol">\'</span><span class="symbol">\x</span>e5<span class="symbol">\x</span>85<span class="symbol">\x</span>85<span class="symbol">\x</span>e7<span class="symbol">\x</span>94<span class="symbol">\x</span>b5<span class="symbol">\x</span>e7<span class="symbol">\x</span>ba<span class="symbol">\x</span>bf<span class="symbol">\'</span>:80,<span class="symbol">\n</span>    <span class="symbol">\'</span><span class="symbol">\x</span>e9<span class="symbol">\x</span>93<span class="symbol">\x</span>85<span class="symbol">\x</span>e7<span class="symbol">\x</span>ac<span class="symbol">\x</span>94<span class="symbol">\'</span>:15<span class="symbol">\n</span><span class="symbol">\n</span>&#125;<span class="symbol">\n</span>money =raw_input("<span class="symbol">\x</span>e8<span class="symbol">\x</span>af<span class="symbol">\x</span>b7<span class="symbol">\x</span>e5<span class="symbol">\x</span>85<span class="symbol">\x</span>85<span class="symbol">\x</span>e5<span class="symbol">\x</span>80<span class="symbol">\x</span>bc<span class="symbol">\x</span>e9<span class="symbol">\x</span>87<span class="symbol">\x</span>91<span class="symbol">\x</span>e9<span class="symbol">\x</span>a2<span class="symbol">\x</span>9d:")<span class="symbol">\n</span>print <span class="symbol">\'</span><span class="symbol">\x</span>e5<span class="symbol">\x</span>85<span class="symbol">\x</span>85<span class="symbol">\x</span>e5<span class="symbol">\x</span>80<span class="symbol">\x</span>bc<span class="symbol">\x</span>e6<span class="symbol">\x</span>88<span class="symbol">\x</span>90<span class="symbol">\x</span>e5<span class="symbol">\x</span>8a<span class="symbol">\x</span>9f<span class="symbol">\x</span>e9<span class="symbol">\x</span>87<span class="symbol">\x</span>91<span class="symbol">\x</span>e9<span class="symbol">\x</span>a2<span class="symbol">\x</span>9d<span class="symbol">\x</span>e4<span class="symbol">\x</span>b8<span class="symbol">\x</span>ba <span class="variable">%s\' %</span>money<span class="symbol">\n</span>shop=[]<span class="symbol">\n</span>print "-"*12 +u"<span class="symbol">\x</span>e5<span class="symbol">\x</span>95<span class="symbol">\x</span>86<span class="symbol">\x</span>e5<span class="symbol">\x</span>93<span class="symbol">\x</span>81<span class="symbol">\x</span>e5<span class="symbol">\x</span>88<span class="symbol">\x</span>97<span class="symbol">\x</span>e8<span class="symbol">\x</span>a1<span class="symbol">\x</span>a8" +"-"*12<span class="symbol">\n</span>for i in product:<span class="symbol">\n</span><span class="symbol">\n</span>    print <span class="symbol">\'</span><span class="symbol">\x</span>e5<span class="symbol">\x</span>90<span class="symbol">\x</span>8d<span class="symbol">\x</span>e7<span class="symbol">\x</span>a7<span class="symbol">\x</span>b0:<span class="variable">%s----&gt;\xe4\xbb\xb7\xe6\xa0\xbc\xef\xbc\x9a%</span>d<span class="symbol">\'</span><span class="variable">%(i,product[i])\nprint "-"*12 +u"\xe5\x95\x86\xe5\x93\x81\xe5\x88\x97\xe8\xa1\xa8" +"-"*12\nsheng_money=money\nwhile True:\n    buy=raw_input(u"\xe4\xbd\xa0\xe9\x9c\x80\xe8\xa6\x81\xe8\xb4\xad\xe7\x89\xa9\xe5\x90\x97\xef\xbc\x9fy/n")\n    if buy==\'y\':\n        salry=raw_input(u"\xe8\xbe\x93\xe5\x85\xa5\xe4\xbd\xa0\xe8\xa6\x81\xe8\xb4\xad\xe4\xb9\xb0\xe7\x9a\x84\xe5\x95\x86\xe5\x93\x81:")\n        if salry in product:\n            temp=int(sheng_money)-int(product[salry])\n            sheng_money=temp\n            if sheng_money&gt;=0:\n                 print \'\xe6\x81\xad\xe5\x96\x9c\xe4\xbd\xa0\xe8\xb4\xad\xe4\xb9\xb0\xe6\x88\x90\xe5\x8a\x9f,\xe8\xb4\xad\xe4\xb9\xb0\xe7\x9a\x84\xe5\x95\x86\xe5\x93\x81\xef\xbc\x9a%</span>s ,<span class="symbol">\x</span>e5<span class="symbol">\x</span>89<span class="symbol">\x</span>a9<span class="symbol">\x</span>e4<span class="symbol">\x</span>bd<span class="symbol">\x</span>99<span class="symbol">\x</span>e9<span class="symbol">\x</span>87<span class="symbol">\x</span>91<span class="symbol">\x</span>e9<span class="symbol">\x</span>a2<span class="symbol">\x</span>9d<span class="symbol">\x</span>e4<span class="symbol">\x</span>b8<span class="symbol">\x</span>ba<span class="symbol">\x</span>ef<span class="symbol">\x</span>bc<span class="symbol">\x</span>9a<span class="variable">%d,\xe5\x95\x86\xe5\x93\x81\xe4\xbb\xb7\xe6\xa0\xbc\xe4\xb8\xba\xef\xbc\x9a%</span>d<span class="symbol">\'</span>  <span class="variable">%(salry,sheng_money,product[salry])\n            else:\n                print \'\xe5\xbd\x93\xe5\x89\x8d\xe5\x89\xa9\xe4\xbd\x99\xe9\x87\x91\xe9\xa2\x9d\xef\xbc\x9a%</span>d,<span class="symbol">\x</span>e5<span class="symbol">\x</span>95<span class="symbol">\x</span>86<span class="symbol">\x</span>e5<span class="symbol">\x</span>93<span class="symbol">\x</span>81<span class="symbol">\x</span>e4<span class="symbol">\x</span>bb<span class="symbol">\x</span>b7<span class="symbol">\x</span>e6<span class="symbol">\x</span>a0<span class="symbol">\x</span>bc<span class="symbol">\x</span>ef<span class="symbol">\x</span>bc<span class="symbol">\x</span>9a<span class="variable">%d,\xe5\x89\xa9\xe4\xbd\x99\xe9\x87\x91\xe9\xa2\x9d\xe4\xb8\x8d\xe8\xb6\xb3\xe8\xaf\xb7\xe5\x85\x85\xe5\x80\xbc\xef\xbc\x81\' %</span>(sheng_money,product[salry])<span class="symbol">\n</span>                break<span class="symbol">\n</span>        else:<span class="symbol">\n</span>            print <span class="symbol">\'</span><span class="symbol">\x</span>e6<span class="symbol">\x</span>b2<span class="symbol">\x</span>a1<span class="symbol">\x</span>e6<span class="symbol">\x</span>9c<span class="symbol">\x</span>89<span class="symbol">\x</span>e8<span class="symbol">\x</span>af<span class="symbol">\x</span>a5<span class="symbol">\x</span>e5<span class="symbol">\x</span>95<span class="symbol">\x</span>86<span class="symbol">\x</span>e5<span class="symbol">\x</span>93<span class="symbol">\x</span>81<span class="variable">%s\' %</span>salry<span class="symbol">\n</span>            salry=raw_input(u"<span class="symbol">\x</span>e8<span class="symbol">\x</span>af<span class="symbol">\x</span>b7<span class="symbol">\x</span>e9<span class="symbol">\x</span>87<span class="symbol">\x</span>8d<span class="symbol">\x</span>e6<span class="symbol">\x</span>96<span class="symbol">\x</span>b0<span class="symbol">\x</span>e8<span class="symbol">\x</span>be<span class="symbol">\x</span>93<span class="symbol">\x</span>e5<span class="symbol">\x</span>85<span class="symbol">\x</span>a5:")<span class="symbol">\n</span>    else:<span class="symbol">\n</span>        print "<span class="symbol">\x</span>e6<span class="symbol">\x</span>ac<span class="symbol">\x</span>a2<span class="symbol">\x</span>e8<span class="symbol">\x</span>bf<span class="symbol">\x</span>8e<span class="symbol">\x</span>e4<span class="symbol">\x</span>b8<span class="symbol">\x</span>8b<span class="symbol">\x</span>e6<span class="symbol">\x</span>ac<span class="symbol">\x</span>a1<span class="symbol">\x</span>e5<span class="symbol">\x</span>85<span class="symbol">\x</span>89<span class="symbol">\x</span>e4<span class="symbol">\x</span>b8<span class="symbol">\x</span>b4<span class="symbol">\x</span>ef<span class="symbol">\x</span>bc<span class="symbol">\x</span>81"<span class="symbol">\n</span>        break<span class="symbol">\n</span>        '&#125;</div><div class="line">help(vars())</div></pre></td></tr></table></figure>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="title">print</span>  <span class="keyword">type</span>(a)</div><div class="line"></div><div class="line">&lt;<span class="keyword">type</span> 'list'&gt;</div></pre></td></tr></table></figure>
+<p>查看一个变量的类型</p>
+<p>导入模块</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span>  <span class="keyword">file</span> <span class="keyword">import</span> demo</div><div class="line">reload(demo)<span class="comment">//再次导入模块</span></div></pre></td></tr></table></figure>
+<p>id()，内存地址</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">t1 = <span class="number">123</span></div><div class="line">t2=<span class="number">999</span></div><div class="line">print id(t1)</div><div class="line">print id(t2)</div><div class="line"></div><div class="line"><span class="number">6793536</span>  <span class="comment">//t1的内存地址</span></div><div class="line"><span class="number">44305828</span>  <span class="comment">//t2的内存地址</span></div></pre></td></tr></table></figure>
+<p>Abs()，取绝对值</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">print</span>  <span class="built_in">abs</span>(<span class="number">-9</span>)</div><div class="line"></div><div class="line"><span class="number">9</span></div></pre></td></tr></table></figure>
+<p>Bool()，判断真假</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">print</span>  <span class="keyword">bool</span>(<span class="number">1</span>)  <span class="comment">//输出True</span></div><div class="line"><span class="built_in">print</span>  <span class="keyword">bool</span>(<span class="number">0</span>)   <span class="comment">//输出False</span></div><div class="line"><span class="built_in">print</span>  <span class="keyword">bool</span>(<span class="number">15</span>)   <span class="comment">//输出True</span></div><div class="line"><span class="built_in">print</span>  <span class="keyword">bool</span>(<span class="number">-1</span>)   <span class="comment">//输出True</span></div></pre></td></tr></table></figure>
+<p>divmod(),数字处理函数,实用场景例如：分页</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">print  divmod(<span class="number">9</span>,<span class="number">4</span>)</div><div class="line">print  divmod(<span class="number">9</span>,<span class="number">3</span>)</div><div class="line"></div><div class="line">(<span class="number">2</span>, <span class="number">1</span>)</div><div class="line">(<span class="number">3</span>, <span class="number">0</span>)</div></pre></td></tr></table></figure>
+<p><code>cmp( x, y)</code>，比较大小，如果x&gt;y，则返回1，负责返回-1</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">print cmp(<span class="number">4</span>,<span class="number">8</span>)</div><div class="line"><span class="number">-1</span></div><div class="line">print cmp(<span class="number">4</span>,<span class="number">2</span>)</div><div class="line"><span class="number">1</span></div></pre></td></tr></table></figure>
+<p><code>Max()</code>,返回参数的最大值</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">print max([<span class="number">11</span>,<span class="number">33</span>,<span class="number">55</span>,<span class="number">22</span>,<span class="number">9</span>,<span class="number">77</span>,<span class="number">38</span>])</div><div class="line"></div><div class="line"><span class="number">77</span></div></pre></td></tr></table></figure>
+<p>min(),返回参数的最小值</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">print min([<span class="number">11</span>,<span class="number">33</span>,<span class="number">55</span>,<span class="number">22</span>,<span class="number">9</span>,<span class="number">77</span>,<span class="number">38</span>])</div><div class="line"></div><div class="line"><span class="number">9</span></div></pre></td></tr></table></figure>
+<p><code>sum(iterable[, start])</code>，用于计算可迭代对iterable的和</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">print sum([<span class="number">11</span>,<span class="number">33</span>,<span class="number">55</span>,<span class="number">22</span>,<span class="number">9</span>,<span class="number">77</span>,<span class="number">38</span>])</div><div class="line"></div><div class="line"><span class="number">245</span></div></pre></td></tr></table></figure>
+<p><code>Pow(x,y)</code>,用于求参数x的多少次方y</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">print pow(<span class="number">2</span>,<span class="number">10</span>)</div><div class="line"></div><div class="line"><span class="number">1024</span></div></pre></td></tr></table></figure>
+<p><code>Len()</code>,返回字符串的长度，如果是中文，则返回的是字节的长度</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">print</span> <span class="built_in">len</span>(<span class="string">'alexzhou'</span>)</div><div class="line"></div><div class="line"><span class="number">8</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">print</span> <span class="built_in">len</span>(<span class="string">'你好'</span>)</div><div class="line"><span class="number">6</span></div></pre></td></tr></table></figure>
+<p><code>all(iterable)</code>，判断可迭代的值里面如果有出现的值为0，则返回的值为false,否则返回True</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">print all([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">7</span>])</div><div class="line">print all([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">22</span>])</div><div class="line"></div><div class="line"></div><div class="line">True</div><div class="line">False</div></pre></td></tr></table></figure>
+<p><code>Any(iterable)</code>, 判断可迭代的值里面如果值都为0，则返回的值为<code>false</code>,否则返回<code>True</code></p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">print any([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">7</span>])</div><div class="line">print any([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">22</span>])</div><div class="line">print any([<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>])</div><div class="line"></div><div class="line">True</div><div class="line">True</div><div class="line">False</div></pre></td></tr></table></figure>
+<p><code>Chr()</code>,根据参数值<code>ascii</code>，返回对应的字符串</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">print</span>  <span class="keyword">chr</span>(<span class="number">65</span>)</div><div class="line"><span class="keyword">print</span>  <span class="keyword">chr</span>(<span class="number">44</span>)</div><div class="line"><span class="keyword">print</span>  <span class="keyword">chr</span>(<span class="number">66</span>)</div><div class="line"><span class="keyword">print</span>  <span class="keyword">chr</span>(<span class="number">67</span>)</div><div class="line"><span class="keyword">print</span>  <span class="keyword">chr</span>(<span class="number">68</span>)</div><div class="line"></div><div class="line"></div><div class="line">A</div><div class="line">,</div><div class="line">B</div><div class="line">C</div><div class="line">D</div></pre></td></tr></table></figure>
+<p>Ord(),根据参数值，返回对应的ascii的转换（实用于验证码数字字母转换）</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">print</span>  <span class="keyword">ord</span>(<span class="string">'A'</span>)</div><div class="line"><span class="keyword">print</span>  <span class="keyword">ord</span>(<span class="string">'B'</span>)</div><div class="line"><span class="keyword">print</span>  <span class="keyword">ord</span>(<span class="string">'C'</span>)</div></pre></td></tr></table></figure>
+<p><code>hex()</code>、bin()、<code>oct()</code>,八进制，16进制，2进制之间的转换</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">print</span> hex(<span class="number">20</span>)</div><div class="line"><span class="built_in">print</span> bin(<span class="number">20</span>)</div><div class="line"><span class="built_in">print</span> oct(<span class="number">20</span>)</div><div class="line"></div><div class="line"><span class="number">0x14</span></div><div class="line"><span class="number">0b10100</span></div><div class="line"><span class="number">024</span></div></pre></td></tr></table></figure>
+<p><code>Enumerate()</code>,添加索引序号，返回值可以根据自定义的序号返回参数</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">shop=[<span class="string">'猕猴桃'</span>,<span class="string">'香蕉'</span>,<span class="string">'橙子'</span>]</div><div class="line"></div><div class="line"><span class="keyword">for</span> <span class="selector-tag">i</span> <span class="keyword">in</span> shop:</div><div class="line">    print <span class="selector-tag">i</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">for</span> team <span class="keyword">in</span> enumerate(shop,<span class="number">10</span>):</div><div class="line">    print team[<span class="number">0</span>],team[<span class="number">1</span>]</div><div class="line"></div><div class="line"></div><div class="line">猕猴桃</div><div class="line">香蕉</div><div class="line">橙子</div><div class="line"><span class="number">10</span> 猕猴桃</div><div class="line"><span class="number">11</span> 香蕉</div><div class="line"><span class="number">12</span> 橙子</div></pre></td></tr></table></figure>
+<p><code>format</code>函数格式化字符串，{0}，{1}相当于占位符%s</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">s=<span class="string">'我 叫 &#123;0&#125;,&#123;1&#125;'</span></div><div class="line"></div><div class="line"><span class="keyword">print</span> s.<span class="keyword">format</span>(<span class="string">'Alexzhou'</span>,<span class="string">'xx'</span>)</div></pre></td></tr></table></figure>
+<p>apply(),用于执行函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">say</span><span class="params">(a,b)</span>:</span></div><div class="line">  <span class="keyword">print</span> a,b</div><div class="line"></div><div class="line">apply(say,(<span class="string">"hello"</span>,<span class="string">"Alex"</span>))</div></pre></td></tr></table></figure>
+<p><code>map()</code>是 <code>Python</code> 内置的高阶函数，它接收一个函数 f 和一个 list，并通过把函数 f 依次作用在 list 的每个元素上，得到一个新的 list 并返回,常常于<code>lambda</code>一起使用</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">print</span>  <span class="built_in">map</span>(<span class="built_in">lambda</span> x:(x*<span class="number">2</span>)-<span class="number">1</span>,<span class="built_in">range</span>(<span class="number">1</span>,<span class="number">50</span>))</div><div class="line"><span class="built_in">print</span>  <span class="built_in">map</span>(<span class="built_in">lambda</span> x:x*<span class="number">2</span>,<span class="built_in">range</span>(<span class="number">51</span>))</div><div class="line"></div><div class="line"><span class="number">100</span>以内的奇偶数</div><div class="line">[<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">15</span>, <span class="number">17</span>, <span class="number">19</span>, <span class="number">21</span>, <span class="number">23</span>, <span class="number">25</span>, <span class="number">27</span>, <span class="number">29</span>, <span class="number">31</span>, <span class="number">33</span>, <span class="number">35</span>, <span class="number">37</span>, <span class="number">39</span>, <span class="number">41</span>, <span class="number">43</span>, <span class="number">45</span>, <span class="number">47</span>, <span class="number">49</span>, <span class="number">51</span>, <span class="number">53</span>, <span class="number">55</span>, <span class="number">57</span>, <span class="number">59</span>, <span class="number">61</span>, <span class="number">63</span>, <span class="number">65</span>, <span class="number">67</span>, <span class="number">69</span>, <span class="number">71</span>, <span class="number">73</span>, <span class="number">75</span>, <span class="number">77</span>, <span class="number">79</span>, <span class="number">81</span>, <span class="number">83</span>, <span class="number">85</span>, <span class="number">87</span>, <span class="number">89</span>, <span class="number">91</span>, <span class="number">93</span>, <span class="number">95</span>, <span class="number">97</span>]</div><div class="line">[<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">12</span>, <span class="number">14</span>, <span class="number">16</span>, <span class="number">18</span>, <span class="number">20</span>, <span class="number">22</span>, <span class="number">24</span>, <span class="number">26</span>, <span class="number">28</span>, <span class="number">30</span>, <span class="number">32</span>, <span class="number">34</span>, <span class="number">36</span>, <span class="number">38</span>, <span class="number">40</span>, <span class="number">42</span>, <span class="number">44</span>, <span class="number">46</span>, <span class="number">48</span>, <span class="number">50</span>, <span class="number">52</span>, <span class="number">54</span>, <span class="number">56</span>, <span class="number">58</span>, <span class="number">60</span>, <span class="number">62</span>, <span class="number">64</span>, <span class="number">66</span>, <span class="number">68</span>, <span class="number">70</span>, <span class="number">72</span>, <span class="number">74</span>, <span class="number">76</span>, <span class="number">78</span>, <span class="number">80</span>, <span class="number">82</span>, <span class="number">84</span>, <span class="number">86</span>, <span class="number">88</span>, <span class="number">90</span>, <span class="number">92</span>, <span class="number">94</span>, <span class="number">96</span>, <span class="number">98</span>, <span class="number">100</span>]</div></pre></td></tr></table></figure>
+<p>Filter(),用于过滤条件，过滤</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">shop=[<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>]</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(arg)</span>:</span></div><div class="line">    <span class="keyword">if</span> arg&lt;<span class="number">22</span>:</div><div class="line">        <span class="keyword">return</span> <span class="keyword">True</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">temp=filter(foo,shop)</div><div class="line"><span class="keyword">print</span>  temp</div><div class="line"></div><div class="line">[<span class="number">11</span>]</div></pre></td></tr></table></figure>
+<p>Reduce(),累加，累乘…，必须要接收两个参数</p>
+<figure class="highlight golo"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">shop=[<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>]</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">print</span>  <span class="keyword">reduce</span>(lambda x,y:x+y,shop)</div></pre></td></tr></table></figure>
+<p>zip(),拼接列表的列组成一个新的序列</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">x=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>]</div><div class="line">y=[<span class="number">4</span>,<span class="number">5</span>]</div><div class="line">z=[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</div><div class="line">t =[<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]</div><div class="line">print zip(x,y,z,t)</div></pre></td></tr></table></figure>
+<p><code>eval()</code>,字符串当做表达式执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">a= <span class="string">'9+9'</span></div><div class="line"><span class="built_in">print</span>  <span class="built_in">eval</span>(a)</div></pre></td></tr></table></figure>
+<h5 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h5><p>通过字符串的形式去导入模块，并以字符串的形式执行函数</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">temp = <span class="string">'mysqlheerp'</span></div><div class="line">mode = __import__<span class="comment">(temp)</span></div><div class="line">mode.cout<span class="comment">()</span></div></pre></td></tr></table></figure>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2017/05/26/Lambda/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2017/05/26/Lambda/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/05/26/Hexoblog/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    hexo博客搭建
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/05/26/LinuxRinetd/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Linux使用Rinetd来实现端口转发</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2017/05/26/Lambda/" data-title="Lambda表达式以及python的内置函数" data-url="/2017/05/26/Lambda/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/Prometheus入门/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/prometheus-arch.png)" alt="Prometheus入门" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Prometheus/">Prometheus</a></p>
+                            <p class="item-title"><a href="/2017/05/27/Prometheus入门/" class="title">Prometheus入门</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T09:41:15.536Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/press/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/05/27/press/" class="title">press</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T06:41:56.000Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/zabbixtomcat/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/tomcat211.png)" alt="zabbix 监控服务--------使用JMX监控tomcat" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/27/zabbixtomcat/" class="title">zabbix 监控服务--------使用JMX监控tomcat</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T03:56:37.548Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/zabbix/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/zabbix.png)" alt="Zabbix 源码安装配置" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/26/zabbix/" class="title">Zabbix 源码安装配置</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:36:31.962Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/05/26/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:35:06.510Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Prometheus/">Prometheus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">29</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prometheus/">Prometheus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Prometheus/" style="font-size: 10px;">Prometheus</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

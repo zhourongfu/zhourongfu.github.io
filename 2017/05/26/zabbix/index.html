@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Zabbix 源码安装配置 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="zabbix（音同 zæbix）是一个基于WEB界面的提供分布式系统监视以及网络监视功能的企业级的开源解决方案。zabbix能监视各种网络参数，保证服务器系统的安全运营；并提供灵活的通知机制以让系统管理员快速定位/解决存在的各种问题。zabbix由2部分构成，zabbix server与可选组件zabbix agent。zabbix server可以通过SNMP，zabbix agent，ping">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zabbix 源码安装配置">
+<meta property="og:url" content="/2017/05/26/zabbix/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:description" content="zabbix（音同 zæbix）是一个基于WEB界面的提供分布式系统监视以及网络监视功能的企业级的开源解决方案。zabbix能监视各种网络参数，保证服务器系统的安全运营；并提供灵活的通知机制以让系统管理员快速定位/解决存在的各种问题。zabbix由2部分构成，zabbix server与可选组件zabbix agent。zabbix server可以通过SNMP，zabbix agent，ping">
+<meta property="og:image" content="https://www.msbgn.cn/msbgn/zabbix.png">
+<meta property="og:updated_time" content="2017-05-26T08:36:31.959Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zabbix 源码安装配置">
+<meta name="twitter:description" content="zabbix（音同 zæbix）是一个基于WEB界面的提供分布式系统监视以及网络监视功能的企业级的开源解决方案。zabbix能监视各种网络参数，保证服务器系统的安全运营；并提供灵活的通知机制以让系统管理员快速定位/解决存在的各种问题。zabbix由2部分构成，zabbix server与可选组件zabbix agent。zabbix server可以通过SNMP，zabbix agent，ping">
+<meta name="twitter:image" content="https://www.msbgn.cn/msbgn/zabbix.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/press">新闻资讯</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/press">新闻资讯</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">(醉卧沙场君莫笑)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                29
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                21
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-zabbix" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Zabbix 源码安装配置
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/05/26/zabbix/">
+            <time datetime="2017-05-26T08:36:31.962Z" itemprop="datePublished">2017-05-26</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/zabbix/">zabbix</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/zabbix/">zabbix</a>, <a class="tag-link" href="/tags/监控/">监控</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p><img src="https://www.msbgn.cn/msbgn/zabbix.png" alt="zabbix agent"><br>zabbix（音同 zæbix）是一个基于WEB界面的提供分布式系统监视以及网络监视功能的企业级的开源解决方案。<br>zabbix能监视各种网络参数，保证服务器系统的安全运营；并提供灵活的通知机制以让系统管理员快速定位/解决存在的各种问题。<br>zabbix由2部分构成，zabbix server与可选组件zabbix agent。zabbix server可以通过SNMP，zabbix agent，ping，端口监视等方法提供对远程服务器/网络状态的监视，<br>数据收集等功能，它可以运行在Linux，Solaris，HP-UX，AIX，Free BSD，Open BSD，OS X等平台上。<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Zabbix Server (收集数据)</div><div class="line">Zabbix Agent (监视)</div><div class="line">Net-SNMP (为了支持 SNMP(简单网络管理协议))</div><div class="line">Jabber (支持消息通知)</div><div class="line">OpenIPMI (监视)</div><div class="line">cURL (网页监视)</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>##第一、安装环境<br>操作系统：centos6.5 64位<br>Yum源：本地yum源<br>IP地址：192.168.1.248<br>DNS：192.168.1.1<br>主机名：Alexzhou</p>
+<p>##第二、软件包</p>
+<p>###1. Yum源<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@Alexzhou]</span><span class="meta"># yum install httpd httpd-devel mariadb mariadb-server mariadb-devel php php-mysql php-common php-gd php-xml</span></div></pre></td></tr></table></figure></p>
+<p>###2. 源码包<br><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@Alexzhou ~]# wget http://downloads.sourceforge.<span class="built_in">net</span>/project/zabbix/ZABBIX<span class="variable">%20Latest%</span><span class="number">20</span>Stable/<span class="number">2</span>.<span class="number">4</span>.<span class="number">7</span>/zabbix-<span class="number">2</span>.<span class="number">4</span>.<span class="number">7</span>.tar.gz?r=http<span class="variable">%3A%</span><span class="number">2</span>F<span class="variable">%2Fwww.zabbix.com%</span><span class="number">2</span>Fdownload.php&amp;ts=<span class="number">1452051496</span>&amp;use_mirror=netix</div></pre></td></tr></table></figure></p>
+<p>##第三、开始安装</p>
+<p>###1.安装基础环境 安装LAMP<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># yum install httpd httpd-devel mariadb mariadb-server mariadb-devel php php-mysql php-common php-gd php-xml php-bcmath php-mbstring </span></div><div class="line">OpenIPMI-devel libssh2-devel libxml2-devel unixODBC-devel net-snmp net-snmp-*</div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># vim /etc/httpd/conf.d/vrt.conf</span></div></pre></td></tr></table></figure></p>
+<p>写入<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;Virtualhost *:<span class="number">80</span>&gt;</div><div class="line">    ServerName zabbix<span class="selector-class">.allposs</span><span class="selector-class">.com</span></div><div class="line">    DocumentRoot /data/web/Monitor/zabbix/</div><div class="line">    DirectoryIndex index<span class="selector-class">.php</span> index<span class="selector-class">.html</span></div><div class="line">    &lt;Directory <span class="string">"/data/web/Monitor/zabbix/"</span>&gt;</div><div class="line">        Options FollowSymLinks</div><div class="line">        Order allow,deny</div><div class="line">        Allow from all</div><div class="line">        Require all granted</div><div class="line">    &lt;/Directory&gt;</div><div class="line">    LogFormat <span class="string">"%h %l %u %t %T \"%r\" %&gt;s %b \"%&#123;Referer&#125;i\" \"%&#123;User-Agent&#125;i\""</span> common</div><div class="line">    CustomLog /data/web/logs/Monitor/zabbix_access_log<span class="selector-class">.log</span> common</div><div class="line">    ErrorLog /data/web/logs/Monitor/zabbix_error_log<span class="selector-class">.log</span></div><div class="line">&lt;/VirtUalHost&gt;</div></pre></td></tr></table></figure></p>
+<p>注： apache配置文件请见Apache区域相关文档。<br>开启服务并配置防火墙<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># mkdir -p /data/web/Monitor/zabbix/</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># mkdir -p /data/web/logs/Monitor/</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># chcon -R -t httpd_sys_content_t /data/web/</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># chcon -R -t httpd_log_t  /data/web/logs/</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># firewall-cmd --permanent --add-service=http</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># firewall-cmd --permanent --add-service=mysql</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># firewall-cmd --reload</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># systemctl enable mariadb.service </span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># systemctl enable httpd.service </span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># systemctl start mariadb.service</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># systemctl start httpd.service</span></div></pre></td></tr></table></figure></p>
+<p>初始化Mariadb<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># mysql_secure_installation</span></div><div class="line"><span class="meta">#使用MySQL的初始化脚本，设置密码等。 </span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># ntpdate cn.pool.ntp.org</span></div><div class="line"><span class="meta">#同步时间，注意一定要与监控客户机一致，最好搭建一个NTP服务器，以保证时间同步。</span></div></pre></td></tr></table></figure></p>
+<p>###2.安装zabbix<br><figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@Alexzhou ~]<span class="comment"># wget http://downloads.sourceforge.net/project/zabbix/ZABBIX%20Latest%20Stable/2.4.7/zabbix-2.4.7.tar.gz?r=http%3A%2F%2Fwww.zabbix.com%2Fdownload.php&amp;ts=1452051496&amp;use_mirror=netix</span></div><div class="line">[root@Alexzhou ~]<span class="comment"># mv zabbix-2.4.7.tar.gz\?r\=http\:%2F%2Fwww.zabbix.com%2Fdownload.php zabbix-2.4.7.tar.gz</span></div><div class="line">[root@Alexzhou ~]<span class="comment"># tar -zxvf zabbix-2.4.7.tar.gz</span></div><div class="line">[root@Alexzhou ~]<span class="comment"># cd zabbix-2.4.7/</span></div><div class="line">[root@Alexzhou zabbix-<span class="number">2.4</span>.<span class="number">7</span>]<span class="comment"># groupadd  -g 201  zabbix</span></div><div class="line">[root@Alexzhou zabbix-<span class="number">2.4</span>.<span class="number">7</span>]<span class="comment"># useradd -M -s /sbin/nologin -g zabbix zabbix</span></div><div class="line">[root@Alexzhou zabbix-<span class="number">2.4</span>.<span class="number">7</span>]<span class="comment"># mysql -uroot -p</span></div><div class="line">MariaDB [(none)]&gt; create database zabbix character set utf8;</div><div class="line">MariaDB [(none)]&gt; grant all <span class="literal">on</span> zabbix.* <span class="keyword">to</span> <span class="string">'zabbix'</span>@<span class="string">'localhost'</span> identified <span class="keyword">by</span> <span class="string">'Password123'</span> <span class="keyword">with</span> grant option;</div><div class="line">MariaDB [(none)]&gt; flush privileges;</div><div class="line">MariaDB [(none)]&gt; quit</div></pre></td></tr></table></figure></p>
+<p>导入数据库，注意:导入数据库的先后顺序<br><figure class="highlight scheme"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[<span class="name">root@Alexzhou</span> zabbix-2.4.7]# mysql -u<span class="symbol">'zabbix</span>' -p<span class="symbol">'Password123</span>' zabbix &lt;database/mysql/schema.sql</div><div class="line">[<span class="name">root@Alexzhou</span> zabbix-2.4.7]# mysql -u<span class="symbol">'zabbix</span>' -p<span class="symbol">'Password123</span>' zabbix &lt;database/mysql/images.sql</div><div class="line">[<span class="name">root@Alexzhou</span> zabbix-2.4.7]# mysql -u<span class="symbol">'zabbix</span>' -p<span class="symbol">'Password123</span>' zabbix &lt;database/mysql/data.sql</div></pre></td></tr></table></figure></p>
+<p>编译安装zabbix<br><figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="title">[</span><span class="comment">root@Alexzhou</span> <span class="comment">zabbix</span><span class="literal">-</span><span class="comment">2</span><span class="string">.</span><span class="comment">4</span><span class="string">.</span><span class="comment">7</span><span class="title">]</span><span class="comment">#</span>  <span class="comment">yum</span>  <span class="literal">-</span><span class="comment">y</span> <span class="comment">groupinstall</span>  <span class="comment">"Development</span> <span class="comment">Tools"</span></div><div class="line"><span class="title">[</span><span class="comment">root@Alexzhou</span> <span class="comment">zabbix</span><span class="literal">-</span><span class="comment">2</span><span class="string">.</span><span class="comment">4</span><span class="string">.</span><span class="comment">7</span><span class="title">]</span><span class="comment">#</span> <span class="comment">yum</span> <span class="comment">install</span> <span class="comment">net</span><span class="literal">-</span><span class="comment">snmp</span><span class="literal">-</span><span class="comment">devel</span></div><div class="line"><span class="title">[</span><span class="comment">root@Alexzhou</span> <span class="comment">zabbix</span><span class="literal">-</span><span class="comment">2</span><span class="string">.</span><span class="comment">4</span><span class="string">.</span><span class="comment">7</span><span class="title">]</span><span class="comment">#</span> <span class="comment">yum</span> <span class="comment">install</span> <span class="comment">curl</span><span class="literal">-</span><span class="comment">devel</span></div><div class="line"><span class="title">[</span><span class="comment">root@Alexzhou</span> <span class="comment">zabbix</span><span class="literal">-</span><span class="comment">2</span><span class="string">.</span><span class="comment">4</span><span class="string">.</span><span class="comment">7</span><span class="title">]</span><span class="comment">#</span> <span class="string">.</span><span class="comment">/configure</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">prefix=/usr/local/zabbix</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">sysconfdir=/etc/zabbix/</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">server</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">proxy</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">agent</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span><span class="literal">-</span><span class="comment">net</span><span class="literal">-</span><span class="comment">snmp</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span><span class="literal">-</span><span class="comment">libcurl</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span><span class="literal">-</span><span class="comment">mysql=/usr/bin/mysql_config</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span><span class="literal">-</span><span class="comment">net</span><span class="literal">-</span><span class="comment">snmp</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span><span class="literal">-</span><span class="comment">ssh2</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">java</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span><span class="literal">-</span><span class="comment">libcurl</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span><span class="literal">-</span><span class="comment">libxml2</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span><span class="literal">-</span><span class="comment">ldap</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span><span class="literal">-</span><span class="comment">openipmi</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span><span class="literal">-</span><span class="comment">unixodbc</span><span class="literal">-</span><span class="literal">-</span><span class="comment">with</span><span class="literal">-</span><span class="comment">jabber</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">enable</span><span class="literal">-</span><span class="comment">ipv6</span> </div><div class="line"><span class="title">[</span><span class="comment">root@Alexzhou</span> <span class="comment">zabbix</span><span class="literal">-</span><span class="comment">2</span><span class="string">.</span><span class="comment">4</span><span class="string">.</span><span class="comment">7</span><span class="title">]</span><span class="comment">#</span> <span class="comment">make</span> <span class="comment">&amp;&amp;</span> <span class="comment">make</span> <span class="comment">install</span></div></pre></td></tr></table></figure></p>
+<p>注：<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby">-prefix指定zabbix安装目录，</span></div><div class="line">-<span class="ruby">-enable-server 支持zabbix服务器，</span></div><div class="line">-<span class="ruby">-enable-agent支持zabbix代理，</span></div><div class="line">-<span class="ruby">-enable-proxy 支持zabbix代理服务器，</span></div><div class="line">-<span class="ruby">-with-mysql 使用MySQL客户端库可以选择指定路径mysql_config，</span></div><div class="line">-<span class="ruby">-with-net-snmp 使用net snmp软件包,择性地指定路径NET SNMP配置, </span></div><div class="line">-<span class="ruby">-with-libcurl 使用curl包。</span></div><div class="line">-<span class="ruby">-with-openipmi 开启温度监控</span></div><div class="line">-<span class="ruby">-enable-java 开启java监控 注意需要安装jdk</span></div><div class="line"> 安装Jabber需要依赖于iksemel包的iksemel-devel包</div><div class="line">要使用自己发现协议必须开启snmp和fping</div></pre></td></tr></table></figure></p>
+<p>配置zabbix<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">root<span class="symbol">@Alexzhou</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># cp -Rf frontends/php/* /data/web/Monitor/zabbix/</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># usermod -G apache zabbix</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># chown -R apache.apache /data/web/Monitor/zabbix/</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># chown -R zabbix.zabbix /data/web/logs/Monitor/</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># vim /usr/lib/systemd/system/zabbix-server.service</span></div></pre></td></tr></table></figure></p>
+<p>写入<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="section">[Unit]</span></div><div class="line"><span class="attr">Description</span>=Zabbix Monitor server</div><div class="line"><span class="attr">After</span>=network.target</div><div class="line"><span class="section">[Service]</span></div><div class="line"><span class="attr">Type</span>=forking</div><div class="line"><span class="attr">PIDFile</span>=/tmp/zabbix_server.pid</div><div class="line"><span class="attr">Environment</span>=<span class="string">"CONFIG=/etc/zabbix/zabbix_server.conf"</span></div><div class="line"><span class="attr">ExecStart</span>=/usr/local/zabbix/sbin/zabbix_server  -c <span class="variable">$&#123;CONFIG&#125;</span></div><div class="line"><span class="attr">ExecStop</span>=/bin/kill `cat <span class="variable">$PIDFile</span>`</div><div class="line"><span class="attr">RemainAfterExit</span>=<span class="literal">yes</span></div><div class="line"><span class="attr">Restart</span>=always</div><div class="line"><span class="section">[Install]</span></div><div class="line"><span class="attr">WantedBy</span>=multi-user.target</div></pre></td></tr></table></figure></p>
+<p>修改配置文件<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@Alexzhou</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># vim /etc/zabbix/zabbix_server.conf</span></div></pre></td></tr></table></figure></p>
+<p>修改<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="attr">ListenPort</span>=<span class="number">10051</span></div><div class="line"><span class="attr">LogFile</span>=/data/web/logs/Monitor/zabbix_server.log</div><div class="line"><span class="attr">PidFile</span>=/tmp/zabbix_server.pid</div><div class="line"><span class="attr">DBHost</span>=localhost</div><div class="line"><span class="attr">DBName</span>=zabbix</div><div class="line"><span class="attr">DBUser</span>=zabbix</div><div class="line"><span class="attr">DBPassword</span>=Password123</div><div class="line"><span class="attr">DBPort</span>=<span class="number">3306</span></div><div class="line"><span class="attr">AlertScriptsPath</span>=/etc/zabbix/alertscripts</div></pre></td></tr></table></figure></p>
+<p>修改php.ini<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@Alexzhou</span> zabbix<span class="number">-2.4</span><span class="number">.7</span>]<span class="meta"># vim /etc/php.ini</span></div></pre></td></tr></table></figure></p>
+<p>修改<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="attr">post_max_size</span> = <span class="number">16</span>M</div><div class="line"><span class="attr">max_execution_time</span> = <span class="number">300</span></div><div class="line"><span class="attr">max_input_time</span> = <span class="number">300</span></div><div class="line">date.<span class="attr">timezone</span> = Asia/Shanghai</div></pre></td></tr></table></figure></p>
+<p>添加客户端<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@monitor</span> Alexzhou]<span class="meta"># vim /usr/lib/systemd/system/zabbix-agentd.service</span></div></pre></td></tr></table></figure></p>
+<p>写入<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="section">[Unit]</span></div><div class="line"><span class="attr">Description</span>=Zabbix Monitor agentd</div><div class="line"><span class="attr">After</span>=network.target</div><div class="line"><span class="section"></span></div><div class="line">[Service]</div><div class="line"><span class="attr">Type</span>=forking</div><div class="line"><span class="attr">PIDFile</span>=/tmp/zabbix_agentd.pid</div><div class="line"><span class="attr">Environment</span>=<span class="string">"CONFIG=/etc/zabbix/zabbix_agentd.conf"</span></div><div class="line"><span class="attr">ExecStart</span>=/usr/local/zabbix/sbin/zabbix_agentd  -c <span class="variable">$&#123;CONFIG&#125;</span></div><div class="line"><span class="attr">ExecStop</span>=/bin/kill `cat <span class="variable">$PIDFile</span>`</div><div class="line"><span class="attr">RemainAfterExit</span>=<span class="literal">yes</span></div><div class="line"><span class="attr">Restart</span>=always</div><div class="line"><span class="section">[Install]</span></div><div class="line"><span class="attr">WantedBy</span>=multi-user.target</div></pre></td></tr></table></figure></p>
+<p>修改配置文件<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="attr">PidFile</span>=/tmp/zabbix_agentd.pid</div><div class="line"><span class="attr">LogFile</span>=/data/web/logs/Monitor/zabbix_agentd.log</div><div class="line"><span class="attr">Server</span>=<span class="number">10.199</span>.<span class="number">200.15</span></div><div class="line"><span class="attr">ListenPort</span>=<span class="number">10050</span></div><div class="line"><span class="attr">ServerActive</span>=<span class="number">127.0</span>.<span class="number">0.1</span></div><div class="line"><span class="attr">Hostname</span>=Zabbix server</div><div class="line"><span class="attr">UnsafeUserParameters</span>=<span class="number">1</span></div></pre></td></tr></table></figure></p>
+<p>设置防火墙<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># firewall-cmd --permanent --add-port=10051/tcp</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># firewall-cmd --permanent --add-port=10051/udp</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># firewall-cmd --permanent --add-port=10050/udp</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># firewall-cmd --permanent --add-port=10050/tcp</span></div><div class="line">[root<span class="symbol">@Alexzhou</span> ~]<span class="meta"># firewall-cmd --reload</span></div></pre></td></tr></table></figure></p>
+<p>开启服务<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@<span class="literal">monitor</span> ~]<span class="comment"># chcon -u system_u /usr/lib/systemd/system/zabbix-*</span></div><div class="line">[root@<span class="literal">monitor</span> ~]<span class="comment"># chcon -t systemd_unit_file_t /usr/lib/systemd/system/zabbix-*</span></div><div class="line">[root@<span class="literal">monitor</span> <span class="literal">Monitor</span>]<span class="comment"># systemctl enable zabbix-agentd.service </span></div><div class="line">[root@<span class="literal">monitor</span> <span class="literal">Monitor</span>]<span class="comment"># systemctl start zabbix-agentd.service</span></div></pre></td></tr></table></figure></p>
+<p>注意： 1.在配置相关服务的时候一定要注意selinux和防火墙设置，还有还有文件权限的设置。<br>至此服务安装完成，打开界面进行下一步安装。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2017/05/26/zabbix/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2017/05/26/zabbix/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/05/27/zabbixtomcat/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    zabbix 监控服务--------使用JMX监控tomcat
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/05/26/pythonfile/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">python 的文件操作</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2017/05/26/zabbix/" data-title="Zabbix 源码安装配置" data-url="/2017/05/26/zabbix/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/Prometheus入门/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/prometheus-arch.png)" alt="Prometheus入门" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Prometheus/">Prometheus</a></p>
+                            <p class="item-title"><a href="/2017/05/27/Prometheus入门/" class="title">Prometheus入门</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T09:41:15.536Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/press/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/05/27/press/" class="title">press</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T06:41:56.000Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/zabbixtomcat/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/tomcat211.png)" alt="zabbix 监控服务--------使用JMX监控tomcat" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/27/zabbixtomcat/" class="title">zabbix 监控服务--------使用JMX监控tomcat</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T03:56:37.548Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/zabbix/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/zabbix.png)" alt="Zabbix 源码安装配置" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/26/zabbix/" class="title">Zabbix 源码安装配置</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:36:31.962Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/05/26/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:35:06.510Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Prometheus/">Prometheus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">29</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prometheus/">Prometheus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Prometheus/" style="font-size: 10px;">Prometheus</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

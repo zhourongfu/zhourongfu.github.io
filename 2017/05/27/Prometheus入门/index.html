@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Prometheus入门 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="什么是TSDB？TSDB(Time Series Database)时序列数据库，我们可以简单的理解为一个优化后用来处理时间序列数据的软件，并且数据中的数组是由时间进行索引的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prometheus入门">
+<meta property="og:url" content="/2017/05/27/Prometheus入门/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:description" content="什么是TSDB？TSDB(Time Series Database)时序列数据库，我们可以简单的理解为一个优化后用来处理时间序列数据的软件，并且数据中的数组是由时间进行索引的。">
+<meta property="og:image" content="https://www.msbgn.cn/msbgn/prometheus-arch.png">
+<meta property="og:updated_time" content="2017-05-27T09:41:15.533Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Prometheus入门">
+<meta name="twitter:description" content="什么是TSDB？TSDB(Time Series Database)时序列数据库，我们可以简单的理解为一个优化后用来处理时间序列数据的软件，并且数据中的数组是由时间进行索引的。">
+<meta name="twitter:image" content="https://www.msbgn.cn/msbgn/prometheus-arch.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/press">新闻资讯</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/press">新闻资讯</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">(醉卧沙场君莫笑)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                29
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                21
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Prometheus入门" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Prometheus入门
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/05/27/Prometheus入门/">
+            <time datetime="2017-05-27T09:41:15.536Z" itemprop="datePublished">2017-05-27</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Prometheus/">Prometheus</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Prometheus/">Prometheus</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<h3 id="什么是TSDB？"><a href="#什么是TSDB？" class="headerlink" title="什么是TSDB？"></a>什么是TSDB？</h3><p>TSDB(Time Series Database)时序列数据库，我们可以简单的理解为一个优化后用来处理时间序列数据的软件，并且数据中的数组是由时间进行索引的。</p>
+<p><img src="https://www.msbgn.cn/msbgn/prometheus-arch.png" alt=" "></p>
+<a id="more"></a>
+<h4 id="时间序列数据库的特点"><a href="#时间序列数据库的特点" class="headerlink" title="时间序列数据库的特点"></a>时间序列数据库的特点</h4><pre><code>大部分时间都是写入操作。
+写入操作几乎是顺序添加，大多数时候数据到达后都以时间排序。
+写操作很少写入很久之前的数据，也很少更新数据。大多数情况在数据被采集到数秒或者数分钟后就会被写入数据库。
+删除操作一般为区块删除，选定开始的历史时间并指定后续的区块。很少单独删除某个时间或者分开的随机时间的数据。
+基本数据大，一般超过内存大小。一般选取的只是其一小部分且没有规律，缓存几乎不起任何作用。
+读操作是十分典型的升序或者降序的顺序读。
+高并发的读操作十分常见。
+</code></pre><h4 id="常见的时间序列数据库"><a href="#常见的时间序列数据库" class="headerlink" title="常见的时间序列数据库"></a>常见的时间序列数据库</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">TSDB项目</th>
+<th style="text-align:right">官网</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">influxDB</td>
+<td style="text-align:right"><a href="https://influxdata.com/" target="_blank" rel="external">https://influxdata.com/</a></td>
+</tr>
+<tr>
+<td style="text-align:left">RRDtool</td>
+<td style="text-align:right"><a href="http://oss.oetiker.ch/rrdtool/" target="_blank" rel="external">http://oss.oetiker.ch/rrdtool/</a></td>
+</tr>
+<tr>
+<td style="text-align:left">Graphite</td>
+<td style="text-align:right"><a href="http://graphiteapp.org/" target="_blank" rel="external">http://graphiteapp.org/</a> </td>
+</tr>
+<tr>
+<td style="text-align:left">OpenTSDB</td>
+<td style="text-align:right"><a href="http://opentsdb.net/" target="_blank" rel="external">http://opentsdb.net/</a></td>
+</tr>
+<tr>
+<td style="text-align:left">Kdb+</td>
+<td style="text-align:right"><a href="http://kx.com/" target="_blank" rel="external">http://kx.com/</a></td>
+</tr>
+<tr>
+<td style="text-align:left">Druid</td>
+<td style="text-align:right"><a href="http://druid.io/" target="_blank" rel="external">http://druid.io/</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="什么是Prometheus"><a href="#什么是Prometheus" class="headerlink" title="什么是Prometheus?"></a>什么是Prometheus?</h3><p>Prometheus是由SoundCloud开发的开源监控报警系统和时序列数据库(TSDB)。Prometheus使用Go语言开发，是Google BorgMon监控系统的开源版本。</p>
+<p>2016年由Google发起Linux基金会旗下的原生云基金会(Cloud Native Computing Foundation), 将Prometheus纳入其下第二大开源项目。Prometheus目前在开源社区相当活跃。</p>
+<p>Prometheus和Heapster(Heapster是K8S的一个子项目，用于获取集群的性能数据。)相比功能更完善、更全面。Prometheus性能也足够支撑上万台规模的集群。</p>
+<h4 id="Prometheus的特点"><a href="#Prometheus的特点" class="headerlink" title="Prometheus的特点"></a>Prometheus的特点</h4><pre><code>多维度数据模型。
+灵活的查询语言。
+不依赖分布式存储，单个服务器节点是自主的。
+通过基于HTTP的pull方式采集时序数据。
+可以通过中间网关进行时序列数据推送。
+通过服务发现或者静态配置来发现目标服务对象。
+支持多种多样的图表和界面展示，比如Grafana等。
+</code></pre><h4 id="Prometheus相关组件"><a href="#Prometheus相关组件" class="headerlink" title="Prometheus相关组件"></a>Prometheus相关组件</h4><p>Prometheus生态系统由多个组件组成，它们中的一些是可选的。多数Prometheus组件是Go语言写的，这使得这些组件很容易编译和部署。</p>
+<pre><code>Prometheus Server
+</code></pre><p>主要负责数据采集和存储，提供PromQL查询语言的支持。</p>
+<pre><code>客户端SDK
+</code></pre><p>官方提供的客户端类库有go、java、scala、python、ruby，其他还有很多第三方开发的类库，支持nodejs、php、erlang等。</p>
+<pre><code>Push Gateway
+</code></pre><p>支持临时性Job主动推送指标的中间网关。</p>
+<pre><code>PromDash
+</code></pre><p>使用Rails开发可视化的Dashboard，用于可视化指标数据。</p>
+<pre><code>Exporter
+</code></pre><p>Exporter是Prometheus的一类数据采集组件的总称。它负责从目标处搜集数据，并将其转化为Prometheus支持的格式。与传统的数据采集组件不同的是，它并不向中央服务器发送数据，而是等待中央服务器主动前来抓取。</p>
+<p>Prometheus提供多种类型的Exporter用于采集各种不同服务的运行状态。目前支持的有数据库、硬件、消息中间件、存储系统、HTTP服务器、JMX等。</p>
+<pre><code>alertmanager
+</code></pre><p>警告管理器，用来进行报警。</p>
+<pre><code>prometheus_cli
+</code></pre><p>命令行工具。</p>
+<pre><code>其他辅助性工具
+</code></pre><p>多种导出工具，可以支持Prometheus存储数据转化为HAProxy、StatsD、Graphite等工具所需要的数据存储格式。</p>
+<h3 id="Prometheus的架构"><a href="#Prometheus的架构" class="headerlink" title="Prometheus的架构"></a>Prometheus的架构</h3><p>下面这张图说明了Prometheus的整体架构，以及生态中的一些组件作用:</p>
+<p> <img src="https://www.msbgn.cn/msbgn/prometheus-arch.png" alt=" "></p>
+<p>Prometheus的基本原理是通过HTTP协议周期性抓取被监控组件的状态，任意组件只要提供对应的HTTP接口就可以接入监控。不需要任何 SDK或者其他的集成过程。这样做非常适合做虚拟化环境监控系统，比如VM、Docker、Kubernetes等。输出被监控组件信息的HTTP接口被 叫做exporter 。目前互联网公司常用的组件大部分都有exporter可以直接使用，比如Varnish、Haproxy、Nginx、MySQL、Linux系统信息 (包括磁盘、内存、CPU、网络等等)。</p>
+<p>Prometheus服务过程大概是这样：</p>
+<p>Prometheus Daemon负责定时去目标上抓取metrics(指标)数据，每个抓取目标需要暴露一个http服务的接口给它定时抓取。Prometheus支持通过 配置文件、文本文件、Zookeeper、Consul、DNS SRV Lookup等方式指定抓取目标。Prometheus采用PULL的方式进行监控，即服务器可以直接通过目标PULL数据或者间接地通过中间网关来 Push数据。</p>
+<p>Prometheus在本地存储抓取的所有数据，并通过一定规则进行清理和整理数据，并把得到的结果存储到新的时间序列中。</p>
+<p>Prometheus通过PromQL和其他API可视化地展示收集的数据。Prometheus支持很多方式的图表可视化，例如 Grafana、自带的Promdash以及自身提供的模版引擎等等。Prometheus还提供HTTP API的查询方式，自定义所需要的输出。</p>
+<p>PushGateway支持Client主动推送metrics到PushGateway，而Prometheus只是定时去Gateway上抓取数据。</p>
+<p>Alertmanager是独立于Prometheus的一个组件，可以支持Prometheus的查询语句，提供十分灵活的报警方式。</p>
+<h4 id="Prometheus适用的场景"><a href="#Prometheus适用的场景" class="headerlink" title="Prometheus适用的场景"></a>Prometheus适用的场景</h4><p>Prometheus 在记录纯数字时间序列方面表现非常好。它既适用于面向服务器等硬件指标的监控，也适用于高动态的面向服务架构的监控。对于现在流行的微服 务，Prometheus的多维度数据收集和数据筛选查询语言也是非常的强大。Prometheus是为服务的可靠性而设计的，当服务出现故障时，它可以 使你快速定位和诊断问题。它的搭建过程对硬件和服务没有很强的依赖关系。</p>
+<h4 id="Prometheus不适用的场景"><a href="#Prometheus不适用的场景" class="headerlink" title="Prometheus不适用的场景"></a>Prometheus不适用的场景</h4><p>Prometheus它的价值在于可靠性，甚至在很恶劣的环境下，你都可以随时访问它和查看系统服务各种指标的统计信息。 如果你对统计数据需要100%的精确，它并不适用，例如：它不适用于实时计费系统。</p>
+<p>Prometheus官网：<a href="https://prometheus.io/" target="_blank" rel="external">https://prometheus.io/</a></p>
+<h3 id="安装Prometheus"><a href="#安装Prometheus" class="headerlink" title="安装Prometheus"></a>安装Prometheus</h3><p>Prometheus官方给出了多重部署方案，比如：Docker容器、Ansible、Chef、Puppet、Saltstack等。</p>
+<p>Prometheus用Golang实现，因此具有天然可移植性(支持Linux、Windows、macOS和Freebsd)。这里直接使用预编译的二进制文件部署，开箱即用。</p>
+<p> Prometheus安装</p>
+<p>这里以Linux系统为例：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ wget  https:<span class="comment">//github.com/prometheus/prometheus/releases/download/v1.6.3/prometheus-1.6.3.linux-amd64.tar.gz</span></div><div class="line">$ tar xzvf prometheus-<span class="number">1.6</span>.<span class="number">3</span><span class="selector-class">.linux-amd64</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></div><div class="line">$ mv prometheus-<span class="number">1.6</span>.<span class="number">3</span><span class="selector-class">.linux-amd64</span> /usr/local/prometheus</div></pre></td></tr></table></figure>
+<p>其它系统版本可在这里下载：<a href="https://prometheus.io/download/" target="_blank" rel="external">https://prometheus.io/download/</a></p>
+<p>验证安装</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ cd <span class="regexp">/usrlocal/</span>prometheus</div><div class="line">$ ./prometheus --version</div><div class="line">prometheus, version <span class="number">1.6</span><span class="number">.3</span> (<span class="string">branch:</span> master, <span class="string">revision:</span> c580b60c67f2c5f6b638c3322161bcdf6d68d7fc)</div><div class="line">  build <span class="string">user:</span>       root<span class="meta">@e</span>54b06e0b22f</div><div class="line">  build <span class="string">date:</span>       <span class="number">20170519</span><span class="number">-08</span>:<span class="number">00</span>:<span class="number">43</span></div><div class="line">  go <span class="string">version:</span>       go1<span class="number">.8</span><span class="number">.1</span></div></pre></td></tr></table></figure>
+<p>配置Prometheus</p>
+<p>在prometheus目录下有一个名为prometheus.yml的主配置文件。其中包含大多数标准配置及prometheus的自检控配置，默认配置文件如下：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ <span class="keyword">cat</span> /usr/local/prometheus/prometheus.yml</div><div class="line"># 全局配置</div><div class="line">globa<span class="variable">l:</span></div><div class="line">  scrape_interva<span class="variable">l:</span>     <span class="number">15</span>s # 默认抓取间隔, <span class="number">15</span>秒向目标抓取一次数据。</div><div class="line">  evaluation_interva<span class="variable">l:</span> <span class="number">15</span>s # Evaluate rules every <span class="number">15</span> seconds. The default <span class="keyword">is</span> every <span class="number">1</span> minute.</div><div class="line">  # scrape_timeout <span class="keyword">is</span> <span class="keyword">set</span> <span class="keyword">to</span> the <span class="keyword">global</span> default (<span class="number">10</span>s).</div><div class="line">  # 这个标签是在本机上每一条时间序列上都会默认产生的，主要可以用于联合查询、远程存储、Alertmanger时使用。</div><div class="line">  external_label<span class="variable">s:</span></div><div class="line">      monitor: <span class="string">'codelab-monitor'</span></div><div class="line"># Load rules once <span class="built_in">and</span> periodically evaluate them according <span class="keyword">to</span> the <span class="keyword">global</span> <span class="string">'evaluation_interval'</span>.</div><div class="line">rule_file<span class="variable">s:</span></div><div class="line">  # - <span class="string">"first.rules"</span></div><div class="line">  # - <span class="string">"second.rules"</span></div><div class="line"># 这里就表示抓取对象的配置</div><div class="line"># 这里是抓去promethues自身的配置</div><div class="line">scrape_config<span class="variable">s:</span></div><div class="line"># job name 这个配置是表示在这个配置内的时间序例，每一条都会自动添加上这个&#123;job_name:<span class="string">"prometheus"</span>&#125;的标签。</div><div class="line">  - job_name: <span class="string">'prometheus'</span></div><div class="line">    # metrics_path defaults <span class="keyword">to</span> <span class="string">'/metrics'</span></div><div class="line">    # scheme defaults <span class="keyword">to</span> <span class="string">'http'</span>.</div><div class="line">    # 重写了全局抓取间隔时间，由<span class="number">15</span>秒重写成<span class="number">5</span>秒。</div><div class="line">    scrape_interva<span class="variable">l:</span> <span class="number">5</span>s</div><div class="line">    static_config<span class="variable">s:</span></div><div class="line">      - target<span class="variable">s:</span> [<span class="string">'localhost:9090'</span>]</div></pre></td></tr></table></figure>
+<p>创建用户</p>
+<p>这里单独创建一个专门用于运行prometheus的用户，不用root运行程序是一种好习惯。主目录为/var/lib/prometheus，用作prometheus的数据目录。</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ groupadd prometheus</div><div class="line">$ useradd -g prometheus -m -d /var/<span class="class"><span class="keyword">lib</span>/<span class="title">prometheus</span> -<span class="title">s</span> /<span class="title">sbin</span>/<span class="title">nologin</span> <span class="title">prometheus</span></span></div></pre></td></tr></table></figure>
+<p>创建Systemd服务</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ vim /etc/systemd/system/prometheus.service</div><div class="line">[Unit]</div><div class="line"><span class="attr">Description=prometheus</span></div><div class="line"><span class="attr">After=network.target</span></div><div class="line">[Service]</div><div class="line"><span class="attr">Type=simple</span></div><div class="line"><span class="attr">User=prometheus</span></div><div class="line"><span class="attr">ExecStart=/usr/local/prometheus/prometheus</span> -config.<span class="attr">file=/usr/local/prometheus/prometheus.yml</span> -storage.local.<span class="attr">path=/var/lib/prometheus</span></div><div class="line"><span class="attr">Restart=on-failure</span></div><div class="line">[Install]</div><div class="line"><span class="attr">WantedBy=multi-user.target</span></div></pre></td></tr></table></figure>
+<p>启动Prometheus</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ systemctl <span class="literal">start</span> prometheus</div></pre></td></tr></table></figure>
+<p>验证Prometheus是否启动成功</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ systemctl status prometheus</div><div class="line">● prometheus.service - prometheus</div><div class="line"><span class="symbol">   Loaded:</span> loaded (<span class="meta-keyword">/etc/</span>systemd<span class="meta-keyword">/system/</span>prometheus.service; disabled; vendor preset: enabled)</div><div class="line"><span class="symbol">   Active:</span> active (running) since Mon <span class="number">2017</span><span class="number">-05</span><span class="number">-22</span> <span class="number">11</span>:<span class="number">13</span>:<span class="number">36</span> CST; <span class="number">18</span>s ago</div><div class="line"> Main PID: <span class="number">9175</span> (prometheus)</div><div class="line"><span class="symbol">    Tasks:</span> <span class="number">9</span></div><div class="line"><span class="symbol">   Memory:</span> <span class="number">15.8</span>M</div><div class="line"><span class="symbol">      CPU:</span> <span class="number">207</span>ms</div><div class="line"><span class="symbol">   CGroup:</span> /system.slice/prometheus.service</div><div class="line">           └─<span class="number">9175</span> <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/prometheus/</span>prometheus -config.file=<span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/prometheus/</span>prometheus.yml -storage.local.path=<span class="meta-keyword">/var/</span>lib/prometheus</div></pre></td></tr></table></figure>
+<p>访问自带Web</p>
+<p>Prometheus自带一个比较简单的Web，可以查看表达式搜索结果、报警配置、prometheus配置,exporter状态等。自带Web默认在<a href="http://ip:9090。" target="_blank" rel="external">http://ip:9090。</a></p>
+<p> <img src="https://www.msbgn.cn/msbgn/prometheus1.png" alt=" "></p>
+<p>Prometheus本身也是自带exporter的,我们通过请求 <a href="http://ip:9090/metrics" target="_blank" rel="external">http://ip:9090/metrics</a> 可以查看从exporter中能具体抓到哪些数据。</p>
+<p> <img src="https://www.msbgn.cn/msbgn/prometheus2.png" alt=" "></p>
+<p>这里以Prometheus本身数据为例，简单演示下在Web中查询指定表达式及图形化显示查询结果。</p>
+<p> <img src="https://www.msbgn.cn/msbgn/prometheus3.png" alt=" "></p>
+<h4 id="使用Prometheus监控服务器"><a href="#使用Prometheus监控服务器" class="headerlink" title="使用Prometheus监控服务器"></a>使用Prometheus监控服务器</h4><p>上面用Prometheus本身的数据简单演示了监控数据的查询，这里我们用一个监控服务器状态的例子来更加直观说明。</p>
+<p>为监控服务器CPU、内存、磁盘、I/O等信息，首先需要安装node_exporter。node_exporter的作用是用于机器系统数据收集。</p>
+<p>安装node_exporter</p>
+<p>node_exporter也是用Golang实现，直接使用预编译的二进制文件部署，开箱即用。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ wget https:<span class="comment">//github.com/prometheus/node_exporter/releases/download/v0.14.0/node_exporter-0.14.0.linux-amd64.tar.gz</span></div><div class="line">$ tar -zxvf node_exporter-<span class="number">0.14</span>.<span class="number">0</span><span class="selector-class">.linux-amd64</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></div><div class="line">$ mv node_exporter-<span class="number">0.14</span>.<span class="number">0</span><span class="selector-class">.linux-amd64</span> /usr/local/prometheus/node_exporter</div></pre></td></tr></table></figure>
+<p>创建Systemd服务</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ vim /etc/systemd/system/node_exporter.service</div><div class="line">[Unit]</div><div class="line">Description=node_exporter</div><div class="line">After=network.target</div><div class="line">[Service]</div><div class="line">Type=simple</div><div class="line">User=prometheus</div><div class="line">ExecStart=/usr/local/prometheus/node_exporter/node_exporter</div><div class="line">Restart=on-failure</div><div class="line">[Install]</div><div class="line">WantedBy=multi-user.target</div></pre></td></tr></table></figure>
+<p>启动Node exporter</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ systemctl <span class="literal">start</span> node_exporter</div></pre></td></tr></table></figure>
+<p>验证Node exporter是否启动成功</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ systemctl status node_exporter</div><div class="line">● node_exporter.service - node_exporter</div><div class="line"><span class="symbol">   Loaded:</span> loaded (<span class="meta-keyword">/etc/</span>systemd<span class="meta-keyword">/system/</span>node_exporter.service; disabled; vendor preset: enabled)</div><div class="line"><span class="symbol">   Active:</span> active (running) since Mon <span class="number">2017</span><span class="number">-05</span><span class="number">-22</span> <span class="number">12</span>:<span class="number">13</span>:<span class="number">43</span> CST; <span class="number">6</span>s ago</div><div class="line"> Main PID: <span class="number">11776</span> (node_exporter)</div><div class="line"><span class="symbol">    Tasks:</span> <span class="number">4</span></div><div class="line"><span class="symbol">   Memory:</span> <span class="number">1.5</span>M</div><div class="line"><span class="symbol">      CPU:</span> <span class="number">24</span>ms</div><div class="line"><span class="symbol">   CGroup:</span> /system.slice/node_exporter.service</div><div class="line">           └─<span class="number">11776</span> <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/prometheus/</span>node_exporter/node_exporter</div></pre></td></tr></table></figure>
+<p>修改prometheus.yml，加入下面的监控目标：</p>
+<p>Node Exporter默认的抓取地址为<a href="http://IP:9100/metrics" target="_blank" rel="external">http://IP:9100/metrics</a></p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ vim  <span class="regexp">/usr/</span>local<span class="regexp">/prometheus/</span>prometheus.yml</div><div class="line">  - <span class="string">job_name:</span> <span class="string">'linux'</span></div><div class="line"><span class="symbol">    static_configs:</span></div><div class="line">      - <span class="string">targets:</span> [<span class="string">'localhost:9100'</span>]</div><div class="line"><span class="symbol">        labels:</span></div><div class="line"><span class="symbol">          instance:</span> node1</div></pre></td></tr></table></figure>
+<p>prometheus.yml中一共定义了两个监控：一个是监控prometheus自身服务<br>另一个是监控Linux服务器。这里给个完整的示例：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="attribute">scrape_configs</span>:</div><div class="line">  - <span class="attribute">job_name</span>: <span class="string">'prometheus'</span></div><div class="line">    <span class="attribute">static_configs</span>:</div><div class="line">      - <span class="attribute">targets</span>: [<span class="string">'localhost:9090'</span>]</div><div class="line">  - <span class="attribute">job_name</span>: <span class="string">'linux'</span></div><div class="line">    <span class="attribute">static_configs</span>:</div><div class="line">      - <span class="attribute">targets</span>: [<span class="string">'localhost:9100'</span>]</div><div class="line">        <span class="attribute">labels</span>:</div><div class="line">          <span class="attribute">instance</span>: node1</div></pre></td></tr></table></figure>
+<p>重启Prometheus</p>
+<p>$ systemctl restart prometheus   </p>
+<p>在Prometheus Web查看监控的目标</p>
+<p>访问Prometheus Web，在Status-&gt;Targets页面下，我们可以看到我们配置的两个Target，它们的State为UP。</p>
+<p><img src="https://www.msbgn.cn/msbgn/prometheus4.png" alt=" "></p>
+<p>使用Prometheus Web来验证Node Exporter的数据已经被正确的采集。</p>
+<p>查看当前主机的CPU使用情况</p>
+<p><img src="https://www.msbgn.cn/msbgn/prometheus5.png" alt=" "></p>
+<p>查看当前主机的CPU负载情况</p>
+<p><img src="https://www.msbgn.cn/msbgn/prometheus6.png" alt=" "></p>
+<p>Prometheus Web界面自带的图表是非常基础的，比较适合用来做测试。如果要构建强大的Dashboard，还是需要更加专业的工具才行。接下来我们将使用Grafana来对Prometheus采集到的数据进行可视化展示。</p>
+<h4 id="给Prometheus添加一个强大的仪表盘"><a href="#给Prometheus添加一个强大的仪表盘" class="headerlink" title="给Prometheus添加一个强大的仪表盘"></a>给Prometheus添加一个强大的仪表盘</h4><p>Grafana是用于可视化大型测量数据的开源程序，它提供了强大和优雅的方式去创建、共享、浏览数据。Dashboard中显示了你不同metric数据源中的数据。</p>
+<p>Grafana最常用于因特网基础设施和应用分析，但在其他领域也有用到，比如：工业传感器、家庭自动化、过程控制等等。Grafana支持热插拔 控制面板和可扩展的数据源，目前已经支持Graphite、InfluxDB、OpenTSDB、Elasticsearch、Prometheus等。</p>
+<p>Grafana安装</p>
+<p>软件源里是比较旧的2.6版本，并且还需要单独打补丁才能正常使用Prometheus的数据源。这里直接下载4.2版本安装包进行安装。</p>
+<p>以Ubutu系统为例：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ wget http<span class="variable">s:</span>//s3-us-west-<span class="number">2</span>.amazonaws.<span class="keyword">com</span>/grafana-releases/release/grafana_4.<span class="number">2.0</span>_amd64.<span class="keyword">deb</span></div><div class="line">$ dpkg -i grafana_4.<span class="number">2.0</span>_amd64.<span class="keyword">deb</span></div></pre></td></tr></table></figure>
+<p>其它系统可在这里下载：<a href="https://grafana.com/grafana/download" target="_blank" rel="external">https://grafana.com/grafana/download</a></p>
+<p>启动Grafana</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ systemctl <span class="keyword">start</span> grafana-<span class="keyword">server</span></div></pre></td></tr></table></figure>
+<p>查看Grafana是否启动成功</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ systemctl status grafana-<span class="keyword">server</span></div></pre></td></tr></table></figure>
+<pre><code>
+● grafana-server.service - Grafana instance
+ Loaded: loaded (/usr/lib/systemd/system/grafana-server.service; masked; vendor preset: enabled)
+ Active: active (running) since Mon 2017-05-22 14:57:29 CST; 49min ago
+ Docs: http://docs.grafana.org
+ Main PID: 21735 (grafana-server)
+ CGroup: /system.slice/grafana-server.service
+ └─21735 /usr/sbin/grafana-server --config=/etc/grafana/grafana.ini --pidfile= cfg:default.paths.logs=/var/log/grafana cfg:default.paths.data=/var/lib/grafana cfg:default.paths.plugins=/var/lib/grafana/plugins
+</code></pre><p>访问Grafana 通过<a href="http://ip:3000访问Grafana" target="_blank" rel="external">http://ip:3000访问Grafana</a> Web界面(缺省帐号/密码为admin/admin)</p>
+<p><img src="https://www.msbgn.cn/msbgn/prometheus7.png" alt=" "></p>
+<p>在Grafana中添加Prometheus数据源</p>
+<p>Name:Prometheus<br>Type:Prometheus<br>Url:<a href="http://localhost:9090/" target="_blank" rel="external">http://localhost:9090/</a><br>Access:proxy</p>
+<p><img src="https://www.msbgn.cn/msbgn/prometheus8.png" alt=" "></p>
+<p>在Dashboards页面导入自带的Prometheus Status模板</p>
+<p><img src="https://www.msbgn.cn/msbgn/prometheus9.png" alt=" "></p>
+<p>导入Node Exporter Server Metrics模板</p>
+<p>访问<a href="https://grafana.com/dashboards/405，从这里下载Node" target="_blank" rel="external">https://grafana.com/dashboards/405，从这里下载Node</a> Exporter Server Metrics模板的JSON文件。</p>
+<p>在Grafana–Dashboard中导入这个文件，数据源选择Prometheus。</p>
+<p><img src="https://www.msbgn.cn/msbgn/prometheus10.png" alt=" "></p>
+<p>访问Dashboards</p>
+<p>在Dashboards上选Node Exporter Server Metrics模板，就可以看到被监控服务器的CPU, 内存, 磁盘等统计信息。</p>
+<p><img src="https://www.msbgn.cn/msbgn/prometheus11.png" alt=" "></p>
+<p>如果想具体查看某一项指标也是可以的。</p>
+<p><img src="https://www.msbgn.cn/msbgn/prometheus12.png" alt=" "></p>
+<p>在Dashboards上选Prometheus Status模板，查看Prometheus各项指标数据。</p>
+<p><img src="https://www.msbgn.cn/msbgn/prometheus13.png" alt=" "></p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="http://www.google.com" target="_blank" rel="external">http://www.google.com</a><br><a href="https://github.com/1046102779/prometheus" target="_blank" rel="external">https://github.com/1046102779/prometheus</a><br><a href="http://liubin.org/blog/2016/02/18/tsdb-intro/" target="_blank" rel="external">http://liubin.org/blog/2016/02/18/tsdb-intro/</a><br><a href="http://www.cnblogs.com/vovlie/p/Prometheus_install.html" target="_blank" rel="external">http://www.cnblogs.com/vovlie/p/Prometheus_install.html</a><br><a href="https://www.addops.cn/post/Prometheus-first-exploration.html" target="_blank" rel="external">https://www.addops.cn/post/Prometheus-first-exploration.html</a><br><a href="http://blog.frognew.com/2017/02/use-prometheus-on-centos7.html" target="_blank" rel="external">http://blog.frognew.com/2017/02/use-prometheus-on-centos7.html</a></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2017/05/27/Prometheus入门/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2017/05/27/Prometheus入门/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2017/05/27/press/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">press</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2017/05/27/Prometheus入门/" data-title="Prometheus入门" data-url="/2017/05/27/Prometheus入门/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/Prometheus入门/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/prometheus-arch.png)" alt="Prometheus入门" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Prometheus/">Prometheus</a></p>
+                            <p class="item-title"><a href="/2017/05/27/Prometheus入门/" class="title">Prometheus入门</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T09:41:15.536Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/press/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/05/27/press/" class="title">press</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T06:41:56.000Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/zabbixtomcat/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/tomcat211.png)" alt="zabbix 监控服务--------使用JMX监控tomcat" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/27/zabbixtomcat/" class="title">zabbix 监控服务--------使用JMX监控tomcat</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T03:56:37.548Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/zabbix/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/zabbix.png)" alt="Zabbix 源码安装配置" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/26/zabbix/" class="title">Zabbix 源码安装配置</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:36:31.962Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/05/26/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:35:06.510Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Prometheus/">Prometheus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">29</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prometheus/">Prometheus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Prometheus/" style="font-size: 10px;">Prometheus</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>我和python的第一次接触 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Python诞生Python是著名的’龟叔Guido van Rossum(吉多·范罗苏在1989年圣诞节期间，为了打发无聊的圣诞节而编写的一个编程语言。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我和python的第一次接触">
+<meta property="og:url" content="/2017/05/26/python01/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:description" content="Python诞生Python是著名的’龟叔Guido van Rossum(吉多·范罗苏在1989年圣诞节期间，为了打发无聊的圣诞节而编写的一个编程语言。">
+<meta property="og:image" content="https://www.msbgn.cn/msbgn/python01.jpg">
+<meta property="og:updated_time" content="2017-05-26T08:35:05.140Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我和python的第一次接触">
+<meta name="twitter:description" content="Python诞生Python是著名的’龟叔Guido van Rossum(吉多·范罗苏在1989年圣诞节期间，为了打发无聊的圣诞节而编写的一个编程语言。">
+<meta name="twitter:image" content="https://www.msbgn.cn/msbgn/python01.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/press">新闻资讯</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/press">新闻资讯</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">(醉卧沙场君莫笑)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                29
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                21
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-python01" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            我和python的第一次接触
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/05/26/python01/">
+            <time datetime="2017-05-26T08:35:05.140Z" itemprop="datePublished">2017-05-26</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/python/">python</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/python/">python</a>, <a class="tag-link" href="/tags/语言/">语言</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h2 id="Python诞生"><a href="#Python诞生" class="headerlink" title="Python诞生"></a>Python诞生</h2><p>Python是著名的’龟叔<code>Guido van Rossum(吉多·范罗苏</code>在1989年圣诞节期间，为了打发无聊的圣诞<br>节而编写的一个编程语言。</p>
+<p><img src="https://www.msbgn.cn/msbgn/python01.jpg" alt="python01"></p>
+<a id="more"></a>
+<p>Python语法很多来自C，但又受到ABC语言的强烈影响。来自ABC语言的一些规定直到今天还富有<br>争议比如强制缩进。但这些语法规定让Python容易读。<br>Guido van Rossum著名的一句话就是<code>Life is short, you need Python</code>，译为：<code>人生苦短，我用Python.</code><br><img src="https://www.msbgn.cn/msbgn/python02.jpg" alt="python02"></p>
+<p>截至到目前<code>2016年4月28日</code>，<code>Python在Tiobe</code>的排名还是很靠前的，而且近几年来说Python上升<br>的趋势已经超过PHP紧随C#。<br><img src="https://www.msbgn.cn/msbgn/python03.png" alt="python03"><br>查询网站：<a href="http://www.tiobe.com/tiobe_index?page=index" target="_blank" rel="external">http://www.tiobe.com/tiobe_index?page=index</a></p>
+<h3 id="Python实现方式"><a href="#Python实现方式" class="headerlink" title="Python实现方式"></a>Python实现方式</h3><p>Python身为一门编程语言，但是他是有多种实现方式的，这里的实现指的是符合Python语言规范的Python解释程序以及标准库等。</p>
+<ul>
+<li><code>Python的实现方式主要分为三大类</code></li>
+</ul>
+<ol>
+<li>Cpython</li>
+<li>PyPy</li>
+<li>Jpython、IronPython等等类似的实现方式</li>
+</ol>
+<ul>
+<li><p><code>CPython</code></p>
+<p>当Python执行代码的时候，会启用一个Python解释器，将源码(.py)文件读取到内存当中，然后编译成字节码(.pyc)文件，最后交给Python的虚拟机逐行解释并执行其内容，然后释放内存，退出程序。</p>
+<p>当第二次在执行当前程序的时候，会现在当前目录下寻找有没有同名的pyc文件，如果找到了，则直接进行运行，否则重复上面的工作。</p>
+<p>  pyc文件的目的其实就是为了实现代码的重用，为什么这么说呢？因为Python认为只要是import导入过来的文件，就是可以被重用的，那么他就会将这个文件编译成pyc文件。</p>
+<p>  python会在每次载入模块之前都会先检查一下py文件和pyc文件的最后修改日期，如果不一致则重新生成一份pyc文件，否则就直接读取运行。</p>
+</li>
+<li><p><code>PyPy</code></p>
+<p>  Python（RPython Python）的Python实现版本，原理是这样的，PyPy运行在CPython（或者其它实现）之上，用户程序运行在PyPy之上。它的一个目标是成为Python语言自身的试验场，因为可以很容易地修改PyPy解释器的实现（因为它是使用Python写的），PyPy的代码性能是Cpython的五倍以上。</p>
+</li>
+<li>性能对比图</li>
+</ul>
+<p><img src="https://www.msbgn.cn/msbgn/python005.png" alt="python05"></p>
+<ul>
+<li><p>Jython<br>ython是个Python的一种实现方式，Jython编译Python代码为Java字节码，然后由JVM（Java虚拟机）执行，这意味着此时Python程序与Java程序没有区别，只是源代码不一样。此外，它能够导入和使用任何Java类像Python模块。</p>
+</li>
+<li><p>IronPython<br>IronPython是Python的C#实现，并且它将Python代码编译成C#中间代码（与Jython类似），然后运行，它与.NET语言的互操作性也非常好。</p>
+</li>
+</ul>
+<h3 id="安装Python"><a href="#安装Python" class="headerlink" title="安装Python"></a>安装Python</h3><h4 id="Windows安装Python2-7-11"><a href="#Windows安装Python2-7-11" class="headerlink" title="Windows安装Python2.7.11"></a>Windows安装Python2.7.11</h4><ul>
+<li><p>下载Python软件<br>64位下载地址：<a href="https://www.python.org/ftp/python/2.7.11/python-2.7.11.amd64.msi" target="_blank" rel="external">https://www.python.org/ftp/python/2.7.11/python-2.7.11.amd64.msi</a><br>32位下载地址：<a href="https://www.python.org/ftp/python/2.7.11/python-2.7.11.msi" target="_blank" rel="external">https://www.python.org/ftp/python/2.7.11/python-2.7.11.msi</a></p>
+</li>
+<li><p>安装Python软件<br>下载下来之后双击安装，安装时一路下一步下一步即可，默认的安装路径是：C:\Python27</p>
+</li>
+<li><p>配置环境变量<br><code>右键计算机</code> —&gt; <code>属性</code> —&gt; <code>高级系统设置</code> —&gt; <code>高级</code> —&gt; <code>环境变量 —&gt;</code>在第二个内容框中找到变量名为Path的一行，双击 —&gt; Python安装目录追加到变值值中，<code>用;分割</code><br>如图：<br><img src="https://www.msbgn.cn/msbgn/python06.png" alt="python06"></p>
+</li>
+</ul>
+<p>如：原来的值``;C:\python27，切记前面有分号,Windows 10安装后默认会把环境变量配置好。</p>
+<ul>
+<li>cmd测试<br><code>win+r</code>调出运行窗口，然后输入<code>cmd</code></li>
+</ul>
+<p><img src="https://www.msbgn.cn/msbgn/pythond07.png" alt="python07"></p>
+<p>在<code>cmd</code>窗口中输入<code>python</code>指令<br><img src="https://www.msbgn.cn/msbgn/python08.png" alt="python08"></p>
+<p>如果你得到的结果和我一样，那么你就安装好了<code>windows</code>下的<code>python</code>环境</p>
+<h4 id="CentOS升级到Python2-7-11"><a href="#CentOS升级到Python2-7-11" class="headerlink" title="CentOS升级到Python2.7.11"></a><code>CentOS</code>升级到<code>Python2.7.11</code></h4><p>CentOS6.7默认自带Python2.6.6版本，如果你不需要升级到2.7.11请跳过这段，如果需要升级请继续往下看</p>
+<ul>
+<li>下载python2.7.11源码包<br>下载地址：<a href="https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tgz" target="_blank" rel="external">https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tgz</a></li>
+</ul>
+<ul>
+<li><p>安装开发工具包</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># yum -y groupinstall <span class="meta-string">"debugging Tools"</span></span></div></pre></td></tr></table></figure>
+</li>
+<li><p>编译安装</p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># tar xf Python-2.7.11.tgz</span></div><div class="line"><span class="meta"># cd Python-2.7.11</span></div><div class="line"><span class="meta"># ./configure -prefix=/usr/local/python2.7.11</span></div><div class="line"><span class="meta"># make &amp;&amp; # make install</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>更改配置<br>创建链接来使系统默认python变为python2.7</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># ln -<span class="built_in">fs</span> /usr/local/python2<span class="meta">.7</span><span class="meta">.11</span>/bin/python2<span class="meta">.7</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>查看Python版本</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># <span class="selector-tag">python</span> <span class="selector-tag">-V</span></div><div class="line"><span class="selector-tag">Python</span> 2<span class="selector-class">.7</span><span class="selector-class">.11</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>修改<code>yum</code>配置（否则<code>yum</code>无法正常运行）</p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># vim /usr/bin/yum</span></div><div class="line"><span class="meta"># !/usr/bin/python</span></div><div class="line"><span class="meta"># 将第一行改为</span></div><div class="line"><span class="meta"># !/usr/bin/python2.6</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Python简单入门"><a href="#Python简单入门" class="headerlink" title="Python简单入门"></a><code>Python</code>简单入门</h3><h4 id="Hello-Word"><a href="#Hello-Word" class="headerlink" title="Hello Word"></a><code>Hello Word</code></h4><p>一般情况下程序猿的第一个小程序都是简单的输出<code>Hello Word!</code>，当然Python也不例外，下面就让我们来用<code>Python</code>输出一句<code>Hello Word!</code>吧！</p>
+<ul>
+<li><p>创建一个以py结尾的文件</p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># touch hello.py</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>其内容为</p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/vin/env python</span></div><div class="line">print <span class="string">"Hello Word!"</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>用Python执行</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># python hello.py</span></div><div class="line"><span class="attribute">Hello</span> Word!</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>输出的内容为<code>Hello Word!</code>，<code>OK</code></p>
+<h4 id="Python代码执行流程"><a href="#Python代码执行流程" class="headerlink" title="Python代码执行流程"></a>Python代码执行流程</h4><p><img src="https://www.msbgn.cn/msbgn/python09.png" alt="python07"><br><code>释意</code>：当Python执行代码的时候，会先把源码读取到内存当中，然后由Cpython进行编译，编译成字节码，最后由Cpython的虚拟机一行一行的解释其内容，再输出到屏幕上，然后释放内存，退出程序。</p>
+<h4 id="pyc文件"><a href="#pyc文件" class="headerlink" title="pyc文件"></a>pyc文件</h4><p>执行<code>Python</code>代码时，如果导入了其他的.py文件，那么，执行过程中会自动生成一个与其同名的.pyc文件，该文件就是Python解释器编译之后产生的字节码。<br>代码经过编译可以产生字节码；字节码通过反编译也可以得到代码</p>
+<h4 id="指定Python解释器"><a href="#指定Python解释器" class="headerlink" title="指定Python解释器"></a>指定Python解释器</h4><p>在Python文件的开头加入以下代码就制定了解释器。</p>
+<ul>
+<li>第一种方式</li>
+</ul>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/python</span></div></pre></td></tr></table></figure>
+<p>告诉<code>shell</code>这个脚本用<code>/usr/bin/python</code>执行</p>
+<ul>
+<li>第二种方式</li>
+</ul>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env python</span></div></pre></td></tr></table></figure>
+<p>在操作系统环境不同的情况下制定这个脚本用python来解释。</p>
+<h4 id="执行Python文件"><a href="#执行Python文件" class="headerlink" title="执行Python文件"></a>执行Python文件</h4><p>执行Python文件的方式有两种</p>
+<ul>
+<li>例如hello.py的文件内容为</li>
+</ul>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env python</span></div><div class="line">print <span class="string">"Life is short, you need Pytho"</span></div></pre></td></tr></table></figure>
+<ul>
+<li>第一种执行方式</li>
+</ul>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># python my.py</span></div><div class="line">Life <span class="keyword">is</span> <span class="keyword">short</span>, you need Pytho</div></pre></td></tr></table></figure>
+<p>如果使用<code>python my.py</code>这种方式执行，那么<code>#!/usr/bin/python</code>会被忽略，等同于注释。</p>
+<ul>
+<li>第二种执行方式</li>
+</ul>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># chmod +x my.py </span></div><div class="line"><span class="meta"># ./my.py </span></div><div class="line">Life is <span class="keyword">short</span>, you need Pytho</div></pre></td></tr></table></figure>
+<p>如果使用<code>./my.py</code>来执行，那么<code>#!/usr/bin/python</code>则是指定解释器的路径，在执行之前<code>my.py</code>这个文件必须有执行权限。</p>
+<p><code>python my.py</code>实则就是在my.py文件顶行加入了<code>#!/usr/bin/python</code></p>
+<h3 id="字符编码"><a href="#字符编码" class="headerlink" title="字符编码"></a>字符编码</h3><p>python解释器在加载<code>.py</code>文件中的代码时，会对内容进行编码，python2.7内部默认<code>ascii</code>字符，而最新的<code>python3.5</code>默认使用UTF-8。<br><code>ascii</code>字符(26个字母，8位表示所有，字符，英文 数字 )<br>万国码(unicode，最少两个字节，所有的字符，一个中文汉字3个字节表示，占用字节多，浪费空间)<br>UTF-8（unicode：英文特殊字符用八位表示，中文–24位….,解决unicode所占用的内存）</p>
+<h4 id="指定字符编码"><a href="#指定字符编码" class="headerlink" title="指定字符编码"></a>指定字符编码</h4><p>python制定字符编码的方式有多种，而编码格式是要写在解释器的下面的，常用的如下面三种:</p>
+<ul>
+<li>第一种</li>
+</ul>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env python</span></div><div class="line"># _*_ coding:utf-<span class="number">8</span> _*_</div></pre></td></tr></table></figure>
+<ul>
+<li>第二种</li>
+</ul>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env python</span></div><div class="line"># -*- coding:utf-<span class="number">8</span> -*-</div></pre></td></tr></table></figure>
+<ul>
+<li>第三种</li>
+</ul>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env python</span></div><div class="line"># coding:utf-<span class="number">8</span></div></pre></td></tr></table></figure>
+<h3 id="代码注释"><a href="#代码注释" class="headerlink" title="代码注释"></a>代码注释</h3><h4 id="单行注释"><a href="#单行注释" class="headerlink" title="单行注释"></a>单行注释</h4><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># 注释内容</span></div></pre></td></tr></table></figure>
+<h4 id="多行注释"><a href="#多行注释" class="headerlink" title="多行注释"></a>多行注释</h4><p>多行注释用三个单引号或者三个双引号躲起来</p>
+<p>单行注释只需要在代码前面加上#号</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">"""</span></div><div class="line">注释内容</div><div class="line">"""</div></pre></td></tr></table></figure>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p><code>py</code>脚本原文件内容</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># <span class="symbol">_</span>*<span class="symbol">_</span> coding:utf-<span class="number">8</span> <span class="symbol">_</span>*<span class="symbol">_</span></div><div class="line"><span class="built_in">print</span> <span class="string">"My name isAlexzhou"</span></div><div class="line"><span class="built_in">print</span> <span class="string">"I'm a Python developer"</span></div><div class="line"><span class="built_in">print</span> <span class="string">"My blog URL: http://msbgn.cn"</span></div><div class="line"><span class="built_in">print</span> <span class="string">"Life is short, you need Pytho"</span></div></pre></td></tr></table></figure>
+<p>源文件输出的内容<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># python my.py </div><div class="line">My name <span class="keyword">is</span> Alexzhou</div><div class="line">I<span class="symbol">'m</span> a Python developer</div><div class="line">My blog URL: https://www.msbgn.cn</div><div class="line">Life <span class="keyword">is</span> short, you need Pytho</div></pre></td></tr></table></figure></p>
+<ul>
+<li>单行注释演示</li>
+<li>代码改为</li>
+</ul>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># <span class="symbol">_</span>*<span class="symbol">_</span> coding:utf-<span class="number">8</span> <span class="symbol">_</span>*<span class="symbol">_</span></div><div class="line"><span class="built_in">print</span> <span class="string">"My name is Alexzhou"</span></div><div class="line"><span class="built_in">print</span> <span class="string">"I'm a Python developer"</span></div><div class="line"><span class="built_in">print</span> <span class="string">"My blog URL: https://www.msbgn.cn"</span></div><div class="line">#<span class="built_in">print</span> <span class="string">"Life is short, you need Pytho"</span></div></pre></td></tr></table></figure>
+<p>执行结果</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># python my.py </span></div><div class="line">My name is Alexzhou</div><div class="line">I'm a Python developer</div><div class="line">My blog URL: https:<span class="comment">//www.msbgn.cn</span></div></pre></td></tr></table></figure>
+<p>结果<code>Life is short, you need Pythoprint</code>出来</p>
+<ul>
+<li>多行注释演示</li>
+<li>代码改为</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># _*_ coding:utf-8 _*_</span></div><div class="line"><span class="keyword">print</span> <span class="string">"My name is Alexzhou"</span></div><div class="line"><span class="string">"""</span></div><div class="line">print "I'm a Python developer"</div><div class="line">print "Life is short, you need Pytho"</div><div class="line">"""</div></pre></td></tr></table></figure>
+<ul>
+<li>执行结果</li>
+</ul>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># python my.py </span></div><div class="line">My <span class="built_in">name</span> <span class="keyword">is</span> Alexzhou</div></pre></td></tr></table></figure>
+<p>print输出多行<br>既然用单个单引号或者多引号可以注释多行，那么能不能print多行呢？</p>
+<ul>
+<li>代码</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># _*_ coding:utf-8 _*_</span></div><div class="line"><span class="keyword">print</span> <span class="string">"""</span></div><div class="line">My name is Alexzhou</div><div class="line">I'm a Python developer</div><div class="line">My blog URL: https://www.msbgn.cn</div><div class="line">Life is short, you need Python.</div><div class="line">"""</div></pre></td></tr></table></figure>
+<p>执行结果<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"># python my.py </div><div class="line">My name <span class="keyword">is</span> Alexzhou</div><div class="line">I<span class="symbol">'m</span> a Python developer</div><div class="line">My blog URL: https://www.msbgn.cn</div><div class="line">Life <span class="keyword">is</span> short, you need Python.</div></pre></td></tr></table></figure></p>
+<p>变量</p>
+<p>1.变量名只能包含数字、字幕、下划线<br>2.不能以数字开头<br>3.变量名不能使python内部的关键字</p>
+<ul>
+<li>Python内部已占用的关键字<br>[‘and’, ‘as’, ‘assert’, ‘break’, ‘class’, ‘continue’, ‘def’, ‘del’, ‘elif’, ‘else’, ‘except’, ‘exec’, ‘finally’, ‘for’, ‘from’, ‘g]</li>
+<li>定义变量</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;</span>&gt; name = <span class="string">"Alexzhou"</span> </div><div class="line"><span class="meta">&gt;&gt;</span>&gt; print name</div><div class="line">Alexzhou</div></pre></td></tr></table></figure>
+<h3 id="基本的数据类型"><a href="#基本的数据类型" class="headerlink" title="基本的数据类型"></a>基本的数据类型</h3><ul>
+<li>字符串(str)<br>定义字符串类型是需要用单引号或者双引号包起来的</li>
+</ul>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; name = <span class="string">"Alexzhou"</span></div><div class="line">&gt;&gt;&gt; print(<span class="name">type</span>(<span class="name">name</span>))</div><div class="line">&lt;type 'str'&gt;</div></pre></td></tr></table></figure>
+<p> 或者</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="keyword">name</span> = <span class="string">'Alexzhou'</span></div><div class="line">&gt;&gt;&gt; print(<span class="keyword">type</span>(<span class="keyword">name</span>))</div><div class="line">&lt;<span class="keyword">type</span> <span class="string">'str'</span>&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>数字(int)<br>证书类型定义的时候变量名后面可以直接跟数字，不要用双引号包起来。</li>
+</ul>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; age = <span class="number">20</span></div><div class="line">&gt;&gt;&gt; print(<span class="name">type</span>(<span class="name">age</span>))</div><div class="line">&lt;type 'int'&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>布尔值()<br>布尔值就只有<code>True</code>(真)，<code>Flash</code>(假)</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">if</span> <span class="keyword">True</span>:</div><div class="line"><span class="meta">... </span> print(<span class="string">"0"</span>)</div><div class="line"><span class="meta">... </span><span class="keyword">else</span>:</div><div class="line"><span class="meta">... </span> print(<span class="string">"1"</span>)</div><div class="line">...</div><div class="line"><span class="number">0</span></div></pre></td></tr></table></figure>
+<p>解释：如果为真则输出<code>0</code>，否则输出<code>1</code></p>
+<h3 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h3><h4 id="if语句"><a href="#if语句" class="headerlink" title="if语句"></a>if语句</h4><p>if语句是用来检查一个条件：如果条件为真(true)，我们运行一个语句块（你为if块），否则(else)，我们执行另一个语句块（称为else块）。else子语句是可选的。</p>
+<h4 id="单条件"><a href="#单条件" class="headerlink" title="单条件"></a>单条件</h4><p>例题：如果num变量大于1，那么就输出num大，否则就输出num小，num值为5。</p>
+<ul>
+<li>代码</li>
+</ul>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env python</span></div><div class="line"># -*- coding:utf-<span class="number">8</span> -*-</div><div class="line">num = <span class="number">5</span></div><div class="line"><span class="keyword">if</span> num &gt; <span class="number">1</span>:     </div><div class="line"> print(<span class="string">"num大"</span>)</div><div class="line"><span class="keyword">else</span>:</div><div class="line"> print(<span class="string">"num小"</span>)</div></pre></td></tr></table></figure>
+<p>结果<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># python <span class="built_in">num</span>.py</div><div class="line"><span class="built_in">num</span>大</div></pre></td></tr></table></figure></p>
+<h4 id="多条件"><a href="#多条件" class="headerlink" title="多条件"></a>多条件</h4><p>例题：如果num变量大于5，那么就输出num大于5，如果num变量小于5，那么就输出num小于5，否则就输出num等于5，num值为5。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding:utf-8 -*-</span></div><div class="line">num = 5</div><div class="line"><span class="keyword">if</span> num &gt; 5:</div><div class="line"> <span class="built_in">print</span>(<span class="string">"num大于5"</span>)</div><div class="line"><span class="keyword">elif</span> num &lt; 5:</div><div class="line"> <span class="built_in">print</span>(<span class="string">"num小于5"</span>)</div><div class="line"><span class="keyword">else</span>:</div><div class="line"> <span class="built_in">print</span>(<span class="string">"num等于5"</span>)</div></pre></td></tr></table></figure></p>
+<p>结果<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">python <span class="built_in">num</span>.py</div><div class="line"><span class="built_in">num</span>等于<span class="number">5</span></div></pre></td></tr></table></figure></p>
+<p>» python基础教程分享百度云盘链接: <a href="https://pan.baidu.com/s/1eSyXdx4" target="_blank" rel="external">https://pan.baidu.com/s/1eSyXdx4</a> 密码: 3ehk<br>» 文章出自链接：<a href="https://blog.ansheng.me/2016/04/python-full-stack-way-basics.html" target="_blank" rel="external">https://blog.ansheng.me/2016/04/python-full-stack-way-basics.html</a></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2017/05/26/python01/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2017/05/26/python01/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/05/26/nginxw/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    nginx的URL重定向功能
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/05/26/Python003/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Python的数据类型和运算</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2017/05/26/python01/" data-title="我和python的第一次接触" data-url="/2017/05/26/python01/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/Prometheus入门/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/prometheus-arch.png)" alt="Prometheus入门" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Prometheus/">Prometheus</a></p>
+                            <p class="item-title"><a href="/2017/05/27/Prometheus入门/" class="title">Prometheus入门</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T09:41:15.536Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/press/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/05/27/press/" class="title">press</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T06:41:56.000Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/zabbixtomcat/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/tomcat211.png)" alt="zabbix 监控服务--------使用JMX监控tomcat" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/27/zabbixtomcat/" class="title">zabbix 监控服务--------使用JMX监控tomcat</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T03:56:37.548Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/zabbix/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/zabbix.png)" alt="Zabbix 源码安装配置" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/26/zabbix/" class="title">Zabbix 源码安装配置</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:36:31.962Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/05/26/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:35:06.510Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Prometheus/">Prometheus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">29</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prometheus/">Prometheus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Prometheus/" style="font-size: 10px;">Prometheus</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

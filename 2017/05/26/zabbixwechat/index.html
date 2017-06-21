@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>zabbix如何实现微信报警 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta property="og:type" content="article">
+<meta property="og:title" content="zabbix如何实现微信报警">
+<meta property="og:url" content="/2017/05/26/zabbixwechat/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:image" content="https://www.msbgn.cn/msbgn/wexin1.png">
+<meta property="og:updated_time" content="2017-05-26T08:35:04.454Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zabbix如何实现微信报警">
+<meta name="twitter:image" content="https://www.msbgn.cn/msbgn/wexin1.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/press">新闻资讯</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/press">新闻资讯</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">(醉卧沙场君莫笑)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                29
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                21
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-zabbixwechat" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            zabbix如何实现微信报警
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/05/26/zabbixwechat/">
+            <time datetime="2017-05-26T08:35:04.454Z" itemprop="datePublished">2017-05-26</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/zabbix/">zabbix</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/zabbix/">zabbix</a>, <a class="tag-link" href="/tags/监控/">监控</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p><img src="https://www.msbgn.cn/msbgn/wexin1.png" alt="微信报警机制"></p>
+<a id="more"></a>
+<h3 id="申请企业号"><a href="#申请企业号" class="headerlink" title="申请企业号"></a>申请企业号</h3><p>首先需要申请一个企业号，其实公众号也可以，不过脚本不一样。而且公众号任何人都可以关注，有泄密的风险。企业号只有指定的人可以关注，安全性较高。<br>申请企业号，需要一个绑定你本人开户银行卡的微信号。<br>申请网址<a href="https://qy.weixin.qq.com/" target="_blank" rel="external">https://qy.weixin.qq.com/</a><br>点击“立即注册”。<br>根据提示注册企业号，到“选择类型”时，选择最右边的企业号。</p>
+<p><img src="https://www.msbgn.cn/msbgn/wexin00.png" alt="zabbix agent"></p>
+<p>“主体类型”中选择“团队”。<br>注意：企业描述中：“报警”是敏感词不能使用。</p>
+<hr>
+<hr>
+<h3 id="设置企业号"><a href="#设置企业号" class="headerlink" title="设置企业号"></a>设置企业号</h3><p>如果一切顺利，申请成功并登录企业号，进入如下界面：</p>
+<p><img src="https://www.msbgn.cn/msbgn/wexin1.png" alt=" "></p>
+<p>（没有头像的话，去“设置”里自己传一个）<br>进入“通讯录”，点击“组织架构”旁边的加号，点击“新增成员”</p>
+<p><img src="https://www.msbgn.cn/msbgn/wexin2.png" alt=" "><br><img src="https://www.msbgn.cn/msbgn/wexin3.png" alt=" "></p>
+<p>填写完成后点击“保存”，如果一切顺利则应该可以看到用户。</p>
+<p><img src="https://www.msbgn.cn/msbgn/wexin4.png" alt=" "></p>
+<p>注：这里的账号相当于你的企业账号，与微信号无关。<br>必须先在此处创建用户，并且填写正确的微信号或者手机号，才可通过扫描二维码关注该企业号（知道为何安全了吧）。</p>
+<h3 id="关注企业号的方法"><a href="#关注企业号的方法" class="headerlink" title="关注企业号的方法"></a>关注企业号的方法</h3><p>点击左侧的“设置”-二维码，使用微信扫一扫扫描二维码。</p>
+<p><img src="https://www.msbgn.cn/msbgn/wexin5.png" alt=" "></p>
+<p>点击左侧列的“应用中心”，点击“我的应用”下面的加号。填写应用名称，描述。<br>一切正常的话，点击进入刚才创建的应用。</p>
+<p><img src="https://www.msbgn.cn/msbgn/wexin6.png" alt=" "></p>
+<p>这里要记住一个值：应用ID。</p>
+<p>设置管理员：<br>设置-功能设置-权限管理-新建管理组,设置权限中，保证管理员可以读取访问通讯录，可以发消息。<br>添加管理员之后，屏幕上显示二维码，用你的微信扫一扫扫描二维码并且设置登录密码。<br><img src="https://www.msbgn.cn/msbgn/wexin7.png" alt=" "></p>
+<p>注意：这里要记录下来下面的CorpID和Secret。<br>现在万事俱备，可以开始编写脚本了。</p>
+<h3 id="编写脚本"><a href="#编写脚本" class="headerlink" title="编写脚本"></a>编写脚本</h3><p>检查/usr/etc/zabbix/zabbix_server.conf 中，加入<br> AlertScriptsPath=/usr/lib/zabbix/alertscripts<br>如果有的话，就确定好报警目录。<br>创建目录。<br>mkdir –p /usr/lib/zabbix/alertscripts<br>在目录下创建<code>wechat.sh</code> 脚本文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line">CorpID=&lt;刚才记下来的CorpID，不要包含尖括号&gt;</div><div class="line">Secret=&lt;刚才记下来的Secret，不要包含尖括号&gt;</div><div class="line">GURL=<span class="string">"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=<span class="variable">$CorpID</span>&amp;corpsecret=<span class="variable">$Secret</span>"</span></div><div class="line">Gtoken=$(/usr/bin/curl <span class="_">-s</span> -G <span class="variable">$GURL</span> | awk -F\<span class="string">" '&#123;print <span class="variable">$4</span>&#125;')</span></div><div class="line"></div><div class="line">PURL="https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=<span class="variable">$Gtoken</span><span class="string">"</span></div><div class="line"></div><div class="line">function body() &#123;</div><div class="line">        local int AppID=&lt;刚才记下来的应用id，不要包含尖括号&gt;                        </div><div class="line">        local UserID=<span class="variable">$1</span>                        </div><div class="line">        local PartyID=1                          </div><div class="line">        local Msg=<span class="variable">$(echo "$@" | cut -d" " -f3-)</span>  </div><div class="line">        printf '&#123;\n'</div><div class="line">        printf '\t"touser<span class="string">": "</span><span class="string">'"$User"\"",\n"</span></div><div class="line">        printf '\t<span class="string">"toparty"</span>: <span class="string">"'"</span><span class="variable">$PartyID</span><span class="string">"\""</span>,\n<span class="string">"</span></div><div class="line">        printf '\t"msgtype<span class="string">": "</span>text<span class="string">",\n'</span></div><div class="line">        printf '\t"agentid<span class="string">": "</span><span class="string">'" $AppID "\"",\n"</span></div><div class="line">        printf '\t<span class="string">"text"</span>: &#123;\n<span class="string">'</span></div><div class="line">        printf '\t\t<span class="string">"content"</span>: <span class="string">"'"</span><span class="variable">$Msg</span><span class="string">"\""</span>\n<span class="string">"</span></div><div class="line">        printf '\t&#125;,\n'</div><div class="line">        printf '\t"safe<span class="string">":"</span>0<span class="string">"\n'</span></div><div class="line">        printf '&#125;\n'</div><div class="line">&#125;</div><div class="line">/usr/bin/curl --data-ascii "$(body <span class="variable">$1</span> <span class="variable">$2</span> <span class="variable">$3</span>)<span class="string">" <span class="variable">$PURL</span></span></div></pre></td></tr></table></figure>
+<p>将上面文字部分替换成自己记录下来的值。保存退出</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chown –R <span class="symbol">zabbix:</span>zabbix /usr/<span class="class"><span class="keyword">lib</span>/<span class="title">zabbix</span>/<span class="title">alertscripts</span></span></div><div class="line">chmod <span class="number">750</span>/usr/<span class="class"><span class="keyword">lib</span>/<span class="title">zabbix</span>/<span class="title">alertscripts</span>/<span class="title">wechat</span>.<span class="title">sh</span></span></div></pre></td></tr></table></figure>
+<p>执行<code>./wechat.sh 1 1 test</code> 看自己微信是否能收到东西。<br>如果能的话，继续下一步。反之检查上面有什么问题。</p>
+<h3 id="添加触发器"><a href="#添加触发器" class="headerlink" title="添加触发器"></a>添加触发器</h3><p> <img src="https://www.msbgn.cn/msbgn/weixin10.png" alt=" "></p>
+<p>点击管理(Administration)-媒体类型(Media types)-创建媒体类型(Create media type)</p>
+<p> <img src="https://www.msbgn.cn/msbgn/weixin11.png" alt=" "></p>
+<p>类型（Type）中选择脚本（Script），脚本名称（Script name）里填写wechat.sh<br>点击旁边的用户(User)创建一个用户。</p>
+<p> <img src="https://www.msbgn.cn/msbgn/weixin12.png" alt=" "><br> <img src="https://www.msbgn.cn/msbgn/weixin13.png" alt=" "><br> 在Media中点击Add<br> <img src="https://www.msbgn.cn/msbgn/weixin14.png" alt=" "><br> <img src="https://www.msbgn.cn/msbgn/weixin15.png" alt=" "></p>
+<p>When active中按如图填写，默认为7*24小时<br>Use if severity选择通告何种等级的消息，从上往下分别是：未分类，资讯，警告，一般，高威胁，灾难。<br>Send to 填写你的微信号。<br>点击Add.</p>
+<p><img src="https://www.msbgn.cn/msbgn/weixin16.png" alt=" "></p>
+<p>下一步，点击许可权（Permissions），将用户类型（User type）改为Zabbix超级用户（Zabbix Super Admin）。<br>创建触发动作。</p>
+<p><img src="https://www.msbgn.cn/msbgn/weixin17.png" alt=" "></p>
+<p>如此填写：</p>
+<p><img src="https://www.msbgn.cn/msbgn/weixin18.png" alt=" "></p>
+<p><code>Host:{HOST.NAME}</code><br><code>Time:{EVENT.DATE} {EVENT.TIME}</code><br><code>Status:{TRIGGER.STATUS}</code><br><code>Event:{TRIGGER.NAME}</code></p>
+<p>勾选下面的故障恢复信息(Recovery message)并在Recovery message中填写：<br><code>Server recovered.</code><br><code>Host:{HOST.NAME}</code><br><code>Time:{EVENT.DATE} {EVENT.TIME}</code><br><code>Status:{TRIGGER.STATUS}</code><br><code>Event:{TRIGGER.NAME}</code></p>
+<p>这样当服务器恢复后，可以收到一条以Server recovered开头的信息，省去了大半夜打车跑公司之苦。<br>条件(Conditions)无视。</p>
+<p><img src="https://www.msbgn.cn/msbgn/weixin19.png" alt=" "></p>
+<p>点击Operations，点击New</p>
+<p><img src="https://www.msbgn.cn/msbgn/weixin20.png" alt=" "></p>
+<p>点击User中的Add. </p>
+<p><img src="https://www.msbgn.cn/msbgn/weixin21.png" alt=" "></p>
+<p>点击刚才创建的用户。</p>
+<p><img src="https://www.msbgn.cn/msbgn/weixin22.png" alt=" "></p>
+<p>最后结果如图，点击Add。然后点击最下面的Add.<br>配置完毕，现在关闭被监控机。[root@Jewel ~]# service network stop<br>等一会，若微信收到消息，则配置成功。</p>
+<p><img src="https://www.msbgn.cn/msbgn/wwwx11.png" alt=" 故障告警信息与故障恢复信息 "><br>反之检查Zabbix报警是否有问题。<br>至此监控报警已经配置完成。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2017/05/26/zabbixwechat/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2017/05/26/zabbixwechat/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/05/26/zabbixFping/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Zabbix 配置Fping
+                
+            </div>
+        </a>
+    
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2017/05/26/zabbixwechat/" data-title="zabbix如何实现微信报警" data-url="/2017/05/26/zabbixwechat/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/Prometheus入门/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/prometheus-arch.png)" alt="Prometheus入门" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Prometheus/">Prometheus</a></p>
+                            <p class="item-title"><a href="/2017/05/27/Prometheus入门/" class="title">Prometheus入门</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T09:41:15.536Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/press/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/05/27/press/" class="title">press</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T06:41:56.000Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/zabbixtomcat/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/tomcat211.png)" alt="zabbix 监控服务--------使用JMX监控tomcat" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/27/zabbixtomcat/" class="title">zabbix 监控服务--------使用JMX监控tomcat</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T03:56:37.548Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/zabbix/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/zabbix.png)" alt="Zabbix 源码安装配置" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/26/zabbix/" class="title">Zabbix 源码安装配置</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:36:31.962Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/05/26/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:35:06.510Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Prometheus/">Prometheus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">29</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prometheus/">Prometheus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Prometheus/" style="font-size: 10px;">Prometheus</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

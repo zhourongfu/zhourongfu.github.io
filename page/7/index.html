@@ -5,15 +5,15 @@
     
     <title>AlexZhou</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="msbgn blog">
+    <meta name="description" content="醉卧沙场">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AlexZhou">
 <meta property="og:url" content="/page/7/index.html">
 <meta property="og:site_name" content="AlexZhou">
-<meta property="og:description" content="msbgn blog">
+<meta property="og:description" content="醉卧沙场">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AlexZhou">
-<meta name="twitter:description" content="msbgn blog">
+<meta name="twitter:description" content="醉卧沙场">
     
 
     
@@ -60,6 +60,8 @@
                     <a class="main-nav-link" href="/archives">归档</a>
                 
                     <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/press">新闻资讯</a>
                 
             </nav>
             
@@ -124,6 +126,8 @@
                 
                     <td><a class="main-nav-link" href="/about">关于</a></td>
                 
+                    <td><a class="main-nav-link" href="/press">新闻资讯</a></td>
+                
                 <td>
                     
     <div class="search-form">
@@ -145,18 +149,18 @@
         <div class="base-info profile-block">
             <img id="avatar" src="/css/images/avatar.png" />
             <h2 id="name">AlexZhou</h2>
-            <h3 id="title">Time Flies(岁月如梭)</h3>
+            <h3 id="title">(醉卧沙场君莫笑)</h3>
             <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
             <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
            <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
 	 </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                27
+                29
                 <span>文章</span>
             </div>
             <div class="article-info-block">
-                20
+                21
                 <span>标签</span>
             </div>
         
@@ -174,13 +178,13 @@
                     </td>
                     
                     <td>
-                        <a href="http://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
                             <i class="fa fa-weixin"></i>
                         </a>
                     </td>
                     
                     <td>
-                        <a href="http://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                        <a href="https://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
                             <i class="fa fa-qq"></i>
                         </a>
                     </td>
@@ -194,7 +198,7 @@
 
             
             <section id="main">
-    <article id="post-python01" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-nginxw" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -202,7 +206,7 @@
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/11/03/python01/">我和python的第一次接触</a>
+            <a class="article-title" href="/2017/05/26/nginxw/">nginx的URL重定向功能</a>
         </h1>
     
 
@@ -211,8 +215,119 @@
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/11/03/python01/">
-            <time datetime="2016-11-03T07:29:07.497Z" itemprop="datePublished">2016-11-03</time>
+        <a href="/2017/05/26/nginxw/">
+            <time datetime="2017-05-26T08:35:05.180Z" itemprop="datePublished">2017-05-26</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/nginx/">nginx</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/nginx/">nginx</a>, <a class="tag-link" href="/tags/科技/">科技</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>location</p>
+<p>语法:location [=|~|~<em>|^~] /uri/ { … }<br>默认:否<br>这个指令随URL不同而接受不同的结构。你可以配置使用常规字符串和正则表达式。如果使用正则表达式，你必须使用 ~</em> 前缀选择不区分大小写的匹配或者 ~ 选择区分大小写的匹配。</p>
+<p>确定 哪个location 指令匹配一个特定指令，常规字符串第一个测试。常规字符串匹配请求的开始部分并且区分大小写，最明确的匹配将会被使用（查看下文明白 nginx 怎么确定它）。然后正则表达式按照配置文件里的顺序测试。找到第一个比配的正则表达式将停止搜索。如果没有找到匹配的正则表达式，使用常规字符串的结果。</p>
+<p>有两个方法修改这个行为。第一个方法是使用 “=”前缀，将只执行严格匹配。如果这个查询匹配，那么将停止搜索并立即处理这个请求。例子：如果经常发生”/”请求，那么使用 “location = /” 将加速处理这个请求。</p>
+<p>第二个是使用 ^~ 前缀。如果把这个前缀用于一个常规字符串那么告诉nginx 如果路径匹配那么不测试正则表达式。</p>
+<p>而且它重要在于 NGINX 做比较没有 URL 编码，所以如果你有一个 URL 链接’/images/%20/test’ , 那么使用 “images/ /test” 限定location。<br></p>
+            <p class="article-more-link">
+                <a href="/2017/05/26/nginxw/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2017/05/26/nginxw/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2017/05/26/nginxw/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+    
+</article>
+
+
+
+
+    <article id="post-python01" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2017/05/26/python01/">我和python的第一次接触</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/05/26/python01/">
+            <time datetime="2017-05-26T08:35:05.140Z" itemprop="datePublished">2017-05-26</time>
         </a>
     </div>
 
@@ -237,9 +352,9 @@
         <div class="article-entry" itemprop="articleBody">
         
             <p><h2 id="Python诞生"><a href="#Python诞生" class="headerlink" title="Python诞生"></a>Python诞生</h2><p>Python是著名的’龟叔<code>Guido van Rossum(吉多·范罗苏</code>在1989年圣诞节期间，为了打发无聊的圣诞<br>节而编写的一个编程语言。</p>
-<p><img src="http://www.msbgn.cn/msbgn/python01.jpg" alt="python01"></p></p>
+<p><img src="https://www.msbgn.cn/msbgn/python01.jpg" alt="python01"></p></p>
             <p class="article-more-link">
-                <a href="/2016/11/03/python01/#more">查看更多</a>
+                <a href="/2017/05/26/python01/#more">查看更多</a>
             </p>
         
         </div>
@@ -287,7 +402,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
            
     
-        <a href="/2016/11/03/python01/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/11/03/python01/">评论</a>
+        <a href="/2017/05/26/python01/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2017/05/26/python01/">评论</a>
     
 
 ~        
@@ -295,98 +410,13 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         </footer>
     </div>
     
-	<!-- css -->
-	<style type="text/css">
-	    .center {
-	        text-align: center;
-	    }
-	    .hidden {
-	        display: none;
-	    }
-		.donate_bar a.btn_donate{
-			display: inline-block;
-			width: 82px;
-			height: 82px;
-			background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
-			_background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
-			<!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
-			     因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
-				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
-				 嵌入其它博客时不一定要它们。 -->
-			-webkit-transition: background 0s;
-			-moz-transition: background 0s;
-			-o-transition: background 0s;
-			-ms-transition: background 0s;
-			transition: background 0s;
-			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
-		}
-		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
-		.donate_bar .donate_txt {
-			display: block;
-			color: #9d9d9d;
-			font: 14px/2 "Microsoft Yahei";
-		}
-		.bold{ font-weight: bold; }
-	</style>
-	<!-- /css -->
-    <!-- Donate Module -->
-    <div id="donate_module">
-	<!-- btn_donate & tips -->
-	<div id="donate_board" class="donate_board donate_bar center">
-	    <br>
-	    ------------------------------------------------------------------------------------------------------------------------------
-	    <br>
-		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
-		<span class="donate_txt">
-			打赏我的人，据说都找到了女朋友~~
-		</span>
-
-
-	</div>
-	<!-- /btn_donate & tips -->
-	<!-- donate guide -->
-
-	<div id="donate_guide" class="donate_bar center hidden">
-        <br>
-	    ------------------------------------------------------------------------------------------------------------------------------
-	    <br>
-	    
-	    <div width="100%" align="center"><div name="dashmain" id="dash-main-id-878d88" class="dash-main-3 878d88-0.88"></div><script
-	    type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-		
-		<a href="http://www.msbgn.cn/msbgn/xpchatpay.png" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-			<img src="http://www.msbgn.cn/msbgn/xpchatpay.png" title="微信打赏 Donate" height="190px" width="203px"/>
-		</a>
-
-        &nbsp;&nbsp;
-		<a href="http://www.msbgn.cn/msbgn/wechatpay.png" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-			<img src="http://www.msbgn.cn/msbgn/wechatpay.png" title="支付宝打赏 Donate" height="190px" width="214px"/>
-		</a>
-		<span class="donate_txt">
-			打赏我的人，据说都找到了女朋友~~
-		</span>
-	</div>
-	<!-- /donate guide -->
-	<!-- donate script -->
-	<script type="text/javascript">
-		$('.btn_donate').click(function(){
-		var par = $(this).parent('.donate_board');
-		par.addClass('hidden');
-		par.next().removeClass('hidden');
-		})
-		
-	</script>
-	<!-- /donate script -->
-</div>
-<!-- /Donate Module -->
-   
     
 </article>
 
 
 
 
-    <article id="post-Zabbixmail" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Python003" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -394,7 +424,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/11/02/Zabbixmail/">zabbix邮件报警设置</a>
+            <a class="article-title" href="/2017/05/26/Python003/">Python的数据类型和运算</a>
         </h1>
     
 
@@ -403,8 +433,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/11/02/Zabbixmail/">
-            <time datetime="2016-11-02T08:55:13.457Z" itemprop="datePublished">2016-11-02</time>
+        <a href="/2017/05/26/Python003/">
+            <time datetime="2017-05-26T08:35:05.042Z" itemprop="datePublished">2017-05-26</time>
         </a>
     </div>
 
@@ -412,13 +442,13 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/zabbix/">zabbix</a>
+        <a class="article-category-link" href="/categories/Python/">Python</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/zabbix/">zabbix</a>, <a class="tag-link" href="/tags/监控/">监控</a>
+        <a class="tag-link" href="/tags/Python/">Python</a>, <a class="tag-link" href="/tags/语言/">语言</a>
     </div>
 
                     </div>
@@ -428,10 +458,19 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p><img src="http://www.msbgn.cn/msbgn/zabbixmail1.png" alt="zabbixmaildex"></p>
-<p>邮件报警有两种情况：<br>1、Zabbix服务端只是单纯的发送报警邮件到指定邮箱，发送报警邮件的这个邮箱账号是Zabbix服务端的本地邮箱账号（例如：root@localhost)<br>2、使用一个可以在互联网上正常收发邮件的邮箱账号（例如：xxx@163.com），通过在Zabbix服务端中设置，使其能够发送报警邮件到指定邮箱。（这里我们使用第二种）</p></p>
+            <p><hr>
+<h3 id="语法要求"><a href="#语法要求" class="headerlink" title="语法要求"></a>语法要求</h3><hr>
+<p>缩进统一<br>变量</p>
+<ul>
+<li>标识符第一个字符必须是字母表中的字母（大写或者小写）或者一个下划线(‘_’)</li>
+<li>标识符名称的组成部分可以由字母(大写或小写)、下划线（’_’）或数字0-9组成</li>
+<li>标识符名称是对大小写敏感的，列如，myname和Myname不是一个标识符。注意前者中的小写m和后者中的大写M.</li>
+<li>有效标识符名称的列子有 i、_my_name、name_32和alb2_c3。</li>
+<li>无效的标识符名称的列子有 2thongs、this is spaced out和my-name.</li>
+</ul>
+<hr></p>
             <p class="article-more-link">
-                <a href="/2016/11/02/Zabbixmail/#more">查看更多</a>
+                <a href="/2017/05/26/Python003/#more">查看更多</a>
             </p>
         
         </div>
@@ -479,7 +518,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
            
     
-        <a href="/2016/11/02/Zabbixmail/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/11/02/Zabbixmail/">评论</a>
+        <a href="/2017/05/26/Python003/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2017/05/26/Python003/">评论</a>
     
 
 ~        
@@ -487,282 +526,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         </footer>
     </div>
     
-	<!-- css -->
-	<style type="text/css">
-	    .center {
-	        text-align: center;
-	    }
-	    .hidden {
-	        display: none;
-	    }
-		.donate_bar a.btn_donate{
-			display: inline-block;
-			width: 82px;
-			height: 82px;
-			background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
-			_background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
-			<!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
-			     因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
-				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
-				 嵌入其它博客时不一定要它们。 -->
-			-webkit-transition: background 0s;
-			-moz-transition: background 0s;
-			-o-transition: background 0s;
-			-ms-transition: background 0s;
-			transition: background 0s;
-			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
-		}
-		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
-		.donate_bar .donate_txt {
-			display: block;
-			color: #9d9d9d;
-			font: 14px/2 "Microsoft Yahei";
-		}
-		.bold{ font-weight: bold; }
-	</style>
-	<!-- /css -->
-    <!-- Donate Module -->
-    <div id="donate_module">
-	<!-- btn_donate & tips -->
-	<div id="donate_board" class="donate_board donate_bar center">
-	    <br>
-	    ------------------------------------------------------------------------------------------------------------------------------
-	    <br>
-		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
-		<span class="donate_txt">
-			打赏我的人，据说都找到了女朋友~~
-		</span>
-
-
-	</div>
-	<!-- /btn_donate & tips -->
-	<!-- donate guide -->
-
-	<div id="donate_guide" class="donate_bar center hidden">
-        <br>
-	    ------------------------------------------------------------------------------------------------------------------------------
-	    <br>
-	    
-	    <div width="100%" align="center"><div name="dashmain" id="dash-main-id-878d88" class="dash-main-3 878d88-0.88"></div><script
-	    type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-		
-		<a href="http://www.msbgn.cn/msbgn/xpchatpay.png" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-			<img src="http://www.msbgn.cn/msbgn/xpchatpay.png" title="微信打赏 Donate" height="190px" width="203px"/>
-		</a>
-
-        &nbsp;&nbsp;
-		<a href="http://www.msbgn.cn/msbgn/wechatpay.png" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-			<img src="http://www.msbgn.cn/msbgn/wechatpay.png" title="支付宝打赏 Donate" height="190px" width="214px"/>
-		</a>
-		<span class="donate_txt">
-			打赏我的人，据说都找到了女朋友~~
-		</span>
-	</div>
-	<!-- /donate guide -->
-	<!-- donate script -->
-	<script type="text/javascript">
-		$('.btn_donate').click(function(){
-		var par = $(this).parent('.donate_board');
-		par.addClass('hidden');
-		par.next().removeClass('hidden');
-		})
-		
-	</script>
-	<!-- /donate script -->
-</div>
-<!-- /Donate Module -->
-   
-    
-</article>
-
-
-
-
-    <article id="post-zabbix" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2016/11/02/zabbix/">Zabbix 源码安装配置</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2016/11/02/zabbix/">
-            <time datetime="2016-11-02T08:53:58.969Z" itemprop="datePublished">2016-11-02</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/zabbix/">zabbix</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/zabbix/">zabbix</a>, <a class="tag-link" href="/tags/监控/">监控</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p><img src="http://www.msbgn.cn/msbgn/zabbix.png" alt="zabbix agent"><br>zabbix（音同 zæbix）是一个基于WEB界面的提供分布式系统监视以及网络监视功能的企业级的开源解决方案。<br>zabbix能监视各种网络参数，保证服务器系统的安全运营；并提供灵活的通知机制以让系统管理员快速定位/解决存在的各种问题。<br>zabbix由2部分构成，zabbix server与可选组件zabbix agent。zabbix server可以通过SNMP，zabbix agent，ping，端口监视等方法提供对远程服务器/网络状态的监视，<br>数据收集等功能，它可以运行在Linux，Solaris，HP-UX，AIX，Free BSD，Open BSD，OS X等平台上。<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Zabbix Server (收集数据)</div><div class="line">Zabbix Agent (监视)</div><div class="line">Net-SNMP (为了支持 SNMP(简单网络管理协议))</div><div class="line">Jabber (支持消息通知)</div><div class="line">OpenIPMI (监视)</div><div class="line">cURL (网页监视)</div></pre></td></tr></table></figure></p></p>
-            <p class="article-more-link">
-                <a href="/2016/11/02/zabbix/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-           
-    
-        <a href="/2016/11/02/zabbix/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2016/11/02/zabbix/">评论</a>
-    
-
-~        
- 
-        </footer>
-    </div>
-    
-	<!-- css -->
-	<style type="text/css">
-	    .center {
-	        text-align: center;
-	    }
-	    .hidden {
-	        display: none;
-	    }
-		.donate_bar a.btn_donate{
-			display: inline-block;
-			width: 82px;
-			height: 82px;
-			background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
-			_background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
-			<!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
-			     因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
-				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
-				 嵌入其它博客时不一定要它们。 -->
-			-webkit-transition: background 0s;
-			-moz-transition: background 0s;
-			-o-transition: background 0s;
-			-ms-transition: background 0s;
-			transition: background 0s;
-			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
-		}
-		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
-		.donate_bar .donate_txt {
-			display: block;
-			color: #9d9d9d;
-			font: 14px/2 "Microsoft Yahei";
-		}
-		.bold{ font-weight: bold; }
-	</style>
-	<!-- /css -->
-    <!-- Donate Module -->
-    <div id="donate_module">
-	<!-- btn_donate & tips -->
-	<div id="donate_board" class="donate_board donate_bar center">
-	    <br>
-	    ------------------------------------------------------------------------------------------------------------------------------
-	    <br>
-		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
-		<span class="donate_txt">
-			打赏我的人，据说都找到了女朋友~~
-		</span>
-
-
-	</div>
-	<!-- /btn_donate & tips -->
-	<!-- donate guide -->
-
-	<div id="donate_guide" class="donate_bar center hidden">
-        <br>
-	    ------------------------------------------------------------------------------------------------------------------------------
-	    <br>
-	    
-	    <div width="100%" align="center"><div name="dashmain" id="dash-main-id-878d88" class="dash-main-3 878d88-0.88"></div><script
-	    type="text/javascript" charset="utf-8" src="http://www.dashangcloud.com/static/ds.js"></script>
-		
-		<a href="http://www.msbgn.cn/msbgn/xpchatpay.png" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-			<img src="http://www.msbgn.cn/msbgn/xpchatpay.png" title="微信打赏 Donate" height="190px" width="203px"/>
-		</a>
-
-        &nbsp;&nbsp;
-		<a href="http://www.msbgn.cn/msbgn/wechatpay.png" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-			<img src="http://www.msbgn.cn/msbgn/wechatpay.png" title="支付宝打赏 Donate" height="190px" width="214px"/>
-		</a>
-		<span class="donate_txt">
-			打赏我的人，据说都找到了女朋友~~
-		</span>
-	</div>
-	<!-- /donate guide -->
-	<!-- donate script -->
-	<script type="text/javascript">
-		$('.btn_donate').click(function(){
-		var par = $(this).parent('.donate_board');
-		par.addClass('hidden');
-		par.next().removeClass('hidden');
-		})
-		
-	</script>
-	<!-- /donate script -->
-</div>
-<!-- /Donate Module -->
-   
     
 </article>
 
@@ -770,7 +533,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
     <nav id="page-nav">
-        <a class="extend prev" rel="prev" href="/page/6/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/8/">下一页 &raquo;</a>
+        <a class="extend prev" rel="prev" href="/page/6/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/8/">下一页 &raquo;</a>
     </nav>
 </section>
             
@@ -785,7 +548,83 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/01/04/pythonfile/" class="thumbnail">
+                            <a href="/2017/05/27/Prometheus入门/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/prometheus-arch.png)" alt="Prometheus入门" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Prometheus/">Prometheus</a></p>
+                            <p class="item-title"><a href="/2017/05/27/Prometheus入门/" class="title">Prometheus入门</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T09:41:15.536Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/press/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/05/27/press/" class="title">press</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T06:41:56.000Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/zabbixtomcat/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/tomcat211.png)" alt="zabbix 监控服务--------使用JMX监控tomcat" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/27/zabbixtomcat/" class="title">zabbix 监控服务--------使用JMX监控tomcat</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T03:56:37.548Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/zabbix/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/zabbix.png)" alt="Zabbix 源码安装配置" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/26/zabbix/" class="title">Zabbix 源码安装配置</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:36:31.962Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/pythonfile/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -796,84 +635,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
-                            <p class="item-title"><a href="/2017/01/04/pythonfile/" class="title">python 的文件操作</a></p>
-                            <p class="item-date"><time datetime="2017-01-04T07:44:54.456Z" itemprop="datePublished">2017-01-04</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/22/LinuxRinetd/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/Rinetd.png)" alt="Linux使用Rinetd来实现端口转发" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/linux/">linux</a></p>
-                            <p class="item-title"><a href="/2016/12/22/LinuxRinetd/" class="title">Linux使用Rinetd来实现端口转发</a></p>
-                            <p class="item-date"><time datetime="2016-12-22T03:02:56.851Z" itemprop="datePublished">2016-12-22</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/22/gxng/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/gxng.png)" alt="高性能WEB服务器nginx" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/nginx/">nginx</a></p>
-                            <p class="item-title"><a href="/2016/12/22/gxng/" class="title">高性能WEB服务器nginx</a></p>
-                            <p class="item-date"><time datetime="2016-12-22T02:04:28.823Z" itemprop="datePublished">2016-12-22</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/15/ELKShield/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/ELK1.png)" alt="ELK添加Shield插件管理权限" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/ELK/">ELK</a></p>
-                            <p class="item-title"><a href="/2016/12/15/ELKShield/" class="title">ELK添加Shield插件管理权限</a></p>
-                            <p class="item-date"><time datetime="2016-12-15T07:15:05.363Z" itemprop="datePublished">2016-12-15</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2016/12/15/elk1/" class="thumbnail">
-    
-    
-        <span style="background-size:100% 100%;background-image:url(http://www.msbgn.cn/msbgn/ELK1.png)" alt="elk实时日志分析平台搭建详细过程" class="thumbnail-imag"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/ELK/">ELK</a></p>
-                            <p class="item-title"><a href="/2016/12/15/elk1/" class="title">elk实时日志分析平台搭建详细过程</a></p>
-                            <p class="item-date"><time datetime="2016-12-15T06:55:30.547Z" itemprop="datePublished">2016-12-15</time></p>
+                            <p class="item-title"><a href="/2017/05/26/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:35:06.510Z" itemprop="datePublished">2017-05-26</time></p>
                         </div>
                     </li>
                 
@@ -886,7 +649,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Prometheus/">Prometheus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
         </div>
     </div>
 
@@ -895,7 +658,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">29</span></li></ul>
         </div>
     </div>
 
@@ -904,7 +667,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prometheus/">Prometheus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
         </div>
     </div>
 
@@ -913,7 +676,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Prometheus/" style="font-size: 10px;">Prometheus</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
         </div>
     </div>
 
@@ -925,7 +688,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
             <ul>
                 
                     <li>
-                        <a href="http://www.baidu.com">百度</a>
+                        <a href="https://www.baidu.com">百度</a>
                     </li>
                 
                     <li>

@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Python 运算符 | AlexZhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="什么是运算符？本章节主要说明Python的运算符。举个简单的例子 4 +5 = 9 。 例子中，4 和 5 被称为操作数，”+” 称为运算符。Python语言支持以下类型的运算符:算术运算符比较（关系）运算符赋值运算符逻辑运算符位运算符成员运算符身份运算符运算符优先级">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 运算符">
+<meta property="og:url" content="/2017/05/26/Pythonys/index.html">
+<meta property="og:site_name" content="AlexZhou">
+<meta property="og:description" content="什么是运算符？本章节主要说明Python的运算符。举个简单的例子 4 +5 = 9 。 例子中，4 和 5 被称为操作数，”+” 称为运算符。Python语言支持以下类型的运算符:算术运算符比较（关系）运算符赋值运算符逻辑运算符位运算符成员运算符身份运算符运算符优先级">
+<meta property="og:image" content="https://www.msbgn.cn/msbgn/pythonys.png">
+<meta property="og:updated_time" content="2017-05-26T08:35:04.883Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 运算符">
+<meta name="twitter:description" content="什么是运算符？本章节主要说明Python的运算符。举个简单的例子 4 +5 = 9 。 例子中，4 和 5 被称为操作数，”+” 称为运算符。Python语言支持以下类型的运算符:算术运算符比较（关系）运算符赋值运算符逻辑运算符位运算符成员运算符身份运算符运算符优先级">
+<meta name="twitter:image" content="https://www.msbgn.cn/msbgn/pythonys.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/open-sans/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">AlexZhou</span>
+            </a>
+
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/python">python</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/press">新闻资讯</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/python">python</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/press">新闻资讯</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png" />
+            <h2 id="name">AlexZhou</h2>
+            <h3 id="title">(醉卧沙场君莫笑)</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>shenzhen, China</span>
+            <a id="follow" target="_blank" href="https://github.com/zhourongfu/">关注我</a>
+           <h2 align = center>   <script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"> </script></h2>
+	 </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                29
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                21
+                <span>标签</span>
+            </div>
+        
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/zhourongfu/" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzMxMDQ1NA==&mid=2247483651&idx=1&sn=58ad9ee21c33243688628512624db18f&chksm=ecb6409adbc1c98c3561ce437435666ccd296f0d6a90999e3d2a9dc7d82cc7cbf435896be5a3#rd" target="_blank" title="weixin" class=tooltip>
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://wpa.qq.com/msgrd?v=3&uin=508095413&site=qq&menu=yes" target="_blank" title="qq" class=tooltip>
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Pythonys" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Python 运算符
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/05/26/Pythonys/">
+            <time datetime="2017-05-26T08:35:04.883Z" itemprop="datePublished">2017-05-26</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/python/">python</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/python/">python</a>, <a class="tag-link" href="/tags/语言/">语言</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<h3 id="什么是运算符？"><a href="#什么是运算符？" class="headerlink" title="什么是运算符？"></a>什么是运算符？</h3><p>本章节主要说明Python的运算符。举个简单的例子 4 +5 = 9 。 例子中，4 和 5 被称为操作数，”+” 称为运算符。<br>Python语言支持以下类型的运算符:<br>算术运算符<br>比较（关系）运算符<br>赋值运算符<br>逻辑运算符<br>位运算符<br>成员运算符<br>身份运算符<br>运算符优先级</p>
+<p><img src="https://www.msbgn.cn/msbgn/pythonys.png" alt=" "></p>
+<a id="more"></a>
+<hr>
+<hr>
+<h3 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h3><p>以下假设变量a为10，变量b为20：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">运算符</th>
+<th style="text-align:right">描述</th>
+<th style="text-align:center">实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>+</code></td>
+<td style="text-align:right">加 - 两个对象相加    <code>a + b</code></td>
+<td style="text-align:center">输出结果 30</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-</code></td>
+<td style="text-align:right">减 - 得到负数或是一个数减去另一个数    <code>a - b</code></td>
+<td style="text-align:center">输出结果 -10</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>*</code></td>
+<td style="text-align:right">乘 - 两个数相乘或是返回一个被重复若干次的字符串    <code>a * b</code></td>
+<td style="text-align:center">输出结果 200</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>/</code></td>
+<td style="text-align:right">除 - x除以y    <code>b / a</code></td>
+<td style="text-align:center">输出结果 2</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>%</code></td>
+<td style="text-align:right">取模 - 返回除法的余数    <code>b % a</code></td>
+<td style="text-align:center">输出结果 0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>**</code></td>
+<td style="text-align:right">幂 - 返回x的y次幂    <code>a**b</code> 为10的20次方</td>
+<td style="text-align:center">输出结果 100000000000000000000</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>//</code></td>
+<td style="text-align:right">取整除 - 返回商的整数部分    <code>9//2</code></td>
+<td style="text-align:center">输出结果 4.0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h3><p>以下假设变量a为10，变量b为20：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">运算符</th>
+<th style="text-align:right">描述</th>
+<th style="text-align:center">实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>==</code></td>
+<td style="text-align:right">等于 - 比较对象是否相等</td>
+<td style="text-align:center">(a == b) 返回 False</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>!=</code></td>
+<td style="text-align:right">不等于 - 比较两个对象是否不相等</td>
+<td style="text-align:center">(a != b) 返回 true</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>&lt;&gt;</code></td>
+<td style="text-align:right">不等于 - 比较两个对象是否不相等</td>
+<td style="text-align:center">(a &lt;&gt; b) 返回 true。这个运算符类似 !=</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>&gt;</code></td>
+<td style="text-align:right">大于 - 返回x是否大于y</td>
+<td style="text-align:center">(a &gt; b) 返回 False</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>&lt;</code></td>
+<td style="text-align:right">小于 - 返回x是否小于y。所有比较运算符返回1表示真，返回0表示假。这分别与特殊的变量True和False等价。注意，这些变量名的大写</td>
+<td style="text-align:center">(a &lt; b) 返回 true</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>&gt;=</code></td>
+<td style="text-align:right">大于等于    - 返回x是否大于等于y</td>
+<td style="text-align:center">(a &gt;= b) 返回 False</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>&lt;=</code></td>
+<td style="text-align:right">小于等于 -    返回x是否小于等于y</td>
+<td style="text-align:center">(a &lt;= b) 返回 true</td>
+</tr>
+</tbody>
+</table>
+<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>以下假设变量a为10，变量b为20：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">运算符</th>
+<th style="text-align:right">描述</th>
+<th style="text-align:center">实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>=</code></td>
+<td style="text-align:right">简单的赋值运算符</td>
+<td style="text-align:center">c = a + b 将 a + b 的运算结果赋值为 c</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>+=</code></td>
+<td style="text-align:right">加法赋值运算符</td>
+<td style="text-align:center">c += a 等效于 c = c + a</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-=</code></td>
+<td style="text-align:right">减法赋值运算符</td>
+<td style="text-align:center">c -= a 等效于 c = c - a</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>*=</code></td>
+<td style="text-align:right">乘法赋值运算符</td>
+<td style="text-align:center">c <em>= a 等效于 c = c </em> a</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>/=</code></td>
+<td style="text-align:right">除法赋值运算符</td>
+<td style="text-align:center">c /= a 等效于 c = c / a</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>%=</code></td>
+<td style="text-align:right">取模赋值运算符</td>
+<td style="text-align:center">c %= a 等效于 c = c % a</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>**=</code></td>
+<td style="text-align:right">幂赋值运算符</td>
+<td style="text-align:center">c <strong>= a 等效于 c = c </strong> a</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>//=</code></td>
+<td style="text-align:right">取整除赋值运算符</td>
+<td style="text-align:center">c //= a 等效于 c = c // a</td>
+</tr>
+</tbody>
+</table>
+<h3 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h3><p>按位运算符是把数字看作二进制来进行计算的。Python中的按位运算法则如下：<br>下表中变量 a 为 60，b 为 13，二进制格式如下：<br>a = 0011 1100</p>
+<p>b = 0000 1101</p>
+<hr>
+<p>a&amp;b = 0000 1100</p>
+<p>a|b = 0011 1101</p>
+<p>a^b = 0011 0001</p>
+<p>~a  = 1100 0011</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">运算符</th>
+<th style="text-align:right">描述</th>
+<th style="text-align:center">实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>&amp;</code></td>
+<td style="text-align:right">按位与运算符：参与运算的两个值,如果两个相应位都为1,则该位的结果为1,否则为0</td>
+<td style="text-align:center">(a &amp; b) 输出结果 12 ，二进制解释： 0000 1100</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:right">按位或运算符：只要对应的二个二进位有一个为1时，结果位就为1</td>
+<td style="text-align:center">(a</td>
+<td>b) 输出结果 61 ，二进制解释： 0011 1101</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>^</code></td>
+<td style="text-align:right">按位异或运算符：当两对应的二进位相异时，结果为1</td>
+<td style="text-align:center">(a ^ b) 输出结果 49 ，二进制解释： 0011 0001</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>~</code></td>
+<td style="text-align:right">按位取反运算符：对数据的每个二进制位取反,即把1变为0,把0变为1</td>
+<td style="text-align:center">(~a ) 输出结果 -61 ，二进制解释： 1100 0011， 在一个有符号二进制数的补码形式</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>&lt;&lt;</code></td>
+<td style="text-align:right">左移动运算符：运算数的各二进位全部左移若干位，由”&lt;&lt;”右边的数指定移动的位数，高位丢弃，低位补0</td>
+<td style="text-align:center">a &lt;&lt; 2 输出结果 240 ，二进制解释： 1111 0000</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>&gt;&gt;</code></td>
+<td style="text-align:right">右移动运算符：把”&gt;&gt;”左边的运算数的各二进位全部右移若干位，”&gt;&gt;”右边的数指定移动的位数</td>
+<td style="text-align:center">a &gt;&gt; 2 输出结果 15 ，二进制解释： 0000 1111</td>
+</tr>
+</tbody>
+</table>
+<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>Python语言支持逻辑运算符，以下假设变量 a 为 10, b为 20:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">运算符</th>
+<th style="text-align:right">逻辑表达式</th>
+<th style="text-align:center">描述</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>and</code></td>
+<td style="text-align:right">x and y</td>
+<td style="text-align:center">布尔”与” - 如果 x 为 False，x and y 返回 False，否则它返回 y 的计算值</td>
+<td>(a and b) 返回 20</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>or</code></td>
+<td style="text-align:right">x or y</td>
+<td style="text-align:center">布尔”或”    - 如果 x 是非 0，它返回 x 的值，否则它返回 y 的计算值</td>
+<td>(a or b) 返回 10</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>not</code></td>
+<td style="text-align:right">not x</td>
+<td style="text-align:center">布尔”非” - 如果 x 为 True，返回 False 。如果 x 为 False，它返回 True</td>
+<td>not(a and b) 返回 False</td>
+</tr>
+</tbody>
+</table>
+<h3 id="成员运算符"><a href="#成员运算符" class="headerlink" title="成员运算符"></a>成员运算符</h3><p>除了以上的一些运算符之外，Python还支持成员运算符，测试实例中包含了一系列的成员，包括字符串，列表或元组。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">运算符</th>
+<th style="text-align:right">描述</th>
+<th style="text-align:center">实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>in</code></td>
+<td style="text-align:right">如果在指定的序列中找到值返回 True，否则返回 False</td>
+<td style="text-align:center">x 在 y 序列中 , 如果 x 在 y 序列中返回 True</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>not in</code></td>
+<td style="text-align:right">如果在指定的序列中没有找到值返回 True，否则返回 False</td>
+<td style="text-align:center">x 不在 y 序列中 , 如果 x 不在 y 序列中返回 True</td>
+</tr>
+</tbody>
+</table>
+<h3 id="身份运算符"><a href="#身份运算符" class="headerlink" title="身份运算符"></a>身份运算符</h3><p>身份运算符用于比较两个对象的存储单元</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">运算符</th>
+<th style="text-align:right">描述</th>
+<th style="text-align:center">实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>is</code></td>
+<td style="text-align:right">is是判断两个标识符是不是引用自一个对象</td>
+<td style="text-align:center">x is y, 如果 id(x) 等于 id(y) , is 返回结果 1</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>is not</code></td>
+<td style="text-align:right">is not是判断两个标识符是不是引用自不同对象</td>
+<td style="text-align:center">x is not y, 如果 id(x) 不等于 id(y). is not 返回结果 1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="运算符优先级"><a href="#运算符优先级" class="headerlink" title="运算符优先级"></a>运算符优先级</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">运算符</th>
+<th style="text-align:right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>**</code></td>
+<td style="text-align:right">指数 (最高优先级)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>~ + -</code></td>
+<td style="text-align:right">按位翻转, 一元加号和减号 (最后两个的方法名为 +@ 和 -@)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>* / % //</code></td>
+<td style="text-align:right">乘，除，取模和取整除</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>+ -</code></td>
+<td style="text-align:right">加法减法</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>&gt;&gt; &lt;&lt;</code></td>
+<td style="text-align:right">右移，左移运算符</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>&amp;</code></td>
+<td style="text-align:right">位 ‘AND’</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>^</code></td>
+<td style="text-align:right">位运算符</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>&lt;= &lt; &gt; &gt;=</code></td>
+<td style="text-align:right">比较运算符</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>&lt;&gt; == !=</code></td>
+<td style="text-align:right">等于运算符</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>= %= /= //= -= += *= **=</code></td>
+<td style="text-align:right">赋值运算符</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>is is not</code></td>
+<td style="text-align:right">身份运算符</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>in not in</code></td>
+<td style="text-align:right">成员运算符</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>not or and</code></td>
+<td style="text-align:right">逻辑运算符</td>
+</tr>
+</tbody>
+</table>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+           
+    
+        <a href="/2017/05/26/Pythonys/#comments" class="article-comment-link ds-thread-count" data-thread-key="/2017/05/26/Pythonys/">评论</a>
+    
+
+~        
+ 
+        </footer>
+    </div>
+    
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/05/26/Pythondate2/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Python 流程控制
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/05/26/redmine/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">redmine的安装部署</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+<section id="comments"
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2017/05/26/Pythonys/" data-title="Python 运算符" data-url="/2017/05/26/Pythonys/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"carl1990"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+</section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/Prometheus入门/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/prometheus-arch.png)" alt="Prometheus入门" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Prometheus/">Prometheus</a></p>
+                            <p class="item-title"><a href="/2017/05/27/Prometheus入门/" class="title">Prometheus入门</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T09:41:15.536Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/press/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/05/27/press/" class="title">press</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T06:41:56.000Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/27/zabbixtomcat/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/tomcat211.png)" alt="zabbix 监控服务--------使用JMX监控tomcat" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/27/zabbixtomcat/" class="title">zabbix 监控服务--------使用JMX监控tomcat</a></p>
+                            <p class="item-date"><time datetime="2017-05-27T03:56:37.548Z" itemprop="datePublished">2017-05-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/zabbix/" class="thumbnail">
+    
+    
+        <span style="background-size:100% 100%;background-image:url(https://www.msbgn.cn/msbgn/zabbix.png)" alt="Zabbix 源码安装配置" class="thumbnail-imag"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/zabbix/">zabbix</a></p>
+                            <p class="item-title"><a href="/2017/05/26/zabbix/" class="title">Zabbix 源码安装配置</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:36:31.962Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/26/pythonfile/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Python/">Python</a></p>
+                            <p class="item-title"><a href="/2017/05/26/pythonfile/" class="title">python 的文件操作</a></p>
+                            <p class="item-date"><time datetime="2017-05-26T08:35:06.510Z" itemprop="datePublished">2017-05-26</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Codis/">Codis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HA/">HA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Prometheus/">Prometheus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SSL/">SSL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redmine/">redmine</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zabbix/">zabbix</a><span class="category-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">29</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Codis/">Codis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ELK/">ELK</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HA/">HA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keepalived/">Keepalived</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prometheus/">Prometheus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StartSSL/">StartSSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redmine/">redmine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssl/">ssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/科技/">科技</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/负载/">负载</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集群/">集群</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Codis/" style="font-size: 11.67px;">Codis</a> <a href="/tags/ELK/" style="font-size: 13.33px;">ELK</a> <a href="/tags/HA/" style="font-size: 10px;">HA</a> <a href="/tags/Keepalived/" style="font-size: 10px;">Keepalived</a> <a href="/tags/Prometheus/" style="font-size: 10px;">Prometheus</a> <a href="/tags/Python/" style="font-size: 11.67px;">Python</a> <a href="/tags/StartSSL/" style="font-size: 10px;">StartSSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/python/" style="font-size: 16.67px;">python</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redmine/" style="font-size: 10px;">redmine</a> <a href="/tags/ssl/" style="font-size: 10px;">ssl</a> <a href="/tags/zabbix/" style="font-size: 18.33px;">zabbix</a> <a href="/tags/监控/" style="font-size: 18.33px;">监控</a> <a href="/tags/科技/" style="font-size: 16.67px;">科技</a> <a href="/tags/语言/" style="font-size: 20px;">语言</a> <a href="/tags/负载/" style="font-size: 11.67px;">负载</a> <a href="/tags/集群/" style="font-size: 11.67px;">集群</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://www.baidu.com">百度</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.10ytao.com">同舟商城</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.tiejiang.org">铁匠运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.51ou.com">51运维</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.yunweipai.com">运维派</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.linuxidc.com">Linux公社</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.lnamps.com">lnamps</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 Rongfu Zhou<br>
+            
+        </div>
+    </div>
+   <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e789acd9d26f63dd158c39fd292f28f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</footer>
+
+        
+    
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'carl1990'};
+    (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+
+
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
